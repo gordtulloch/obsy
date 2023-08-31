@@ -1,0 +1,30 @@
+body {
+    min-height: 75rem;
+    padding-top: 4.5rem;
+  }
+  
+  h1 {
+      color: red;
+    }
+  
+  img.bookcover {
+    height: 300px;
+    width: auto;
+  }
+
+  covered {
+    position:relative; /* make a new "render context", so absolute positioning is relative to this parent container */
+  
+    padding:30px; /* only needed for this demo */
+  }
+  
+  .covered-img {
+    background:url('http://localhost:8000/static/images/obsy.jpg');
+    opacity: .25;
+  
+    background-size:cover; /* cover will scale the image so that the smallest dimension = the widest dimension of the box */
+    background-position:center; /* vs the top-left that is default */
+    
+    position:absolute; /* take me out of the render context! let me define my own positioning */
+    top:0;bottom:0;left:0;right:0; /* this could also work with width:100%; height:100%;, but is simpler */
+  }
