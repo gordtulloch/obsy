@@ -19,3 +19,4 @@ Currently working on sub-projects as follows:
 loads summary and image information into the OBSY database. (STARTED)
 * [Photometry-Pipeline](https://github.com/gordtulloch/Photometry-Pipeline) Python script for processing of images via differential photometry (STARTED)
 * [MLCloudDetect](https://github.com/gordtulloch/mlCloudDetect) Machine Learning based cloud detection for allsky cameras (COMPLETE)
+* [PythonEkosFiles] (https://github.com/gordtulloch/pythonEkosFiles) Python objects for reading and writing Ekos sequence and schedule files (STARTED)
