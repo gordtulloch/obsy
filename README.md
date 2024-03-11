@@ -8,11 +8,13 @@ OBSY is the glue that ties together a number of sub-projects into a single cohes
 to amateur astronomers as such) then will be integrated into OBSY. Stages will be:
 
 1. EKOS Script Integration for calibration and registration in OBSY database, including livestacking during imaging runs. Also support for calibration libraries 
-2. Core Database tables maintainable through Dj                                                            ango
+2. Core Database tables maintainable through Django
 3. Target selection and scheduling setup to produce XML schedule files for EKOS nightly processing, "pretty picture" imaging
-4. Master Control Project to examine current conditions (including weather station output, ML Cloud Detection, etc.), open the observatory and initiate EKOS Schedules. Watch for possible condition changes that would require schedules to be cancelled and the roof closed.
-5. Photometry data reduction and reporting to AAVSO
-6. Exoplanet observations and automated data reduction
+4. Master Control Program to examine current conditions (including weather station output, ML Cloud Detection, etc.), open the observatory and initiate EKOS Schedules, watch for possible condition changes that would require schedules to be cancelled and the roof closed.
+5. Automated image calibration with calibration libraries
+6. Automated stacking and stretching of images as appropriate (for creation of thumbnails and sample images)
+7. Photometry data reduction and reporting to AAVSO
+8. Exoplanet observations and automated data reduction
 
 ## Technology Architecture
 OBSY will run on Linux/Unix environments, with all development occurring on the Stellarmate X OS, which is a Debian derived distribution of Linux with bundled astronomy software and a IOS/Android app.  All code is written in Python3 with web infrastructure provided by Django. The two primary components of OBSY are:
@@ -28,3 +30,6 @@ loads summary and image information into the OBSY database. (TESTING)
 * [Photometry-Pipeline](https://github.com/gordtulloch/Photometry-Pipeline) Python script for processing of images via differential photometry (STARTED)
 * [MLCloudDetect](https://github.com/gordtulloch/mlCloudDetect) Machine Learning based cloud detection for allsky cameras (COMPLETE)
 * [PythonEkosFiles](https://github.com/gordtulloch/pythonEkosFiles) Python objects for reading and writing Ekos sequence and schedule files (STARTED)
+
+## Installation
+Full installation instructions will be provided when the initial release is created.
