@@ -31,5 +31,7 @@ loads summary and image information into the OBSY database. (TESTING)
 * [MLCloudDetect](https://github.com/gordtulloch/mlCloudDetect) Machine Learning based cloud detection for allsky cameras (COMPLETE)
 * [PythonEkosFiles](https://github.com/gordtulloch/pythonEkosFiles) Python objects for reading and writing Ekos sequence and schedule files (STARTED)
 
+The user interface software under Django is also under active development (this project).
+
 ## Installation
 Full installation instructions will be provided when the initial release is created.
