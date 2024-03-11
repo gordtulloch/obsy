@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Include Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Include custom CSS -->
+    <link href="styles.css" rel="stylesheet">
+    <title>Obsy</title>
+</head>
+ 
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Obsy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Home <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTargets" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bullseye"></i> Targets
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownTargets">
+                        <a class="dropdown-item" href="ListUpcomingTargets.html">Upcoming Targets</a>
+                        <a class="dropdown-item" href="TargetQuery.html">Target Query</a>
+                        <a class="dropdown-item" href="ViewDailySchedules.html">View Daily Schedules</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownData" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-database"></i> Data
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownData">
+                        <a class="dropdown-item" href="ViewDataLog.html"> View Data Log</a>
+                        <a class="dropdown-item" href="ViewDailyResults.html"> View Daily Results</a>
+                        <a class="dropdown-item" href="ViewTargetResults.html"> View Target Results</a>
+                        <a class="dropdown-item" href="ViewTargetResults.html"> Manage Sequences</a>
+                        <a class="dropdown-item" href="ViewTargetResults.html"> Manage Calibration</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAnalysis" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-chart-line"></i> Analysis
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownAnalysis">
+                        <a class="dropdown-item" href="ViewPending.html">View Pending</a>
+                        <a class="dropdown-item" href="ViewErrorList.html">View Error List</a>
+                        <a class="dropdown-item" href="ExoplanetAnalysis.html">Exoplanet Analysis</a>
+                        <a class="dropdown-item" href="VarStarAnalysis.html">VarStar Analysis</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSetup" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i> Setup</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownSetup">
+                            <a class="dropdown-item" href="SetupObservatory.html" >Observatories</a>
+                            <a class="dropdown-item" href="SetupObservers.html"   >Observers</a>
+                            <a class="dropdown-item" href="SetupInstrumentss.html">Instruments</a>
+                            <a class="dropdown-item" href="SetupObjectsDB.html"   >Objects</a>
+                            <a class="dropdown-item" href="ViewLogs.html"         >Log Viewer</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
