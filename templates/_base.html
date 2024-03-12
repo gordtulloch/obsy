@@ -76,12 +76,12 @@
                             <a class="dropdown-item" href="ViewLogs.html"         >Log Viewer</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </li>
 
     {% else %}
                 <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
                 </li>
     {% endif %}
             </ul>

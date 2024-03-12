@@ -1,13 +1,16 @@
 {% extends "_base.html" %}
 {% block title %}Home{% endblock title %}
 {% block content %}
-<!-- Hero section -->
+{% if user.is_authenticated %}
+<p>Hi {{ user.email }}!</p>
+{% else %}
 <div class="hero-section">
     <div class="container text-center">
         <h1>Welcome to Obsy</h1>
         <p>Personal Observatory Management System</p>
-        <a href="#" class="btn btn-primary mt-3">Get Started</a>
+        <a href="{% url 'register' %}" class="btn btn-primary mt-3">Get Started</a>
     </div>
 </div>
+{% endif %}
 {% endblock content %}
     
