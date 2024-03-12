@@ -1,0 +1,30 @@
+OBSY Personal Observatory Management System
+Installation Guide 0.01 (Pre-release)
+
+To install Obsy first clone the repository from github:
+
+git clone https://github.com/gordtulloch/obsy.git
+
+Create a new virtual environment for Obsy
+
+python -m venv .venv
+.venv\scripts\activate.bat  (in Windows)
+source ./venv/bin/activate  (Linux)
+
+Next install all of the required dependencies with pip:
+
+pip install -r requirements.txt
+
+Create the database server structure and load all of the core Obsy tables:
+
+$ python manage.py migrate
+$ sqlite db.sqlite3
+sqlite>.read coredata.sql
+
+Finally run the server 
+
+python manage.py runserver
+
+
+
+
