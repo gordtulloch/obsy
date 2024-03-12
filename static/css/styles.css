@@ -4,7 +4,8 @@
     align-items: center; /* Vertically center items */
     justify-content: center; /* Horizontally center items */
     height: 100vh; /* Set the desired height for the hero section */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://localhost:8000/static/images/hero-image.jpg');
+    width: 100vw;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/images/hero-image.jpg');
     background-size: cover;
     background-position: center;
     color: #fff;

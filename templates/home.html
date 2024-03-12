@@ -1,8 +1,13 @@
 {% extends "_base.html" %}
+{% load static %}
 {% block title %}Home{% endblock title %}
 {% block content %}
 {% if user.is_authenticated %}
-<p>Hi {{ user.email }}!</p>
+<div class="hero-section">
+    <div class="container text-center">
+        <h1>Welcome back {{ user.email }}!</h1>
+    </div>
+</div>
 {% else %}
 <div class="hero-section">
     <div class="container text-center">
@@ -13,4 +18,3 @@
 </div>
 {% endif %}
 {% endblock content %}
-    

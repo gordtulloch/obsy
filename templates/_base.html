@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,13 +11,13 @@
     <!-- Include Font Awesome for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <!-- Include custom CSS -->
-    <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <title>Obsy</title>
 </head>
  
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Obsy</a>
+        <a class="navbar-brand" href='{% url "home" %}'>Obsy</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -24,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Home <span
+                    <a class="nav-link"  href='{% url "home" %}'><i class="fas fa-home"></i> Home <span
                             class="sr-only">(current)</span></a>
                 </li>
 {% if user.is_authenticated %}
@@ -88,7 +89,7 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container-flex">
         {% block content %}
         {% endblock content %}
     </div>
