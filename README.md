@@ -1,5 +1,5 @@
 # OBSY Personal Observatory Management System
-![](github-cover.png)
+![](static/images/github-cover.png)
 OBSY is an Open Source observatory management system intended for amateur astronomers who want to automate data collection in their observatories. The system forms a meta layer over the KStars/EKOS imaging and telescope control system, 
 feeding nightly schedules to the EKOS Scheduler and capturing the results. 
 
