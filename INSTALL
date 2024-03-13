@@ -18,8 +18,7 @@ pip install -r requirements.txt
 Create the database server structure and load all of the core Obsy tables:
 
 $ python manage.py migrate
-$ sqlite db.sqlite3
-sqlite>.read coredata.sql
+$ python manage.py loaddata obsy.json
 
 Finally run the server 
 
