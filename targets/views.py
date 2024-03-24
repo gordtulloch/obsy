@@ -1,15 +1,19 @@
 # targets/views.py
+from django.views.generic import ListView
+
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import TargetModel
 from .forms import TargetModelForm
 
-def TargetModel_list(request):
-    TargetModels = TargetModel.objects.all()
-    return render(request, "targets/target_list.html", {"TargetModels": TargetModels})
+class TargetModel_list(ListView):
+    model=TargetModel
+    context_object_name="target_list"
+    template_name="targets/target_list.html"
 
-def TargetModel_all_list(request):
-    TargetModels = TargetModel.objects.all()
-    return render(request, "targets/target_all_list.html", {"TargetModels": TargetModels})
+class TargetModel_all_list(ListView):
+    model=TargetModel
+    context_object_name="target_list"
+    template_name="targets/target_all_list.html"
 
 def TargetModel_create(request):
     if request.method == "POST":

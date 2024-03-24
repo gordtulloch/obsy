@@ -3,7 +3,7 @@
 {% block content %}
 <H2>Upcoming Target List</H2>
 <ul>
-    {% for target in targets %}
+    {% for target in target_list %}
     <li>{{ target.target }} (Catalog ID: {{ target.catalogID }})</li>
     {% endfor %}
 </ul>

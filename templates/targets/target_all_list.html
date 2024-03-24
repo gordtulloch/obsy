@@ -3,9 +3,8 @@
 {% block content %}
 <H2>Target All List</H2>
 <ul>
-    {% for target in targets %}
-    found one
-    <li>{{ target.id }} {{ target.catalogID }}</li>
+    {% for target in target_list %}
+    <li>{{ target.target }} (Catalog ID: {{ target.catalogID }})</li>
     {% endfor %}
 </ul>
 {% endblock content %}
