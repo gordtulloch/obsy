@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "pages.apps.PagesConfig",
     "accounts.apps.AccountsConfig",
     "setup.apps.SetupConfig",
+    "targets.apps.TargetsConfig",
 ]
 
 MIDDLEWARE = [
