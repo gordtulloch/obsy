@@ -5,7 +5,11 @@ from .forms import TargetModelForm
 
 def TargetModel_list(request):
     TargetModels = TargetModel.objects.all()
-    return render(request, "targets/TargetModel_list.html", {"TargetModels": TargetModels})
+    return render(request, "targets/target_list.html", {"TargetModels": TargetModels})
+
+def TargetModel_all_list(request):
+    TargetModels = TargetModel.objects.all()
+    return render(request, "targets/target_all_list.html", {"TargetModels": TargetModels})
 
 def TargetModel_create(request):
     if request.method == "POST":
@@ -15,7 +19,7 @@ def TargetModel_create(request):
             return redirect("TargetModel_list")
     else:
         form = TargetModelForm()
-    return render(request, "targets/TargetModel_form.html", {"form": form})
+    return render(request, "targets/target_form.html", {"form": form})
 
 def TargetModel_update(request, pk):
     TargetModel = get_object_or_404(TargetModel, pk=pk)
@@ -26,11 +30,11 @@ def TargetModel_update(request, pk):
             return redirect("TargetModel_list")
     else:
         form = TargetModelForm(instance=TargetModel)
-    return render(request, "targets/TargetModel_form.html", {"form": form})
+    return render(request, "targets/target_form.html", {"form": form})
 
 def TargetModel_delete(request, pk):
     TargetModel = get_object_or_404(TargetModel, pk=pk)
     if request.method == "POST":
         TargetModel.delete()
         return redirect("TargetModel_list")
-    return render(request, "targets/TargetModel_confirm_delete.html", {"TargetModel": TargetModel})
+    return render(request, "targets/target_confirm_delete.html", {"TargetModel": TargetModel})
