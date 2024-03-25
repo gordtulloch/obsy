@@ -77,27 +77,34 @@ class observer(models.Model):
         return self.thisUNID
     
 class instrument(models.Model):
-    thisUNID   =models.CharField(max_length=200,primary_key=True)
+    ALLSKYCAM="AS"
+    WEATHER="WE"
+    INSTRUMENT_TYPES = (
+        (ALLSKYCAM,"AllSkyCam"),
+        (WEATHER,"Weather Station")
+    )
+    thisUNID  =models.CharField(max_length=200,primary_key=True)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
-    class instType(models.TextChoices):
-        ALLSKYCAM = "AL", "AllSkyCam"
-        WEATHER   = "WE", "Weather Station"
+    instType  =models.CharField(max_length=2,choices=INSTRUMENT_TYPES)
     observatory=models.ForeignKey(observatory, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.thisUNID
     
 class telescope(models.Model):
+    TELESCOPE_TYPES=(
+        ("NE", "Newtonian"),
+        ("SC", "Schmidt-Cassegrain"),
+        ("CC", "Classical Cassegrain"),
+        ("RC", "Ritchey Cretien Cassegrain"),
+        ("MC", "Mak-Cassegrain"),
+        ("OT", "Other"),
+    )
     thisUNID   =models.CharField(max_length=200,primary_key=True)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
-    class telescopeType(models.TextChoices):
-        NEWT = "NE", "Newtonian"
-        SCT  = "SC", "Schmidt-Cassegrain"
-        CCT  = "CC", "Classical Cassegrain"
-        RCC  = "RC", "Ritchey Cretien Cassegrain"
-        MCT  = "MC", "Mak-Cassegrain"
+    telescopeType=models.Charfield(max_length=2,choices=TELESCOPE_TYPES)
     aperture    =models.DecimalField(max_digits = 6,decimal_places = 2)
     focalLength =models.DecimalField(max_digits = 6,decimal_places = 2)
     observatory =models.ForeignKey(observatory, on_delete=models.CASCADE)

@@ -2,43 +2,43 @@
 from django.views.generic import ListView
 
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import TargetModel
-from .forms import TargetModelForm
+from .models import target
+from .forms import targetForm
 
-class TargetModel_list(ListView):
-    model=TargetModel
+class target_list(ListView):
+    model=target
     context_object_name="target_list"
     template_name="targets/target_list.html"
 
-class TargetModel_all_list(ListView):
-    model=TargetModel
+class target_all_list(ListView):
+    model=target
     context_object_name="target_list"
     template_name="targets/target_all_list.html"
 
-def TargetModel_create(request):
+def target_create(request):
     if request.method == "POST":
-        form = TargetModelForm(request.POST)
+        form = targetForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("TargetModel_list")
+            return redirect("target_list")
     else:
-        form = TargetModelForm()
+        form = targetForm()
     return render(request, "targets/target_form.html", {"form": form})
 
-def TargetModel_update(request, pk):
-    TargetModel = get_object_or_404(TargetModel, pk=pk)
+def target_update(request, pk):
+    target = get_object_or_404(target, pk=pk)
     if request.method == "POST":
-        form = TargetModelForm(request.POST, instance=TargetModel)
+        form = targetForm(request.POST, instance=target)
         if form.is_valid():
             form.save()
-            return redirect("TargetModel_list")
+            return redirect("target_list")
     else:
-        form = TargetModelForm(instance=TargetModel)
+        form = targetForm(instance=target)
     return render(request, "targets/target_form.html", {"form": form})
 
-def TargetModel_delete(request, pk):
-    TargetModel = get_object_or_404(TargetModel, pk=pk)
+def target_delete(request, pk):
+    target = get_object_or_404(target, pk=pk)
     if request.method == "POST":
-        TargetModel.delete()
-        return redirect("TargetModel_list")
-    return render(request, "targets/target_confirm_delete.html", {"TargetModel": TargetModel})
+        target.delete()
+        return redirect("target_list")
+    return render(request, "targets/target_confirm_delete.html", {"target": target})

@@ -1,7 +1,7 @@
 from django import forms
-from .models import TargetModel
+from .models import target
 
-class TargetModelForm(forms.ModelForm):
+class targetForm(forms.ModelForm):
     class Meta:
-        model = TargetModel
-        fields = ["target", "catalogID"]
+        model = target
+        fields = ["targetName", "catalogIDs"]

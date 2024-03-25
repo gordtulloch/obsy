@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import TargetModel
+from .models import target
 
-class TargetModelAdmin(admin.ModelAdmin):
-    list_display = ("target", "catalogID")
+class targetAdmin(admin.ModelAdmin):
+    list_display = ("targetName", "catalogIDs")
 
-admin.site.register(TargetModel, TargetModelAdmin)
+admin.site.register(target, targetAdmin)

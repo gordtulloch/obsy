@@ -5,7 +5,7 @@ colSpecs = [(1,2), (3,6), (7,7), (8,17), (18,18), (20,21),(22,23),(24, 28),(30,3
             (102,102),(104,107),(108,108), (110,110), (111,126), (129,129), (131,133), (134,134),(135,135),(137,153),
             (155,159), (161,165), (167,177), (179,184), (186,191), (193,200),(202,202),(204,212),(214,223),(225,235)]
 nameSpecs = ['constCode', 'starNo', 'compNo', 'gvcsNo', 'noteFlag', 'RAh2000','RAm2000','RAs2000','DECdeg2000','DECmin2000','DECsec2000',
-             'posnAccuracyFlag','varType','magMax','magMaxUncertainty','magMin1BrightLimit','magMin1','magMin1Uncertainty','magMin1AltPhot',
+             'posnAccuracyFlag','varType','lMagMax','magMax','magMaxUncertainty','magMin1BrightLimit','magMin1','magMin1Uncertainty','magMin1AltPhot',
              'magMin1AmplitudeFlag','magMin2BrightLimit','magMin2','magMin2Uncertainty','magMin2AltPhot','magMin2AmplitudeFlag','photSystem',
              'epochForMaxLight','epochQualityFlag','yearOfOutburst','yearOfOutburstQualityFlag','upperLowerLimitCode','period','periodUncertaintyFlag',
              'nPeriod','nPeriodUncertaintyFlag','risingTimeOrDuration','risingTimeOrDurationUncertaintyFlag','eclipsingVarNote','spectralType','ref1'
@@ -21,8 +21,11 @@ constellationCodes = [(1,'And'),(23,'Cir'),(45,'Lac'),(67,'PsA'),(2,'Ant'),(24,'
                       (39,'Gru'),(61,'Pav'),(83,'UMa'),(18,'Cas'),(40,'Her'),(62,'Peg'),(84,'UMi'),(19,'Cen'),
                       (41,'Hor'),(63,'Per'),(85,'Vel'),(20,'Cep'),(42,'Hya'),(64,'Phe'),(86,'Vir'),(21,'Cet'),
                       (43,'Hyi'),(65,'Pic'),(87,'Vol'),(22,'Cha'),(44,'Ind'),(66,'Psc'),(88,'Vul')]
+#gcvsDF  =pandas.read_fwf('catalogs/gcvs/gcvs5.txt',colspecs=colSpecs,names=nameSpecs)
+#print(list(gcvsDF.columns.values))
+starNoDF=pandas.read_fwf('catalogs/gcvs/starno.txt',colspecs=[(0,5),(6,10)],names=['starName','starNo'])
+print(starNoDF)
+print(list(starNoDF.columns.values))
 
-#starNoDF=pandas.read_fwf('C:/Users/gordt/Desktop/obsy/gcvs/starno.txt',colspecs=[(0,5),(6,10)],names=['starName','starNo'])
-gcvsDF  =pandas.read_fwf('C:/Users/gordt/Desktop/obsy/gcvs/gcvs5.txt',colspecs=colSpecs,names=nameSpecs)
-#remarksDF=pandas.read_fwf('C:/Users/gordt/Desktop/obsy/gcvs/remarks.txt',colspecs=[(0,5),(6,8),(9,80)],names=['starName','const','remark'])
-
+#remarksDF=pandas.read_fwf('catalogs/gcvs/remarks.txt',colspecs=[(0,5),(6,8),(9,80)],names=['starName','const','remark'])
+#print(list(remarksDF.columns.values))
