@@ -86,13 +86,16 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-circle fa-fw"></i> Register</a>
+                </li>
     {% endif %}
             </ul>
         </div>
     </nav>
-
     <div class="container-flex pl-3">
         {% block content %}
+        <br><br>
         {% endblock content %}
     </div>
 

@@ -2,10 +2,12 @@
 {% load crispy_forms_tags %}
 {% block title %}Log In{% endblock title %}
 {% block content %}
-<h2>Log In</h2>
+
+<div class="container">
+    <p>Please enter your credentials to login, or click on Register if you do not have an account.</p>
 <form method="post">
     {% csrf_token %}
     {{ form|crispy }}
-    <button type="submit">Log In</button>
-</form>
+    <button type="submit" class="btn btn-primary">Log In</button>
+</div>
 {% endblock content %}
