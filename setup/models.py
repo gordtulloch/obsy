@@ -104,7 +104,7 @@ class telescope(models.Model):
     thisUNID   =models.CharField(max_length=200,primary_key=True)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
-    telescopeType=models.Charfield(max_length=2,choices=TELESCOPE_TYPES)
+    telescopeType=models.CharField(max_length=2,choices=TELESCOPE_TYPES)
     aperture    =models.DecimalField(max_digits = 6,decimal_places = 2)
     focalLength =models.DecimalField(max_digits = 6,decimal_places = 2)
     observatory =models.ForeignKey(observatory, on_delete=models.CASCADE)

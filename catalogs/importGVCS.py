@@ -21,11 +21,10 @@ constellationCodes = [(1,'And'),(23,'Cir'),(45,'Lac'),(67,'PsA'),(2,'Ant'),(24,'
                       (39,'Gru'),(61,'Pav'),(83,'UMa'),(18,'Cas'),(40,'Her'),(62,'Peg'),(84,'UMi'),(19,'Cen'),
                       (41,'Hor'),(63,'Per'),(85,'Vel'),(20,'Cep'),(42,'Hya'),(64,'Phe'),(86,'Vir'),(21,'Cet'),
                       (43,'Hyi'),(65,'Pic'),(87,'Vol'),(22,'Cha'),(44,'Ind'),(66,'Psc'),(88,'Vul')]
-#gcvsDF  =pandas.read_fwf('catalogs/gcvs/gcvs5.txt',colspecs=colSpecs,names=nameSpecs)
-#print(list(gcvsDF.columns.values))
-starNoDF=pandas.read_fwf('catalogs/gcvs/starno.txt',colspecs=[(0,5),(6,10)],names=['starName','starNo'])
-print(starNoDF)
-print(list(starNoDF.columns.values))
-
+gcvsDF  =pandas.read_fwf('catalogs/gcvs/gcvs5.txt',colspecs=colSpecs,names=nameSpecs)
+print(list(gcvsDF.columns.values))
+#starNoDF=pandas.read_fwf('catalogs/gcvs/starno.txt',colspecs=[(0,5),(6,10)],names=['starName','starNo'])
+#print(starNoDF)
+#print(list(starNoDF.columns.values))
 #remarksDF=pandas.read_fwf('catalogs/gcvs/remarks.txt',colspecs=[(0,5),(6,8),(9,80)],names=['starName','const','remark'])
 #print(list(remarksDF.columns.values))
