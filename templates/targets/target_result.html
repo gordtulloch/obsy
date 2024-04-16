@@ -1,0 +1,23 @@
+<!-- targets/templates/targets/target_form.html -->
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Targets List{% endblock title %}
+{% block content %}
+<div class="container">
+    <br><br>
+    {% if main_identifier %}
+    <H1>{{ main_identifier }}</H1>
+    <div class="container">
+    <table class="table table">
+        <thead class="thead-light">
+            <tr><th colspan=2>Coordinates</td></tr>
+        </thead>
+        <tr><td>RA:</td><td>{{ target_ra }}</td></tr>
+        <tr><td>DEC:</td><td>{{ target_dec }}</td></tr>
+    </table>
+</div>
+{% elif error_message %}
+    <p>{{ error_message }}</p>
+{% endif %}
+</div>
+    {% endblock content %}

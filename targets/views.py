@@ -1,5 +1,6 @@
 # targets/views.py
 from django.views.generic import ListView
+from astroquery.simbad import Simbad
 
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import target
@@ -17,19 +18,20 @@ class target_all_list(ListView):
 
 def target_query(request):
     if request.method == 'POST':
-        form = targetForm(request.POST)
-        if form.is_valid():
-            target_id = form.cleaned_data['targetName']
-            # Fetch target information based on the target_id (e.g., query your database)
-            # Populate a context dictionary with the retrieved information
-            context = {
-                'target_id': target_id,
-                # Add other target-related data here
-            }
-            return render(request, 'targets/target_query.html', context)
-    else:
-        form = targetQueryForm()
-    return render(request, 'targets/target_form.html', {'form': form})
+        search_term = request.POST.get('search_term')
+        try:
+            result_table = Simbad.query_object(search_term)
+            if result_table:
+                main_identifier = result_table['MAIN_ID'][0]
+                target_ra = result_table['RA'][0]
+                target_dec = result_table['DEC'][0]
+                
+                return render(request, 'targets/target_result.html', ({'main_identifier': main_identifier,'target_ra': target_ra,'target_dec': target_dec}))
+            else:
+                return render(request, 'targets/target_result.html', {'error_message': 'No results found.'})
+        except Exception as e:
+            return render(request, 'targets/target_result.html', {'error_message': f'Error: {str(e)}'})
+    return render(request, 'targets/target_search.html')
 
 def target_create(request):
     if request.method == "POST":

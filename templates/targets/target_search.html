@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Targets List{% endblock title %}
+{% block content %}
+<div class="container">
+    <br><br>
+<form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="text" name="search_term" placeholder="Enter search term">
+    <button type="submit">Search</button>
+</form>
+</div>
+{% endblock content %}
