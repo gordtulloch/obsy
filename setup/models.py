@@ -1,39 +1,16 @@
 from django.db import models
 
-class openNGC(models.Model):
-    id = models.CharField(max_length=200,primary_key=True)
-    name = models.CharField(max_length=200)
-    type = models.CharField(max_length=200)
-    ra = models.CharField(max_length=200)
-    dec = models.CharField(max_length=200)
-    const = models.CharField(max_length=200)
-    majax = models.CharField(max_length=200)
-    minax = models.CharField(max_length=200)
-    pa = models.CharField(max_length=200)
-    bmag = models.CharField(max_length=200)
-    vmag = models.CharField(max_length=200)
-    jmag = models.CharField(max_length=200)
-    hmag = models.CharField(max_length=200)
-    kmag = models.CharField(max_length=200)
-    sbrightn = models.CharField(max_length=200)
-    hubble = models.CharField(max_length=200)
-    parallax = models.CharField(max_length=200)
-    pmra = models.CharField(max_length=200)
-    pmdec = models.CharField(max_length=200)
-    radvel = models.CharField(max_length=200)
-    redshift = models.CharField(max_length=200)
-    cstarumag = models.CharField(max_length=200)
-    cstarbmag = models.CharField(max_length=200)
-    cstarvmag = models.CharField(max_length=200)
-    messier = models.CharField(max_length=200)
-    ngc = models.CharField(max_length=200)
-    ic = models.CharField(max_length=200)
-    cstarnames = models.CharField(max_length=200)
-    identifiers = models.CharField(max_length=200)
-    commonnames = models.CharField(max_length=200)
-    nednotes = models.CharField(max_length=200)
-    ongcnotes = models.CharField(max_length=200)
-    notngc = models.CharField(max_length=200)
+class objectsCatalog(models.Model):
+    objID = models.CharField(max_length=200,primary_key=True)
+    objName = models.CharField(max_length=200)
+    objRA2000 = models.CharField(max_length=200)
+    objDec2000 = models.CharField(max_length=200)
+    objConst = models.CharField(max_length=200)
+    objMag = models.CharField(max_length=200)
+    objSize = models.CharField(max_length=200)
+    objType = models.CharField(max_length=200)
+    objClass = models.CharField(max_length=200)
+    objCatalogs = models.CharField(max_length=200)
     
     def __str__(self):
         return self.name
@@ -86,7 +63,7 @@ class instrument(models.Model):
     thisUNID  =models.CharField(max_length=200,primary_key=True)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
-    instType  =models.CharField(max_length=2,choices=INSTRUMENT_TYPES)
+    instType  =models.CharField(max_length=2,choices=INSTRUMENT_TYPES, default='AS')
     observatory=models.ForeignKey(observatory, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -104,7 +81,7 @@ class telescope(models.Model):
     thisUNID   =models.CharField(max_length=200,primary_key=True)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
-    telescopeType=models.CharField(max_length=2,choices=TELESCOPE_TYPES)
+    telescopeType=models.CharField(max_length=2,choices=TELESCOPE_TYPES, default='NE')
     aperture    =models.DecimalField(max_digits = 6,decimal_places = 2)
     focalLength =models.DecimalField(max_digits = 6,decimal_places = 2)
     observatory =models.ForeignKey(observatory, on_delete=models.CASCADE)
@@ -113,12 +90,14 @@ class telescope(models.Model):
         return self.name
     
 class imager(models.Model):
+    IMAGER_TYPES=(
+        ("CMOS", "CMOS"),
+        ("CCD", "CCD"),
+        )
     thisUNID   =models.CharField(max_length=200,primary_key=True)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
-    class imagerType(models.TextChoices):
-        CMOS = "CMOS", "CMOS"
-        CCD  = "CCD", "CCD"
+    imagerType=models.CharField(max_length=4,choices=IMAGER_TYPES, default='CMOS')
     xDim=models.DecimalField(max_digits = 5,decimal_places = 0)
     yDim=models.DecimalField(max_digits = 5,decimal_places = 0)
     xPixelSize=models.DecimalField(max_digits = 6,decimal_places = 2)

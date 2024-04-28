@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import openNGC,fitsFile,fitsHeader,observatory,observer,instrument,instrument,telescope,imager
+from .models import objectsCatalog,fitsFile,fitsHeader,observatory,observer,instrument,instrument,telescope,imager
 
-class openNGCAdmin(admin.ModelAdmin):
-    list_display = ("name","type","ra","dec","const",)
+class objectsCatalogAdmin(admin.ModelAdmin):
+    list_display = ("objID","objName","objRA2000","objDec2000","objConst",)
 
 class fitsFileAdmin(admin.ModelAdmin):
     list_display = ("thisUNID","date","filename",)
@@ -25,7 +25,7 @@ class telescopeAdmin(admin.ModelAdmin):
 class imagerAdmin(admin.ModelAdmin):
     list_display = ("name","shortname","imagerType","xDim","yDim","xPixelSize","yPixelSize",)
     
-admin.site.register(openNGC,openNGCAdmin)
+admin.site.register(objectsCatalog,objectsCatalogAdmin)
 admin.site.register(fitsFile,fitsFileAdmin)
 admin.site.register(fitsHeader,fitsHeaderAdmin)
 admin.site.register(observatory,observatoryAdmin)
