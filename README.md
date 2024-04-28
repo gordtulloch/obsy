@@ -9,7 +9,7 @@ to amateur astronomers as such) then will be integrated into OBSY. Stages will b
 
 1. EKOS Script Integration for calibration and registration in OBSY database, including livestacking during imaging runs. Also support for calibration libraries 
 2. Core Database tables maintainable through Django
-3. Target selection and scheduling setup to produce XML schedule files for EKOS nightly processing, "pretty picture" imaging
+3. Target selection and scheduling setup to produce XML schedule files for EKOS nightly processing, "pretty picture" imaging, and photometry of variable stars and exoplanet transits.
 4. Master Control Program to examine current conditions (including weather station output, ML Cloud Detection, etc.), open the observatory and initiate EKOS Schedules, watch for possible condition changes that would require schedules to be cancelled and the roof closed.
 5. Automated image calibration with calibration libraries
 6. Automated stacking and stretching of images as appropriate (for creation of thumbnails and sample images)
@@ -25,13 +25,12 @@ Initially the SQL Database will be SQLite but will be easily migrated to MySQL o
 
 ## Current Status
 Currently working on sub-projects as follows:
+* OBSY - Building user interface, handling for target searching and selection, setup configuration tables
 * [EKOSProcessingScripts](https://github.com/gordtulloch/EKOSProcessingScripts) Scripts to use with EKOS to integrate with OBSY. For example a post-processing script that calibrates images, stores the FITS data files in a repository, and 
 loads summary and image information into the OBSY database. (TESTING)
 * [Photometry-Pipeline](https://github.com/gordtulloch/Photometry-Pipeline) Python script for processing of images via differential photometry (STARTED)
 * [MLCloudDetect](https://github.com/gordtulloch/mlCloudDetect) Machine Learning based cloud detection for allsky cameras (COMPLETE)
 * [PythonEkosFiles](https://github.com/gordtulloch/pythonEkosFiles) Python objects for reading and writing Ekos sequence and schedule files (STARTED)
-
-The user interface software under Django is also under active development (this project).
 
 ## Installation
 Full installation instructions will be provided when the initial release is created.
