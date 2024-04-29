@@ -2,9 +2,12 @@
 {% block title %}All Targets List{% endblock title %}
 {% block content %}
 <H2>Target All List</H2>
+<div class="container">
+    <br><br>
 <ul>
     {% for target in target_list %}
     <li>{{ target.target }} (Catalog ID: {{ target.catalogID }})</li>
     {% endfor %}
 </ul>
+</div>
 {% endblock content %}

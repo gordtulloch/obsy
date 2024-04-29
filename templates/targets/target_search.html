@@ -4,11 +4,38 @@
 {% block content %}
 <div class="container">
     <br><br>
-<form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <input type="text" name="search_term" placeholder="Enter search term">
-    <button type="submit">Search</button>
-</form>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="text" class="form-control" name="search_term" placeholder="Enter search term">
+        <label class="form-label">Catalogs: &NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="NGC" checked>
+            <label class="form-check-label" for="inlineRadio1">NGC</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="MESSIER">
+            <label class="form-check-label" for="inlineRadio2">Messier</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="CALDWELL">
+            <label class="form-check-label" for="inlineRadio3">Caldwell</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="GVCS">
+            <label class="form-check-label" for="inlineRadio3">GCVS</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="NASA">
+            <label class="form-check-label" for="inlineRadio3">NASA Exoplanet</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="SIMBAD">
+            <label class="form-check-label" for="inlineRadio3">Simbad</label>
+          </div>
+
+        <br><br>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
 </div>
 {% endblock content %}
