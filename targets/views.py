@@ -2,11 +2,12 @@
 from django.views.generic import ListView
 from astroquery.simbad import Simbad
 import pandas as pd
-
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import target
 from setup.models import objectsCatalog
+import logging
 
+logger = logging.getLogger("targets.views")
 
 class target_list(ListView):
     model=target
@@ -20,19 +21,21 @@ class target_all_list(ListView):
 
 def target_query(request):
     if request.method == 'POST':
-        
+        Simbad.TIMEOUT = 10 # sets the timeout to 10s
+        error_message=""
         search_term = request.POST.get('search_term')
-        catalog = request.POST.get('inlineRadioOptions')
-        if  (catalog=="NGC"):
-            
-        elif (catalog=="SIMBAD"):
-            results_simbad = Simbad.query_object(search_term)
+        try:
+            results_simbad = Simbad.query_object(search_term, wildcard=True)
             if (results_simbad):
                 df=results_simbad.to_pandas()
                 results=df.to_dict('records')
-        else: 
-            results=[]
-        return render(request, 'targets/target_result.html',{'results': results})
+            else: 
+                results=[]
+            return render(request, 'targets/target_result.html',{'results': results})
+        except:
+            error_message="Search Timeout occurred with search: "+search_term
+            logger.warning(error_message)
+            return render(request, 'targets/target_search.html',{'error': error_message})
     return render(request, 'targets/target_search.html')
 
 def target_create(request):
