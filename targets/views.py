@@ -1,5 +1,6 @@
 # targets/views.py
 from django.views.generic import ListView
+import astroquery
 from astroquery.simbad import Simbad
 import pandas as pd
 from django.shortcuts import render, get_object_or_404, redirect
@@ -19,24 +20,62 @@ class target_all_list(ListView):
     context_object_name="target_list"
     template_name="targets/target_all_list.html"
 
+def assignTargetClass(targetType)
+    return "VS"
+
 def target_query(request):
+    error_message=""
     if request.method == 'POST':
         Simbad.TIMEOUT = 10 # sets the timeout to 10s
         error_message=""
         search_term = request.POST.get('search_term')
         try:
+            Simbad.add_votable_fields('flux(B)', 'flux(V)', 'flux(R)', 'flux(I)','otype(main)')
             results_simbad = Simbad.query_object(search_term, wildcard=True)
-            if (results_simbad):
+            if (len(results_simbad)>0):
                 df=results_simbad.to_pandas()
                 results=df.to_dict('records')
+                # Add results to the targets database
+                for index, row in df.iterrows():
+                    target.objects.create(
+                    #                       TARGET_TYPES=(
+                    #       ("VS", "Variable Star"),
+                    #       ("EX", "Exoplanet"),
+                    #       ("DS", "Deep Sky Object"),
+                    #       ("PL", "Planet"),
+                    #       ("LU", "Luna"),
+                    #       ("SU", "Sun"),
+                    #       ("SA", "Satellite"),
+                    #       ("OT", "Other")
+                    #   )                   
+                        userId=request.user.id,
+                        targetName = row["MAIN_ID"],
+                        catalogIDs = "",
+                        targetType  =row["OTYPE_main"],
+                        targetClass=assignTargetClass(targetType)
+                        objID = "",
+                        objName = "",
+                        objRA2000 = row["RA"],
+                        objDec2000 = row["DEC"],
+                        objConst = "",
+                        objMag = row["FLUX_V"],
+                        objSize = "",
+                        objType = "",
+                        objClass = "",
+                        objCatalogs = "",
+                        )
             else: 
                 results=[]
             return render(request, 'targets/target_result.html',{'results': results})
-        except:
-            error_message="Search Timeout occurred with search: "+search_term
-            logger.warning(error_message)
+        except astroquery.exceptions.TableParseError as ex:
+            error_message="Search Error occurred with search ("+search_term+" error: "+ex
+            logger.error(error_message)
             return render(request, 'targets/target_search.html',{'error': error_message})
-    return render(request, 'targets/target_search.html')
+        """except astroquery.exceptions.TableParseError as ex:
+            error_message=ex
+            logger.warning(Simbad.last_response)"""
+    else:
+        return render(request, 'targets/target_search.html',{'error': error_message})
 
 def target_create(request):
     if request.method == "POST":

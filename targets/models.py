@@ -1,7 +1,7 @@
 from django.db import models
 
 class target(models.Model):
-    TARGET_TYPES=(
+    TARGET_CLASSES=(
         ("VS", "Variable Star"),
         ("EX", "Exoplanet"),
         ("DS", "Deep Sky Object"),
@@ -11,10 +11,12 @@ class target(models.Model):
         ("SA", "Satellite"),
         ("OT", "Other")
     )
-    targetID = models.AutoField(primary_key=True)
+    targetId = models.AutoField(primary_key=True)
+    userId = models.CharField(max_length=255)
     targetName = models.CharField(max_length=255)
     catalogIDs = models.CharField(max_length=255)
-    targetType  =models.CharField(max_length=2,choices=TARGET_TYPES)
+    targetClass  =models.CharField(max_length=2,choices=TARGET_CLASSES)
+    targetType  =models.CharField(max_length=255)
     objID = models.CharField(max_length=200)
     objName = models.CharField(max_length=200)
     objRA2000 = models.CharField(max_length=200)
