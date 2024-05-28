@@ -11,11 +11,14 @@
             {% if forloop.first %}
                 <tr><th>ID</th><th>RA</th><th>Dec</th><th>Mag</th><th>Type</th><th></th></tr>
                 {% endif %}    
-            <tr><td>{{ result.MAIN_ID }}</td><td>{{ result.RA }}</td><td>{{ result.DEC }}</td><td>{{ result.FLUX_V }}</td><td>{{ result.OTYPE_main }}</td></tr>
+            <tr><td>{{ result.MAIN_ID }}</td>
+                <td>{{ result.RA }}</td>
+                <td>{{ result.DEC }}</td>
+                <td>{{ result.FLUX_V }}</td>
+                <td>{{ result.OTYPE_main }}</td></tr>
         {% empty %}
             <p><i>No results found.</i></p>
         {% endfor %}
     </table>
     </div>
     {% endblock content %}
-

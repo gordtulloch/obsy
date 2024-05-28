@@ -1,27 +1,47 @@
 # targets/views.py
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 import astroquery
 from astroquery.simbad import Simbad
 import pandas as pd
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import target
-from setup.models import objectsCatalog
+from .models import target,simbadType
+from .forms import TargetUpdateForm
+from django.urls import reverse_lazy
+from setup.models import objectsCatalog 
 import logging
+from astropy import units as u
+from astropy.coordinates import SkyCoord, get_constellation
+
 
 logger = logging.getLogger("targets.views")
 
+class target_detail_view(DetailView):
+    model = target
+    context_object_name = "target"
+    template_name = "targets/target_detail.html"
+    login_url = "account_login"
+    
 class target_list(ListView):
     model=target
     context_object_name="target_list"
-    template_name="targets/target_list.html"
+    template_name="targets/target_all_list.html"
+    login_url = "account_login"
 
 class target_all_list(ListView):
     model=target
     context_object_name="target_list"
     template_name="targets/target_all_list.html"
+    login_url = "account_login"
 
-def assignTargetClass(targetType)
-    return "VS"
+def assignTargetClass(targetType):
+    allwithTT=simbadType.objects.filter(label=targetType)
+    firstentry= simbadType.objects.first()
+    if firstentry != None: 
+        return firstentry.category
+    else:
+        logger.warning("Type "+targetType+" not found in simbadTypes table")
+        return "Unknown"
+
 
 def target_query(request):
     error_message=""
@@ -37,32 +57,21 @@ def target_query(request):
                 results=df.to_dict('records')
                 # Add results to the targets database
                 for index, row in df.iterrows():
-                    target.objects.create(
-                    #                       TARGET_TYPES=(
-                    #       ("VS", "Variable Star"),
-                    #       ("EX", "Exoplanet"),
-                    #       ("DS", "Deep Sky Object"),
-                    #       ("PL", "Planet"),
-                    #       ("LU", "Luna"),
-                    #       ("SU", "Sun"),
-                    #       ("SA", "Satellite"),
-                    #       ("OT", "Other")
-                    #   )                   
+                    # Figure out the constellation
+                    coords=row["RA"]+" "+row["DEC"]
+                    c = SkyCoord(coords, unit=(u.hourangle, u.deg), frame='icrs')
+                    
+                    # Add the target record
+                    target.objects.create(               
                         userId=request.user.id,
                         targetName = row["MAIN_ID"],
-                        catalogIDs = "",
+                        catalogIDs = row["MAIN_ID"],
                         targetType  =row["OTYPE_main"],
-                        targetClass=assignTargetClass(targetType)
-                        objID = "",
-                        objName = "",
-                        objRA2000 = row["RA"],
-                        objDec2000 = row["DEC"],
-                        objConst = "",
-                        objMag = row["FLUX_V"],
-                        objSize = "",
-                        objType = "",
-                        objClass = "",
-                        objCatalogs = "",
+                        targetClass=assignTargetClass(row["OTYPE_main"]),
+                        targetRA2000 = row["RA"],
+                        targetDec2000 = row["DEC"],
+                        targetConst = get_constellation(c),
+                        targetMag = row["FLUX_V"],
                         )
             else: 
                 results=[]
@@ -71,36 +80,16 @@ def target_query(request):
             error_message="Search Error occurred with search ("+search_term+" error: "+ex
             logger.error(error_message)
             return render(request, 'targets/target_search.html',{'error': error_message})
-        """except astroquery.exceptions.TableParseError as ex:
-            error_message=ex
-            logger.warning(Simbad.last_response)"""
     else:
         return render(request, 'targets/target_search.html',{'error': error_message})
 
-def target_create(request):
-    if request.method == "POST":
-        form = targetForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("target_list")
-    else:
-        form = targetForm()
-    return render(request, "targets/target_form.html", {"form": form})
-
-def target_update(request, pk):
-    target = get_object_or_404(target, pk=pk)
-    if request.method == "POST":
-        form = targetForm(request.POST, instance=target)
-        if form.is_valid():
-            form.save()
-            return redirect("target_list")
-    else:
-        form = targetForm(instance=target)
-    return render(request, "targets/target_form.html", {"form": form})
-
-def target_delete(request, pk):
-    target = get_object_or_404(target, pk=pk)
-    if request.method == "POST":
-        target.delete()
-        return redirect("target_list")
-    return render(request, "targets/target_confirm_delete.html", {"target": target})
+class target_update(UpdateView):
+    model = target
+    form_class = TargetUpdateForm
+    template_name = "targets/target_form.html"
+    success_url = reverse_lazy('target_all_list')
+    
+class target_delete(DeleteView):
+    model = target
+    template_name = "targets/target_confirm_delete.html"
+    success_url = reverse_lazy('target_all_list')

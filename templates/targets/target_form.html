@@ -1,10 +1,10 @@
-<!-- targets/templates/targets/target_form.html -->
 {% extends "_base.html" %}
 {% load crispy_forms_tags %}
 {% block title %}Targets List{% endblock title %}
 {% block content %}
 <div class="container">
-    <br><br>
+    <br>
+    <h2>Target Update</h2><br>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

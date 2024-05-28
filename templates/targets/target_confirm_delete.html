@@ -1,17 +1,15 @@
-<!-- targets/templates/targets/target_confirm_delete.html -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Confirm Delete</title>
-</head>
-<body>
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}All Targets List{% endblock title %}
+{% block content %}
+<div class="container">
+    <br><br>
     <h1>Confirm Delete</h1>
-    <p>Are you sure you want to delete the target "{{ target.target }}"?</p>
+    <p>Are you sure you want to delete the target "{{ target.targetName }}"?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Delete</button>
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Delete</button>
     </form>
-</body>
-</html>
+</div>
+{% endblock content %}

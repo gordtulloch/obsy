@@ -1,13 +1,26 @@
 {% extends "_base.html" %}
 {% block title %}All Targets List{% endblock title %}
 {% block content %}
-<H2>Target All List</H2>
+
 <div class="container">
     <br><br>
-<ul>
-    {% for target in target_list %}
-    <li>{{ target.target }} (Catalog ID: {{ target.catalogID }})</li>
-    {% endfor %}
-</ul>
-</div>
+    <H2>All Targets List</H2>
+    <table class="table">
+        {% for target in target_list %}
+            {% if forloop.first %}
+                <tr><th>Catalog</th><th>RA (2000)</th><th>Dec (2000)</th><th>Constellation</th><th>Mag</th><th>Type</th><th>Class</th></tr>
+                {% endif %}    
+            <tr><td><A HREF="{{ target.get_absolute_url }}">{{ target.targetName }}</A></td>
+                <td>{{ target.targetRA2000 }}</td>
+                <td>{{ target.targetDec2000 }}</td>
+                <td>{{ target.targetConst }}</td>
+                <td>{{ target.targetMag }}</td>
+                <td>{{ target.targetType }}</td>
+                <td>{{ target.targetClass }}</td>
+            </tr>
+        {% empty %}
+            <p><i>No results found.</i></p>
+        {% endfor %}
+    </table>
+    </div>
 {% endblock content %}
