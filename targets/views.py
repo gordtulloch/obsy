@@ -52,7 +52,7 @@ def target_query(request):
         try:
             Simbad.add_votable_fields('flux(B)', 'flux(V)', 'flux(R)', 'flux(I)','otype(main)')
             results_simbad = Simbad.query_object(search_term, wildcard=True)
-            if (results_simbad != None):
+            if (len(results_simbad)>0):
                 df=results_simbad.to_pandas()
                 results=df.to_dict('records')
                 # Add results to the targets database
