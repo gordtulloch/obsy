@@ -8,14 +8,10 @@ class TargetUpdateForm(forms.ModelForm):
         #fields = '__all__'
         exclude = ('userId',) 
         
-class scheduleFileForm(forms.ModelForm):
-     template_name = 'targets/schedule_upload.html'
-     class Meta:
-        model = scheduleFile  # Specify the model class
-        fields = '__all__'
+class scheduleFileForm(forms.Form):
+     name  = forms.CharField(max_length=50)
+     file = forms.FileField()
 
-class sequenceFileForm(forms.ModelForm):
-     template_name = 'targets/sequence_upload.html'
-     class Meta:
-        model = sequenceFile  # Specify the model class
-        fields = '__all__'
+class sequenceFileForm(forms.Form):
+     name = forms.CharField(max_length=50)
+     file = forms.FileField()

@@ -203,14 +203,16 @@ def checkSchedule():
 ## sequence_file_upload function - allows a user to upload a EKOS Sequence File                 ##
 ##################################################################################################
 def sequence_file_upload(request):
-    error_message=""
+    form = sequenceFileForm()
     if request.method == 'POST':
-        filePath = request.POST.get('sequenceFilePath')
-        newFile=sequenceFile()
-        newFile.sequenceFilePath=filePath
-        return render(request, 'targets/sequence_file_list.html')
-    else:
-        return render(request, 'targets/sequence_upload.html',{'error': error_message})
+        form = sequenceFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Handle the uploaded file (save its contents to a text field, for example)
+            uploaded_file_contents = request.FILES["file"].read().decode("utf-8")
+            # Save the contents to your model or wherever you need it
+            # Example: my_model.text_field = uploaded_file_contents
+            # my_model.save()
+    return render(request, "targets/sequence_upload.html", locals())
     
 ##################################################################################################
 ## sequence_list - List all targets                                                             ## 
@@ -225,7 +227,18 @@ class sequence_file_list(ListView):
 ## schedule_file_upload function - allows a user to upload a EKOS Sequence File                 ##
 ##################################################################################################
 def schedule_file_upload(request):
-    return render(request, 'targets/schedule_upload.html')
+    if request.method == 'POST':
+        form = scheduleFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Handle the uploaded file (save its contents to a text field, for example)
+            uploaded_file_contents = request.FILES["file"].read().decode("utf-8")
+            # Save the contents to your model or wherever you need it
+            # Example: my_model.text_field = uploaded_file_contents
+            # my_model.save()
+            return HttpResponseRedirect("/success/url/")
+    else:
+        form = scheduleFileForm(request)
+    return render(request, "targets/schedule_upload.html", {"form": form})
     
 ##################################################################################################
 ## schedule_file_list - List all targets                                                             ## 
