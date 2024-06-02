@@ -208,10 +208,10 @@ def sequence_file_upload(request):
         form = sequenceFileForm(request.POST, request.FILES)
         if form.is_valid():
             # Handle the uploaded file (save its contents to a text field, for example)
-            uploaded_file_contents = request.FILES["file"].read().decode("utf-8")
-            # Save the contents to your model or wherever you need it
-            # Example: my_model.text_field = uploaded_file_contents
-            # my_model.save()
+            newSequence = sequenceFile() 
+            newSequence.sequenceFileName = request.FILES["file"].name
+            newSequence.sequenceFileData = request.FILES["file"].read().decode("utf-8")
+            return HttpResponseRedirect("/success/url/")
     return render(request, "targets/sequence_upload.html", locals())
     
 ##################################################################################################
@@ -230,11 +230,9 @@ def schedule_file_upload(request):
     if request.method == 'POST':
         form = scheduleFileForm(request.POST, request.FILES)
         if form.is_valid():
-            # Handle the uploaded file (save its contents to a text field, for example)
-            uploaded_file_contents = request.FILES["file"].read().decode("utf-8")
-            # Save the contents to your model or wherever you need it
-            # Example: my_model.text_field = uploaded_file_contents
-            # my_model.save()
+            newSchedule = scheduleFile() 
+            newSchedule.sequenceFileName = request.FILES["file"].name
+            newSchedule.sequenceFileData = request.FILES["file"].read().decode("utf-8")
             return HttpResponseRedirect("/success/url/")
     else:
         form = scheduleFileForm(request)

@@ -9,9 +9,7 @@ class TargetUpdateForm(forms.ModelForm):
         exclude = ('userId',) 
         
 class scheduleFileForm(forms.Form):
-     name  = forms.CharField(max_length=50)
      file = forms.FileField()
 
 class sequenceFileForm(forms.Form):
-     name = forms.CharField(max_length=50)
      file = forms.FileField()

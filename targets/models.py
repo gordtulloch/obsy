@@ -115,7 +115,7 @@ class sequenceFile(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    sequenceFilePath      = models.FileField(max_length=MAX_FILE_SIZE,upload_to="sequence/")
+    sequenceFileName      = models.FileField(max_length=MAX_FILE_SIZE)
     sequenceFileData      = models.CharField(max_length=MAX_FILE_SIZE)
     
 ##################################################################################################
@@ -127,8 +127,8 @@ class scheduleFile(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    scheduleFilePath        = models.FileField(max_length=MAX_FILE_SIZE,upload_to="schedule/") 
-    scheduleFileData       = models.CharField(max_length=MAX_FILE_SIZE)
+    scheduleFileName        = models.FileField(max_length=MAX_FILE_SIZE) 
+    scheduleFileData        = models.CharField(max_length=MAX_FILE_SIZE)
     
 ##################################################################################################
 ## simbadType - this model allows mapping between SIMBAD object types and obsy object classes   ##

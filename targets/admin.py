@@ -11,10 +11,10 @@ class scheduleDetailAdmin(admin.ModelAdmin):
     list_display = ("scheduleDetailId","scheduleId","targetId")
     
 class sequenceFileAdmin(admin.ModelAdmin):
-    list_display = ("sequenceFileId","sequenceFilePath")
+    list_display = ("sequenceFileId","sequenceFileName")
     
 class scheduleFileAdmin(admin.ModelAdmin):
-    list_display = ("scheduleFileId","scheduleFilePath")
+    list_display = ("scheduleFileId","scheduleFileName")
     
 class simbadTypeAdmin(admin.ModelAdmin):
     list_display = ("label", "description","category")
