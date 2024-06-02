@@ -1,22 +1,5 @@
 from django.db import models
 
-class fitsFile(models.Model):
-    fitsFileId=models.CharField(max_length=200,primary_key=True)
-    date    =models.DateField()
-    filename=models.CharField(max_length=512)
-    
-    def __str__(self):
-        return self.thisUNID
-    
-class fitsHeader(models.Model):
-    fitsHeaderId  =models.CharField(max_length=200,primary_key=True)
-    parentUNID=models.ForeignKey(fitsFile, on_delete=models.CASCADE)
-    keyword   =models.CharField(max_length=200)
-    value     =models.CharField(max_length=200)
-    
-    def __str__(self):
-        return self.thisUNID
-    
 class observatory(models.Model):
     observatoryId  =models.CharField(max_length=200,primary_key=True)
     name      =models.CharField(max_length=200)

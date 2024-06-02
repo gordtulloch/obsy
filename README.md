@@ -25,7 +25,7 @@ Initially the SQL Database will be SQLite but will be easily migrated to MySQL o
 
 ## Current Status
 Currently working on sub-projects as follows:
-* OBSY - Building user interface, handling for target searching and selection, setup configuration tables (STARTED)
+* OBSY - Building user interface, handling for target searching and selection, setup configuration tables (STARTED) Next will be data repository creation and management functions using initially Dropbox (because I already have an account, the functions will allow AWS etc later)
 * [EKOSProcessingScripts](https://github.com/gordtulloch/EKOSProcessingScripts) Scripts to use with EKOS to integrate with OBSY. For example a post-processing script that calibrates images, stores the FITS data files in a repository, and 
 loads summary and image information into the OBSY database. (TESTING)
 * [Photometry-Pipeline](https://github.com/gordtulloch/Photometry-Pipeline) Python script for processing of images via differential photometry (STARTED)

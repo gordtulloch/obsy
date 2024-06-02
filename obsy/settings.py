@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "setup.apps.SetupConfig",
     "targets.apps.TargetsConfig",
+    "data.apps.DataConfig",
 ]
 
 MIDDLEWARE = [

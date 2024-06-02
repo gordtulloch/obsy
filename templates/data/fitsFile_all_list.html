@@ -1,0 +1,22 @@
+{% extends "_base.html" %}
+{% block title %}All FITS File List{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <br><br>
+    <H2>All FITS Files List</H2>
+    <table class="table">
+        {% for fitsFile in fitsFile_list %}
+            {% if forloop.first %}
+                <tr><th>UUID</th><th>Date</th><th>FileName</th></tr>
+                {% endif %}    
+            <tr><td><A HREF="{{ target.get_absolute_url }}">{{ fitsFileId }}</A></td>
+                <td>{{ fitsFile.date }}</td>
+                <td>{{ fitsFile.fileName }}</td>
+            </tr>
+        {% empty %}
+            <p><i>No results found.</i></p>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock content %}
