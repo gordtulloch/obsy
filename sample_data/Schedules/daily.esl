@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SchedulerList version='1.6'>
+<Profile>Default</Profile>
+<Mosaic>
+<Target>NGC_2174</Target>
+<Group></Group>
+<FinishSequence/>
+<Sequence>/home/stellarmate/Pictures/Sequences/1 x 300s Ha neg25T.esq</Sequence>
+<Directory>/home/stellarmate/NGC_2174</Directory>
+<FocusEveryN>1</FocusEveryN>
+<AlignEveryN>1</AlignEveryN>
+<TrackChecked/>
+<AlignChecked/>
+<GuideChecked/>
+<Overlap>10</Overlap>
+<CenterRA>6.1625</CenterRA>
+<CenterDE>20.5319</CenterDE>
+<GridW>2</GridW>
+<GridH>4</GridH>
+<FOVW>42.41</FOVW>
+<FOVH>55.17</FOVH>
+<CameraFOVW>22.32</CameraFOVW>
+<CameraFOVH>14.91</CameraFOVH>
+</Mosaic>
+<Job>
+<Name>RW Aur</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>5.13044</J2000RA>
+<J2000DE>30.4014</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>10.044</X>
+<Y>-20.1285</Y>
+<Rotation>0.338741</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>NGC 2217</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>6.36105</J2000RA>
+<J2000DE>-27.2338</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/1 x 300s Ha neg25T.esq</Sequence>
+<TileCenter>
+<X>10.044</X>
+<Y>-6.7095</Y>
+<Rotation>0.100819</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='-15'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>NGC 2207</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>6.27279</J2000RA>
+<J2000DE>-21.3727</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/1 x 300s Ha neg25T.esq</Sequence>
+<TileCenter>
+<X>10.044</X>
+<Y>6.7095</Y>
+<Rotation>-0.137032</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='-15'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>NGC 2204</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>6.25895</J2000RA>
+<J2000DE>-18.6659</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/1 x 300s Ha neg25T.esq</Sequence>
+<TileCenter>
+<X>10.044</X>
+<Y>20.1285</Y>
+<Rotation>-0.374812</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='-15'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>NGC 2359</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>7.30861</J2000RA>
+<J2000DE>-13.2272</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/1 x 300s Ha neg25T.esq</Sequence>
+<TileCenter>
+<X>-10.044</X>
+<Y>20.1285</Y>
+<Rotation>-0.337855</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='-15'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>GM Aur</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>4.91972</J2000RA>
+<J2000DE>30.3665</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>-10.044</X>
+<Y>6.7095</Y>
+<Rotation>-0.100585</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>V396 Aur</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>4.92694</J2000RA>
+<J2000DE>30.2986</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>-10.044</X>
+<Y>-6.7095</Y>
+<Rotation>0.136754</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>AB Aur</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>4.9294</J2000RA>
+<J2000DE>30.5512</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>-10.044</X>
+<Y>-20.1285</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>eps Aur</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>5.03281</J2000RA>
+<J2000DE>43.8233</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/Varstars/eps Aur.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>ARP142</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>9.62906</J2000RA>
+<J2000DE>2.75417</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/1 x 300s Ha neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='-15'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>KR Aur</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>6.2622</J2000RA>
+<J2000DE>28.5857</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>V347 Aur</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>4.94917</J2000RA>
+<J2000DE>51.5141</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>NGC 2775</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>9.17226</J2000RA>
+<J2000DE>7.03794</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/1 x 300s Ha neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>AG DRA</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>16.0281</J2000RA>
+<J2000DE>66.8028</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>T CrB</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>15.9917</J2000RA>
+<J2000DE>25.9202</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='-15'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>TYC 3384-35-1</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>6.51699</J2000RA>
+<J2000DE>50.0467</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/4x30s BV Photometric neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>ARP141</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>7.239</J2000RA>
+<J2000DE>73.4769</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/1 x 300s Ha neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='0'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<Job>
+<Name>M 81</Name>
+<Group></Group>
+<Coordinates>
+<J2000RA>9.92588</J2000RA>
+<J2000DE>69.0653</J2000DE>
+</Coordinates>
+<PositionAngle>-181</PositionAngle>
+<Sequence>/home/stellarmate/Pictures/Sequences/24 x 300s Ha neg25T.esq</Sequence>
+<TileCenter>
+<X>0</X>
+<Y>0</Y>
+<Rotation>0.374163</Rotation>
+</TileCenter>
+<StartupCondition>
+<Condition>ASAP</Condition>
+</StartupCondition>
+<Constraints>
+<Constraint value='-15'>MinimumAltitude</Constraint>
+<Constraint>EnforceTwilight</Constraint>
+<Constraint>EnforceArtificialHorizon</Constraint>
+</Constraints>
+<CompletionCondition>
+<Condition>Sequence</Condition>
+</CompletionCondition>
+<Steps>
+<Step>Track</Step>
+<Step>Align</Step>
+<Step>Guide</Step>
+</Steps>
+</Job>
+<SchedulerAlgorithm value='1'/>
+<ErrorHandlingStrategy value='0'>
+<delay>0</delay>
+</ErrorHandlingStrategy>
+<StartupProcedure>
+<Procedure value='/home/stellarmate/scripts/safeOpen.py'>StartupScript</Procedure>
+<Procedure>UnparkMount</Procedure>
+</StartupProcedure>
+<ShutdownProcedure>
+<Procedure>WarmCCD</Procedure>
+<Procedure>ParkMount</Procedure>
+</ShutdownProcedure>
+</SchedulerList>

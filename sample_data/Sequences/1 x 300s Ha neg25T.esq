@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SequenceQueue version='2.6'>
+<GuideDeviation enabled='false'>2</GuideDeviation>
+<GuideStartDeviation enabled='false'>2</GuideStartDeviation>
+<HFRCheck enabled='false'>
+<HFRDeviation>2.88354</HFRDeviation>
+<HFRCheckAlgorithm>0</HFRCheckAlgorithm>
+<HFRCheckThreshold>10</HFRCheckThreshold>
+<HFRCheckFrames>1</HFRCheckFrames>
+</HFRCheck>
+<RefocusOnTemperatureDelta enabled='false'>1</RefocusOnTemperatureDelta>
+<RefocusEveryN enabled='false'>60</RefocusEveryN>
+<RefocusOnMeridianFlip enabled='false'/>
+<Job>
+<Exposure>300</Exposure>
+<Format>Raw 16 bit</Format>
+<Encoding>FITS</Encoding>
+<Binning>
+<X>1</X>
+<Y>1</Y>
+</Binning>
+<Frame>
+<X>0</X>
+<Y>0</Y>
+<W>5496</W>
+<H>3672</H>
+</Frame>
+<Temperature force='false'>-25</Temperature>
+<Filter>Ha</Filter>
+<Type>Light</Type>
+<Count>1</Count>
+<Delay>0</Delay>
+<TargetName>IC 434</TargetName>
+<GuideDitherPerJob>0</GuideDitherPerJob>
+<FITSDirectory>/home/stellarmate/Pictures</FITSDirectory>
+<PlaceholderFormat>/%t/%T/%F/%t_%T_%F_%G_%O_%B_%e</PlaceholderFormat>
+<PlaceholderSuffix>3</PlaceholderSuffix>
+<UploadMode>0</UploadMode>
+<Properties>
+<PropertyVector name='CCD_CONTROLS'>
+<OneElement name='Gain'>114</OneElement>
+<OneElement name='Offset'>20</OneElement>
+</PropertyVector>
+</Properties>
+<Calibration>
+<PreAction>
+<Type>1</Type>
+</PreAction>
+<FlatDuration dark='false'>
+<Type>ADU</Type>
+<Value>7500</Value>
+<Tolerance>1000</Tolerance>
+</FlatDuration>
+</Calibration>
+</Job>
+</SequenceQueue>

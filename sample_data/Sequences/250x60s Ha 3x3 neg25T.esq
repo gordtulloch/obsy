@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SequenceQueue version='2.6'>
+<GuideDeviation enabled='false'>2</GuideDeviation>
+<GuideStartDeviation enabled='false'>2</GuideStartDeviation>
+<HFRCheck enabled='false'>
+<HFRDeviation>0</HFRDeviation>
+<HFRCheckAlgorithm>0</HFRCheckAlgorithm>
+<HFRCheckThreshold>10</HFRCheckThreshold>
+<HFRCheckFrames>1</HFRCheckFrames>
+</HFRCheck>
+<RefocusOnTemperatureDelta enabled='false'>1</RefocusOnTemperatureDelta>
+<RefocusEveryN enabled='false'>60</RefocusEveryN>
+<RefocusOnMeridianFlip enabled='false'/>
+<Job>
+<Exposure>60</Exposure>
+<Format>Raw 16 bit</Format>
+<Encoding>FITS</Encoding>
+<Binning>
+<X>3</X>
+<Y>3</Y>
+</Binning>
+<Frame>
+<X>0</X>
+<Y>0</Y>
+<W>5496</W>
+<H>3672</H>
+</Frame>
+<Temperature force='true'>-25</Temperature>
+<Filter>Ha</Filter>
+<Type>Light</Type>
+<Count>250</Count>
+<Delay>0</Delay>
+<GuideDitherPerJob>0</GuideDitherPerJob>
+<FITSDirectory>/home/stellarmate/Pictures</FITSDirectory>
+<PlaceholderFormat>/%t/%T/%F/%t_%T_%F_%e_%D</PlaceholderFormat>
+<PlaceholderSuffix>1</PlaceholderSuffix>
+<UploadMode>0</UploadMode>
+<RemoteDirectory>/home/Stellarmate/Pictures</RemoteDirectory>
+<Properties>
+<PropertyVector name='CCD_CONTROLS'>
+<OneElement name='Gain'>114</OneElement>
+<OneElement name='Offset'>20</OneElement>
+</PropertyVector>
+</Properties>
+<Calibration>
+<PreAction>
+<Type>1</Type>
+</PreAction>
+<FlatDuration dark='false'>
+<Type>Manual</Type>
+</FlatDuration>
+</Calibration>
+</Job>
+</SequenceQueue>
