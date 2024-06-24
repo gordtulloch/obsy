@@ -2,9 +2,10 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
+from setup.models import observatory, telescope, imager
 
 class target(models.Model):
-    
+    # Initial data loaded
     TARGET_CLASSES=(
         ("VS", "Variable Star"),
         ("EX", "Exoplanet"),
@@ -30,6 +31,10 @@ class target(models.Model):
     targetPA        = models.DecimalField(default=0.0,max_digits=6, decimal_places=2)
     targetInactive  = models.BooleanField(default=False)
     observeOnce     = models.BooleanField(default=True)
+    # Additional data selected
+    observatory     = models.ForeignKey(observatory, on_delete=models.CASCADE)
+    telescope       = models.ForeignKey(telescope, on_delete=models.CASCADE)
+    imager          = models.ForeignKey(imager, on_delete=models.CASCADE)
     
     def __str__(self):
         return f"{self.targetId}"

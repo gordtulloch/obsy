@@ -3,8 +3,9 @@ from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, HttpResponseRedirect
 from .models import target,simbadType,scheduleMaster,scheduleFile,sequenceFile
 from setup.models import observatory,telescope,imager
-from .forms import TargetUpdateForm,sequenceFileForm,scheduleFileForm
+from .forms import TargetUpdateForm
 from django.urls import reverse_lazy,reverse
+from django.core.files.storage import FileSystemStorage
 import logging
 
 import astroquery
@@ -199,51 +200,4 @@ def checkSchedule():
     # TODO
     return
 
-##################################################################################################
-## sequence_file_upload function - allows a user to upload a EKOS Sequence File                 ##
-##################################################################################################
-def sequence_file_upload(request):
-    form = sequenceFileForm(request.POST, request.FILES)
-    if request.method == 'POST':
-        form = sequenceFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            newSequence=sequenceFile()
-            newSequence.sequenceFileName = request.FILES["file"].name
-            newSequence.sequenceFileData = request.FILES["file"].read().decode("utf-8")
-            return HttpResponseRedirect(reverse('sequence_file_list'))
-        else:
-            logger.warning("Invalid form submission in Sequence upload")
-    return render(request, "targets/sequence_upload.html", locals())
-    
-##################################################################################################
-## sequence_list - List all targets                                                             ## 
-##################################################################################################
-class sequence_file_list(ListView):
-    model=sequenceFile
-    context_object_name="sequence_list"
-    template_name="targets/sequence_file_list.html"
-    login_url = "account_login"
 
-##################################################################################################
-## schedule_file_upload function - allows a user to upload a EKOS Sequence File                 ##
-##################################################################################################
-def schedule_file_upload(request):
-    if request.method == 'POST':
-        form = scheduleFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            newSchedule = scheduleFile() 
-
-            return HttpResponseRedirect(reverse('schedule_file_list'))
-    else:
-        form = scheduleFileForm(request)
-    return render(request, "targets/schedule_upload.html", {"form": form})
-    
-##################################################################################################
-## schedule_file_list - List all targets                                                             ## 
-##################################################################################################
-class schedule_file_list(ListView):
-    model=scheduleFile
-    context_object_name="schedule_list"
-    template_name="targets/schedule_file_list.html"
-    login_url = "account_login"
