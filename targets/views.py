@@ -1,10 +1,10 @@
 # targets/views.py
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, HttpResponseRedirect
 from .models import target,simbadType,scheduleMaster,scheduleFile,sequenceFile
 from setup.models import observatory,telescope,imager
 from .forms import TargetUpdateForm,sequenceFileForm,scheduleFileForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 import logging
 
 import astroquery
@@ -203,15 +203,17 @@ def checkSchedule():
 ## sequence_file_upload function - allows a user to upload a EKOS Sequence File                 ##
 ##################################################################################################
 def sequence_file_upload(request):
-    form = sequenceFileForm()
+    form = sequenceFileForm(request.POST, request.FILES)
     if request.method == 'POST':
         form = sequenceFileForm(request.POST, request.FILES)
         if form.is_valid():
-            # Handle the uploaded file (save its contents to a text field, for example)
-            newSequence = sequenceFile() 
+            form.save()
+            newSequence=sequenceFile()
             newSequence.sequenceFileName = request.FILES["file"].name
             newSequence.sequenceFileData = request.FILES["file"].read().decode("utf-8")
-            return HttpResponseRedirect("/success/url/")
+            return HttpResponseRedirect(reverse('sequence_file_list'))
+        else:
+            logger.warning("Invalid form submission in Sequence upload")
     return render(request, "targets/sequence_upload.html", locals())
     
 ##################################################################################################
@@ -231,9 +233,8 @@ def schedule_file_upload(request):
         form = scheduleFileForm(request.POST, request.FILES)
         if form.is_valid():
             newSchedule = scheduleFile() 
-            newSchedule.sequenceFileName = request.FILES["file"].name
-            newSchedule.sequenceFileData = request.FILES["file"].read().decode("utf-8")
-            return HttpResponseRedirect("/success/url/")
+
+            return HttpResponseRedirect(reverse('schedule_file_list'))
     else:
         form = scheduleFileForm(request)
     return render(request, "targets/schedule_upload.html", {"form": form})

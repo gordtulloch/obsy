@@ -102,10 +102,10 @@ class scheduleDetail(models.Model):
     jobStepGuide            = models.BooleanField(default=True)
     
     def __str__(self):
-        return f"{self.scheduleDetailId}"
+        return f"{self.scheduleDetailId}" 
     def get_absolute_url(self):
-        return reverse("schedule_detail", args=[str(self.scheduleDetailId)])
-
+        return reverse("schedule_detail", args=[str(self.scheduleDetailId)]) 
+    
 ##################################################################################################
 ## sequenceFile - this model allows storage of XML EKOS Sequence Files                          ##
 ##################################################################################################
@@ -115,7 +115,7 @@ class sequenceFile(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    sequenceFileName      = models.FileField(max_length=MAX_FILE_SIZE)
+    sequenceFileName      = models.FileField(max_length=MAX_FILE_SIZE,upload_to='sequence')
     sequenceFileData      = models.CharField(max_length=MAX_FILE_SIZE)
     
 ##################################################################################################
@@ -127,7 +127,7 @@ class scheduleFile(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    scheduleFileName        = models.FileField(max_length=MAX_FILE_SIZE) 
+    scheduleFileName        = models.FileField(max_length=MAX_FILE_SIZE,upload_to='schedule') 
     scheduleFileData        = models.CharField(max_length=MAX_FILE_SIZE)
     
 ##################################################################################################

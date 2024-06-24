@@ -4,12 +4,17 @@ from .models import target, scheduleFile,sequenceFile
 class TargetUpdateForm(forms.ModelForm):
      template_name = 'targets/target_form.html'
      class Meta:
-        model = target  # Specify the model class
+        model = target 
         #fields = '__all__'
         exclude = ('userId',) 
         
-class scheduleFileForm(forms.Form):
-     file = forms.FileField()
+class scheduleFileForm(forms.ModelForm):
+     class Meta:
+          model=scheduleFile
+          fields = ['scheduleFileName']
 
-class sequenceFileForm(forms.Form):
-     file = forms.FileField()
+class sequenceFileForm(forms.ModelForm):
+     template_name = 'targets/sequence_upload.html' 
+     class Meta:
+          model=sequenceFile
+          fields = ['sequenceFileName']
