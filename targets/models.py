@@ -43,12 +43,12 @@ class target(models.Model):
         return reverse("target_detail", args=[str(self.targetId)])
 
 ##################################################################################################
-## schedule -   this model is the master record for a schedule and has n children consisting of ##
-##              targets and associated observation strategy information                         ##
+## scheduleMaster -   this model is the master record for a schedule and has n children         ##
+##              consisting of targets and associated observation strategy information           ##
 ##################################################################################################
 class scheduleMaster(models.Model):
     
-    scheduleId              = models.UUIDField( 
+    scheduleMasterId              = models.UUIDField( 
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
@@ -77,10 +77,10 @@ class scheduleMaster(models.Model):
     ShutDownCap            = models.BooleanField(default=False,null=True, blank=True)
    
     def __str__(self):
-        return f"{self.scheduleId}"
+        return f"{self.scheduleMasterId}"
     
     def get_absolute_url(self):
-        return reverse("schedule_detail", args=[str(self.targetId)])
+        return reverse("schedule_details", args=[str(self.scheduleMasterId)])
 
 class ScheduleManager(models.Manager):
     def delete_everything(self):
@@ -91,12 +91,11 @@ class ScheduleManager(models.Manager):
 ##                  targets and associated observation strategy information                     ##
 ##################################################################################################
 class scheduleDetail(models.Model):
- 
     scheduleDetailId        = models.UUIDField( 
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    scheduleId              = models.ForeignKey(scheduleMaster, on_delete=models.CASCADE)
+    scheduleMasterId              = models.ForeignKey(scheduleMaster, on_delete=models.CASCADE)
     scheduledDateTime       = models.DateTimeField()
     targetPriority          = models.IntegerField(default=1,validators=[MaxValueValidator(100),MinValueValidator(1)])
     targetId                = models.ForeignKey(target, on_delete=models.CASCADE)
@@ -115,7 +114,7 @@ class scheduleDetail(models.Model):
     def __str__(self):
         return f"{self.scheduleDetailId}" 
     def get_absolute_url(self):
-        return reverse("schedule_detail", args=[str(self.scheduleDetailId)]) 
+        return reverse("schedule_details_item", args=[str(self.scheduleDetailId)]) 
     
 ##################################################################################################
 ## sequenceFile - this model allows storage of XML EKOS Sequence Files                          ##

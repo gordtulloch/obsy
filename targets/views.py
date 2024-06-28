@@ -1,9 +1,9 @@
 # targets/views.py
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, HttpResponseRedirect
-from .models import target,simbadType,scheduleMaster,scheduleFile,sequenceFile
+from .models import target,simbadType,scheduleMaster,scheduleDetail
 from setup.models import observatory,telescope,imager
-from .forms import TargetUpdateForm,ScheduleQueryForm,ScheduleEditForm
+from .forms import TargetUpdateForm
 from django.urls import reverse_lazy,reverse
 from django.core.files.storage import FileSystemStorage
 import logging
@@ -34,16 +34,6 @@ class target_all_list(ListView):
     model=target
     context_object_name="target_list"
     template_name="targets/target_all_list.html"
-    login_url = "account_login"
-
-##################################################################################################
-## Schedule Edit List-  this function will allow the user to edit a schedule of targets if one  ##
-##                      has been created using the Schedule function                            ##
-##################################################################################################
-class schedule_edit(ListView):
-    model=scheduleMaster
-    context_object_name="schedule_edit"
-    template_name="targets/schedule_edit.html"
     login_url = "account_login"
 
 ##################################################################################################
@@ -119,23 +109,31 @@ class target_delete(DeleteView):
     success_url = reverse_lazy('target_all_list')
 
 ##################################################################################################
-## Schedule function -  this function will accept two inputs from the user, a start date to     ##
-##                      use when  generating a schedule and a number of dates out in which to   ##
-##                      plan. The result will be a list of schedule entries that are passed to  ##
-##                      another view that enables the user to manipulate and save the schedule  ##
+## Schedule -  this function will allow the user to create and edit a schedule of targets       ##
 ##################################################################################################
-def schedule(request):
-    error_message=""
-    if request.method == 'POST':
-        form = ScheduleEditForm(request.POST)
-        if form.is_valid():
-            form.save()
-            results=scheduleMaster.objects.first()
-            return render(request, 'targets/schedule_edit.html',{'results': results})
-        else:
-            form = ScheduleQueryForm(request.POST)
-            form.userID=request.user.id
-            return render(request, 'targets/schedule_query.html',{'form': form})
+class schedule(ListView):
+    model=scheduleMaster
+    context_object_name="scheduleMaster_list"
+    template_name="targets/schedule.html"
+    login_url = "account_login"
+
+##################################################################################################
+## Schedule Details -  this function displays a schedule of targets                             ##
+##################################################################################################
+class scheduleDetails(ListView):
+    model=scheduleDetail
+    context_object_name="scheduleDetail_list"
+    template_name="targets/schedule_detail_list.html"
+    login_url = "account_login"
+    
+##################################################################################################
+## Schedule Details Items -  this function displays individual target details                   ##
+##################################################################################################
+class scheduleDetailsItem(UpdateView):
+    model=scheduleDetail
+    context_object_name="scheduleDetailItem_list"
+    template_name="targets/schedule_detail_edit.html"
+    login_url = "account_login"
 
 ##################################################################################################
 ## buildSchedule function -  this function accepts parameters from the user and loads the       ##
@@ -185,15 +183,6 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
             detailRow.scheduledDateTime     = observer.next_setting(ephem.Sun(), use_center=True)
             detailRow.targetId              = targetRec.targetId
              
-##################################################################################################
-## checkSchedule function -  this function looks at a past schedule and goes through each       ##
-##                           detail row in the schedule to determine if the item was completed. ##
-##                           If so if the target was one time then the target is marked         ##
-##                           inactive otherwise it is left as active to be scheduled another    ##
-##                           night.                                                             ##
-##################################################################################################
-def checkSchedule():
-    # TODO
-    return
+
 
 
