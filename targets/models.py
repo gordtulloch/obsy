@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from setup.models import observatory, telescope, imager
+from datetime import datetime
 
 class target(models.Model):
     # Initial data loaded
@@ -32,9 +33,9 @@ class target(models.Model):
     targetInactive  = models.BooleanField(default=False)
     observeOnce     = models.BooleanField(default=True)
     # Additional data selected
-    observatory     = models.ForeignKey(observatory, on_delete=models.CASCADE)
-    telescope       = models.ForeignKey(telescope, on_delete=models.CASCADE)
-    imager          = models.ForeignKey(imager, on_delete=models.CASCADE)
+    observatoryId     = models.ForeignKey(observatory, on_delete=models.CASCADE,null=True, blank=True)
+    telescopeId       = models.ForeignKey(telescope, on_delete=models.CASCADE,null=True, blank=True)
+    imagerId          = models.ForeignKey(imager, on_delete=models.CASCADE,null=True, blank=True)
     
     def __str__(self):
         return f"{self.targetId}"
@@ -51,28 +52,33 @@ class scheduleMaster(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    userId                  = models.CharField(max_length=255)
-    scheduleDate            = models.DateField()
-    startUpUnparkDome       = models.BooleanField(default=False)
-    startUpUnparkMount      = models.BooleanField(default=False)
-    startUpUnCap            = models.BooleanField(default=False)
-    onAbortJobMgmt          = models.CharField(max_length=10,choices=[("None","None"),("Queue","Queue"),("Immediate","Immediate")],default="None")
-    rescheduleErrorsSecs    = models.IntegerField(default=0)
-    jobConstraintsAlt       = models.DecimalField(default=0.0,max_digits=6, decimal_places=2)
-    jobConstraintsMoon      = models.DecimalField(default=0.0,max_digits=6, decimal_places=2)
-    jobConstraintsWeather   = models.BooleanField(default=False)
-    jobConstraintTwilight   = models.BooleanField(default=False)
-    jobConstraintArtHor     = models.BooleanField(default=False)
-    jobCompleteCondSeq      = models.BooleanField(default=False)
-    jobCompleteCondRepeatNo = models.IntegerField(default=0)  
-    jobCompleteCondRepeatAll    = models.BooleanField(default=False)
-    jobCompleteCondRepeatUntil  = models.DateField() 
-    ShutDownParkDome       = models.BooleanField(default=False)
-    ShutDownParkMount      = models.BooleanField(default=False)
-    ShutDownCap            = models.BooleanField(default=False)
-    
+    userId                  = models.CharField(max_length=255,null=True, blank=True)
+    scheduleDate            = models.DateField(null=True, blank=True)
+    scheduleDays            = models.IntegerField(null=True, blank=True) 
+    observatoryId           = models.ForeignKey(observatory, on_delete=models.CASCADE,null=True, blank=True)
+    telescopeId             = models.ForeignKey(telescope, on_delete=models.CASCADE,null=True, blank=True)
+    imagerId                = models.ForeignKey(imager, on_delete=models.CASCADE,null=True, blank=True)
+    startUpUnparkDome       = models.BooleanField(default=False,null=True, blank=True)
+    startUpUnparkMount      = models.BooleanField(default=False,null=True, blank=True)
+    startUpUnCap            = models.BooleanField(default=False,null=True, blank=True)
+    onAbortJobMgmt          = models.CharField(max_length=10,choices=[("None","None"),("Queue","Queue"),("Immediate","Immediate")],default="None",null=True, blank=True)
+    rescheduleErrorsSecs    = models.IntegerField(default=0,null=True, blank=True)
+    jobConstraintsAlt       = models.DecimalField(default=0.0,max_digits=6, decimal_places=2,null=True, blank=True)
+    jobConstraintsMoon      = models.DecimalField(default=0.0,max_digits=6, decimal_places=2,null=True, blank=True)
+    jobConstraintsWeather   = models.BooleanField(default=False,null=True, blank=True)
+    jobConstraintTwilight   = models.BooleanField(default=False,null=True, blank=True)
+    jobConstraintArtHor     = models.BooleanField(default=False,null=True, blank=True)
+    jobCompleteCondSeq      = models.BooleanField(default=False,null=True, blank=True)
+    jobCompleteCondRepeatNo = models.IntegerField(default=0,null=True, blank=True)  
+    jobCompleteCondRepeatAll    = models.BooleanField(default=False,null=True, blank=True)
+    jobCompleteCondRepeatUntil  = models.DateField(null=True, blank=True) 
+    ShutDownParkDome       = models.BooleanField(default=False,null=True, blank=True)
+    ShutDownParkMount      = models.BooleanField(default=False,null=True, blank=True)
+    ShutDownCap            = models.BooleanField(default=False,null=True, blank=True)
+   
     def __str__(self):
         return f"{self.scheduleId}"
+    
     def get_absolute_url(self):
         return reverse("schedule_detail", args=[str(self.targetId)])
 

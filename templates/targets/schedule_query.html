@@ -8,12 +8,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="text" class="form-control" data-provide="datepicker" name="start_date" placeholder="Enter starting date (YYYY/MM/DD) or TONIGHT">
-        <input type="text" class="form-control" name="days_to_schedule" placeholder="Enter how many days to include in the schedule?">
-         <button type="submit" class="btn btn-primary">Search</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-          {% if error %}
-          <p class="text-danger"><b>ERROR: {{ error }}</b></p>
-          {% endif %}
 </div>
 {% endblock content %}

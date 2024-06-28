@@ -12,10 +12,11 @@
         <tr><td>Magnitude</td><td>{{ target.targetMag }}</td></tr>
         <tr><td>Target Type</td><td>{{ target.targetType }}</td></tr>
         <tr><td>Target Class</td><td>{{ target.targetClass }}</td></tr>
-        <tr><td>Catalog IDs</td><td>{{ target.catalogIDs }}</td></tr>
         <tr><td>Name</td><td>{{ target.targetName }}</td></tr>
         <tr><td>Constellation</td><td>{{ target.targetConst }}</td></tr>
-
+        <tr><td>Requested Observatory</td><td>{{ target.observatory }}</td></tr>
+        <tr><td>Requested Telescope</td><td>{{ target.telescope }}</td></tr>
+        <tr><td>Requested Imager</td><td>{{ target.imager }}</td></tr>
     </table>
     <button type="button" class="btn btn-primary">< </button>
     <A HREF="edit/{{ target.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>

@@ -8,6 +8,9 @@ class observatory(models.Model):
     longitude =models.DecimalField(max_digits = 9,decimal_places = 6,default=0.0)
     elevation =models.DecimalField(max_digits = 6,decimal_places = 2,default=0.0)
     tz        =models.CharField(max_length=200)
+    telescopeId  = models.ForeignKey('telescope', on_delete=models.CASCADE,null=True, blank=True)
+    imagerId      = models.ForeignKey('imager', on_delete=models.CASCADE,null=True, blank=True)
+    
     def __str__(self):
         return self.name
     
@@ -16,9 +19,9 @@ class observer(models.Model):
     firstname  =models.CharField(max_length=200)
     middlename =models.CharField(max_length=200,blank=True)
     lastname   =models.CharField(max_length=200)
-    observatory=models.ForeignKey(observatory, on_delete=models.CASCADE)
     tz         =models.CharField(max_length=200) 
-    
+    observatoryId=models.ForeignKey('observatory', on_delete=models.CASCADE,null=True, blank=True)
+        
     def __str__(self):
         return self.observerId
     
@@ -39,7 +42,7 @@ class telescope(models.Model):
     telescopeType=models.CharField(max_length=2,choices=TELESCOPE_TYPES, default='NE')
     aperture    =models.DecimalField(max_digits = 6,decimal_places = 2)
     focalLength =models.DecimalField(max_digits = 6,decimal_places = 2)
-    observatory =models.ForeignKey(observatory, on_delete=models.CASCADE)
+    observatoryId =models.ForeignKey('observatory', on_delete=models.CASCADE,null=True, blank=True)
     
     def __str__(self):
         return self.name

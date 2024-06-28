@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, HttpResponseRedirect
 from .models import target,simbadType,scheduleMaster,scheduleFile,sequenceFile
 from setup.models import observatory,telescope,imager
-from .forms import TargetUpdateForm
+from .forms import TargetUpdateForm,ScheduleQueryForm,ScheduleEditForm
 from django.urls import reverse_lazy,reverse
 from django.core.files.storage import FileSystemStorage
 import logging
@@ -84,7 +84,6 @@ def target_query(request):
                     target.objects.create(               
                         userId=request.user.id,
                         targetName = row["MAIN_ID"],
-                        catalogIDs = row["MAIN_ID"],
                         targetType  =row["OTYPE_main"],
                         targetClass=assignTargetClass(row["OTYPE_main"]),
                         targetRA2000 = row["RA"],
@@ -128,18 +127,15 @@ class target_delete(DeleteView):
 def schedule(request):
     error_message=""
     if request.method == 'POST':
-        error_message=""
-        start_date          = request.POST.get('start_date')
-        days_to_schedule    = request.POST.get('days_to_schedule')
-        observatory_id      = request.POST.get('observatory_id')
-        telescope_id        = request.POST.get('telescope_id')
-        imager_id           = request.POST.get('imager_id')
-        
-        buildSchedule(request,start_date,days_to_schedule,observatory_id,telescope_id,imager_id) # Run the routine that populates the schedule tables
-        results=schedule.objects.all()
-        return render(request, 'targets/schedule_edit.html',{'results': results})
-    else:
-        return render(request, 'targets/schedule_query.html',{'error': error_message})
+        form = ScheduleEditForm(request.POST)
+        if form.is_valid():
+            form.save()
+            results=scheduleMaster.objects.first()
+            return render(request, 'targets/schedule_edit.html',{'results': results})
+        else:
+            form = ScheduleQueryForm(request.POST)
+            form.userID=request.user.id
+            return render(request, 'targets/schedule_query.html',{'form': form})
 
 ##################################################################################################
 ## buildSchedule function -  this function accepts parameters from the user and loads the       ##
