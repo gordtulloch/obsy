@@ -19,18 +19,18 @@ from MCPFunctions import isRaining, isSun, isCloudy, isBadWeather, obsyOpen, obs
 # CONFIGURATION AND SETUP
 ############################################################################################################
 debug			=	True
-homedir			=	"/home/gtulloch/Projects/EKOSProcessingScripts/"
+homedir			=	"/usr/local/share/indi/scripts"
 long			=	-97.1385
 lat				=	 49.8954
 runMCP			=	True
 maxPending		=	5
-ekosProfile		=	"NTT8"
+ekosProfile		=	"SPAO-PC"
 
 # Suppress warnings
 #warnings.filterwarnings("ignore")
 
 # Set up database
-dbName = homedir+"obsy.db"
+dbName = "obsy.db"
 con = sqlite3.connect(dbName)
 cur = con.cursor()
 
@@ -43,6 +43,7 @@ logger.info('MCP starting')
 # Ensure Ekos is running or exit
 ekosStartCounter=0
 while not ekos_dbus.is_ekos_running():
+	logger.info('DBus starting Ekos')
 	ekos_dbus.start_ekos()
 	time.sleep(5)
 	if ekosStartCounter > 5:
@@ -55,6 +56,7 @@ while not ekos_dbus.is_ekos_running():
 while runMCP:
 	# If it's raining or daytime, immediate shut down and wait 5 mins
 	if isRaining() or isSun():
+		logger.info('Daytime or rain - Closed Roof')
 		obsyState = "Closed"
 		obsyClose()
 		time.sleep(300)
@@ -62,6 +64,7 @@ while runMCP:
 
     # If weather looks unsuitable either stay closed or move to Close Pending if Open
 	if isCloudy() or isBadWeather():
+		logger.info('Clouds/Weather not within parameters - Closed Roof')
 		if obsyState == "Closed":
 			continue
 		# If Open give it PENDING minutes to change
@@ -76,6 +79,7 @@ while runMCP:
 			pendingCount=0
 	else:
 		# Good weather so set to Open Pending or Open
+		logger.info('Clouds/Weather within parameters - Open Roof')
 		if obsyState != "Open":
 			obsyState="Open Pending"
 			pendingCount=1

@@ -1,0 +1,2 @@
+0 Clear
+1 Cloudy
