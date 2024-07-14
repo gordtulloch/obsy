@@ -26,6 +26,11 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 from PIL import Image, ImageOps      # Install pillow instead of PIL
 import configparser
 
+# Set up logging
+import logging
+logger = logging.getLogger('MCP.py')
+logger.basicConfig(filename='MCP.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 #############################################################################################################
 ## G E T C O N F I G                                                                                       ##
 #############################################################################################################
@@ -35,16 +40,19 @@ def getConfig(keyword):
     file_path = "MCP.ini"
 	
 	# Check if the file exists
-    if os.path.exists(file_path):
+    if not os.path.exists(file_path):
         logger.info("Config file not found, creating with defaults.")
         config['DEFAULT'] = {
-    	    	'INDISERVER'	: 'localhost',
-              	'INDIPORT'	    : 7624,
+                'MCPHOME': '/home/gtulloch/obsy/MCP',
+                'INDI_TELESCOPE_SERVER'	: 'localhost',
+    	    	'INDI_DOME_SERVER'	    : 'localhost',
+              	'INDI_TELESCOPE_PORT'   : 7624,
+                'INDI_DOME_PORT'        : 7624,
              	'INDITELESCOPE'	: 'Telescope Simulator',
                 'INDIDOME'	    : 'Rolloff Simulator',
                 'WEATHERPORT'	: '/dev/ttyUSB0',
                 'RAINPORT'	    : '/dev/ttyUSB1',
-                }
+        }
         with open('MCP.ini', 'w') as configfile:
             config.write(configfile)
             return config['DEFAULT'][keyword]
@@ -54,9 +62,9 @@ def getConfig(keyword):
     
 ############################################################################################################
 # INDI Client Definition
-class IndiClient(PyIndi.BaseClient):
+class telescopeClient(PyIndi.BaseClient):
     def __init__(self):
-        super(IndiClient, self).__init__()
+        super(telescopeClient, self).__init__()
     def newDevice(self, d):
         pass
     def newProperty(self, p):
@@ -83,15 +91,48 @@ class IndiClient(PyIndi.BaseClient):
     def serverDisconnected(self, code):
         pass
 
+# INDI Client Definition
+class domeClient(PyIndi.BaseClient):
+    def __init__(self):
+        super(domeClient, self).__init__()
+    def newDevice(self, d):
+        pass
+    def newProperty(self, p):
+        pass
+    def removeProperty(self, p):
+        pass
+    def newSwitch(self, svp):
+        pass
+    def newNumber(self, nvp):
+        pass
+    def newText(self, tvp):
+        pass
+    def newLight(self, lvp):
+        pass
+    def newMessage(self, d, m):
+        pass
+    def serverConnected(self):
+        pass
+    def serverDisconnected(self, code):
+        pass
+
 #############################################################################################################
 ## S E R V E R  S E T U P                                                                                  ##
 #############################################################################################################
-# connect the server
-indiclient=IndiClient()
-indiclient.setServer(getConfig("INDISERVER"),getConfig("INDIPORT"))
+# connect the telescope server
+telescopeClient=telescopeClient()
+telescopeClient.setServer(getConfig("INDI_TELESCOPE_SERVER"),getConfig("INDI_TELESCOPE_PORT"))
 
-if (not(indiclient.connectServer())):
-    logger.error("No indiserver running on "+indiclient.getHost()+":"+str(indiclient.getPort()))
+if (not(telescopeClient.connectServer())):
+    logger.error("Telescope: No indiserver running on "+telescopeClient.getHost()+":"+str(telescopeClient.getPort()))
+    sys.exit(1)
+
+# connect the dome server
+domeClient=domeClient()
+domeClient.setServer(getConfig("INDI_DOME_SERVER"),getConfig("INDI_DOME_PORT"))
+
+if (not(domeClient.connectServer())):
+    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
     sys.exit(1)
 
 #############################################################################################################
@@ -103,10 +144,10 @@ device_telescope=None
 telescope_connect=None
 
 # get the telescope device
-device_telescope=indiclient.getDevice(telescope)
+device_telescope=telescopeClient.getDevice(telescope)
 while not(device_telescope):
     time.sleep(0.5)
-    device_telescope=indiclient.getDevice(telescope)
+    device_telescope=telescopeClient.getDevice(telescope)
 
 # wait CONNECTION property be defined for telescope
 telescope_connect=device_telescope.getSwitch("CONNECTION")
@@ -118,7 +159,7 @@ while not(telescope_connect):
 if not(device_telescope.isConnected()):
     telescope_connect[0].s=PyIndi.ISS_ON  # the "CONNECT" switch
     telescope_connect[1].s=PyIndi.ISS_OFF # the "DISCONNECT" switch
-    indiclient.sendNewSwitch(telescope_connect) # send this new value to the device
+    telescopeClient.sendNewSwitch(telescope_connect) # send this new value to the device
 
 #############################################################################################################
 ## D O M E  S E T U P                                                                                      ##
@@ -129,10 +170,10 @@ device_dome=None
 dome_connect=None
 
 # get the dome device
-device_dome=indiclient.getDevice(dome)
+device_dome=domeClient.getDevice(dome)
 while not(device_dome):
     time.sleep(0.5)
-    device_telescope=indiclient.getDevice(dome)
+    device_dome=domeClient.getDevice(dome)
 
 # wait CONNECTION property be defined for telescope
 dome_connect=device_dome.getSwitch("CONNECTION")
@@ -144,7 +185,7 @@ while not(dome_connect):
 if not(device_dome.isConnected()):
     dome_connect[0].s=PyIndi.ISS_ON  # the "CONNECT" switch
     dome_connect[1].s=PyIndi.ISS_OFF # the "DISCONNECT" switch
-    indiclient.sendNewSwitch(dome_connect) # send this new value to the device
+    telescopeClient.sendNewSwitch(dome_connect) # send this new value to the device
 
 #############################################################################################################
 ## D O M E  O P E N                                                                                        ##
@@ -158,7 +199,7 @@ def obsyOpen():
 
     telescope_parkstatus[0].s=PyIndi.ISS_ON   # the "PARK" switch
     telescope_parkstatus[1].s=PyIndi.ISS_OFF  # the "UNPARKED" switch
-    indiclient.sendNewSwitch(telescope_parkstatus) # send this new value to the device
+    telescopeClient.sendNewSwitch(telescope_parkstatus) # send this new value to the device
 
     telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
     while not(telescope_parkstatus):
@@ -178,7 +219,7 @@ def obsyOpen():
 
     dome_parkstatus[0].s=PyIndi.ISS_OFF   # the "PARK" switch
     dome_parkstatus[1].s=PyIndi.ISS_ON    # the "UNPARKED" switch
-    indiclient.sendNewSwitch(dome_parkstatus) # send this new value to the device
+    domeClient.sendNewSwitch(dome_parkstatus) # send this new value to the device
 
     dome_parkstatus=device_dome.getSwitch("DOME_PARK")
     while not(dome_parkstatus):
@@ -210,7 +251,7 @@ def obsyClose():
         telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
     telescope_parkstatus[0].s=PyIndi.ISS_ON   # the "PARK" switch
     telescope_parkstatus[1].s=PyIndi.ISS_OFF  # the "UNPARKED" switch
-    indiclient.sendNewSwitch(telescope_parkstatus) # send this new value to the device
+    telescopeClient.sendNewSwitch(telescope_parkstatus) # send this new value to the device
 
     telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
     while not(telescope_parkstatus):
@@ -230,7 +271,7 @@ def obsyClose():
 
     dome_parkstatus[0].s=PyIndi.ISS_ON   # the "PARK" switch
     dome_parkstatus[1].s=PyIndi.ISS_OFF  # the "UNPARKED" switch
-    indiclient.sendNewSwitch(dome_parkstatus) # send this new value to the device
+    domeClient.sendNewSwitch(dome_parkstatus) # send this new value to the device
 
     dome_parkstatus=device_dome.getSwitch("DOME_PARK")
     while not(dome_parkstatus):
