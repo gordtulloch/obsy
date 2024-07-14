@@ -13,7 +13,7 @@
 ############################################################################################################
 
 # A whole bunch of setup and function definition happens here
-from MCPFunctions import isRaining, isSun, isCloudy, isBadWeather, obsyOpen, obsyClose, ekos_dbus
+from MCPFunctions import isRaining, isSun, isCloudy, isBadWeather, obsyOpen, obsyClose, ekos_dbus, getConfig
 
 ############################################################################################################
 # CONFIGURATION AND SETUP

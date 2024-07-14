@@ -26,13 +26,32 @@ from keras.models import load_model  # TensorFlow is required for Keras to work
 from PIL import Image, ImageOps      # Install pillow instead of PIL
 import configparser
 
-
-############################################################################################################
-# Setup for mlCloudDetect
-# Load the model and labels
-model = load_model(homedir+"mlCloudDetect/keras_model.h5", compile=False)
-class_names = open(homedir+"mlCloudDetect/labels.txt", "r").readlines()
-
+#############################################################################################################
+## G E T C O N F I G                                                                                       ##
+#############################################################################################################
+# Function to retrieve configuration
+def getConfig(keyword):
+    config = configparser.ConfigParser()
+    file_path = "MCP.ini"
+	
+	# Check if the file exists
+    if os.path.exists(file_path):
+        logger.info("Config file not found, creating with defaults.")
+        config['DEFAULT'] = {
+    	    	'INDISERVER'	: 'localhost',
+              	'INDIPORT'	    : 7624,
+             	'INDITELESCOPE'	: 'Telescope Simulator',
+                'INDIDOME'	    : 'Rolloff Simulator',
+                'WEATHERPORT'	: '/dev/ttyUSB0',
+                'RAINPORT'	    : '/dev/ttyUSB1',
+                }
+        with open('MCP.ini', 'w') as configfile:
+            config.write(configfile)
+            return config['DEFAULT'][keyword]
+    else:
+        config.read(file_path)
+        return config['DEFAULT'][keyword]
+    
 ############################################################################################################
 # INDI Client Definition
 class IndiClient(PyIndi.BaseClient):
@@ -69,7 +88,7 @@ class IndiClient(PyIndi.BaseClient):
 #############################################################################################################
 # connect the server
 indiclient=IndiClient()
-indiclient.setServer(getConfig("INDISERVER",getConfig("INDIPORT"))
+indiclient.setServer(getConfig("INDISERVER"),getConfig("INDIPORT"))
 
 if (not(indiclient.connectServer())):
     logger.error("No indiserver running on "+indiclient.getHost()+":"+str(indiclient.getPort()))
@@ -79,7 +98,7 @@ if (not(indiclient.connectServer())):
 ## T E L E S C O P E  S E T U P                                                                            ##
 #############################################################################################################
 # connect the scope
-telescope=getConfig("INDITELESCOPE)
+telescope=getConfig("INDITELESCOPE")
 device_telescope=None
 telescope_connect=None
 
@@ -105,7 +124,7 @@ if not(device_telescope.isConnected()):
 ## D O M E  S E T U P                                                                                      ##
 #############################################################################################################
 # connect the dome
-dome=getConfig("INDIDOME)
+dome=getConfig("INDIDOME")
 device_dome=None
 dome_connect=None
 
@@ -126,32 +145,6 @@ if not(device_dome.isConnected()):
     dome_connect[0].s=PyIndi.ISS_ON  # the "CONNECT" switch
     dome_connect[1].s=PyIndi.ISS_OFF # the "DISCONNECT" switch
     indiclient.sendNewSwitch(dome_connect) # send this new value to the device
-
-#############################################################################################################
-## G E T C O N F I G                                                                                       ##
-#############################################################################################################
-# Function to retrieve configuration
-def getConfig(keyword):
-    config = configparser.ConfigParser()
-    file_path = "MCP.ini"
-	
-	# Check if the file exists
-    if os.path.exists(file_path):
-        logger.info("Config file not found, creating with defaults.")
-        config['DEFAULT'] = {
-    	    	'INDISERVER'	: 'localhost',
-              	'INDIPORT'	    : 7624,
-             	'INDITELESCOPE'	: 'Telescope Simulator',
-                'INDIDOME'	    : 'Rolloff Simulator',
-                'WEATHERPORT'	: '/dev/ttyUSB0',
-                'RAINPORT'	    : '/dev/ttyUSB1',
-                }
-        with open('MCP.ini', 'w') as configfile:
-            config.write(configfile)
-            return config['DEFAULT'][keyword]
-    else:
-        config.read(file_path)
-        return config['DEFAULT'][keyword]
 
 #############################################################################################################
 ## D O M E  O P E N                                                                                        ##
@@ -252,45 +245,17 @@ def obsyClose():
     return
 
 #############################################################################################################
-## m l C L O U D  D E T E C T                                                                              ##
+## i s C L O U D Y                                                                                         ##
 #############################################################################################################
 # Get cloud status from AllSkyCam
 def isCloudy():
-    # Create the array of the right shape to feed into the keras model
-    # The 'length' or number of images you can put into the array is
-    # determined by the first position in the shape tuple, in this case 1
-    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-
-	# Find the latest image in the allsky cam (created by external task) 
-    image = Image.open(homedir+"mlCloudDetect/latest.jpg").convert("RGB")
-
-	# resizing the image to be at least 224x224 and then cropping from the center
-    size = (224, 224)
-    image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
-
-	# turn the image into a numpy array
-    image_array = np.asarray(image)
-
-	# Normalize the image
-    normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
-
-	# Load the image into the array
-    data[0] = normalized_image_array
-
-    # Predicts the model
-    prediction = model.predict(data)
-    index = np.argmax(prediction)
-    class_name = class_names[index]
-    confidence_score = prediction[0][index]
-    
-    logger.info("Cloud Detect returns ",class_name)
-    return class_name
+     return True
 
 #############################################################################################################
 ## i s S U N                                                                                               ##
 #############################################################################################################
 # Check if the Sun is up
-def isSun()):
+def isSun():
     loc = coord.EarthLocation(long * u.deg, lat * u.deg)
     now = Time.now()
     altaz = coord.AltAz(location=loc, obstime=now)
@@ -317,7 +282,7 @@ def isRaining():
     except Exception as msg:
         logger.error("getRain error: "+msg)
 
-    if (packet != b"safe#")::
+    if (packet != b"safe#"):
         logger.info("Rain detected by Hydreon RG-11!")
         return True
     else:
@@ -436,16 +401,14 @@ def isBadWeather():
 		    
         # Determine whether we should open dome
         if (wx_average_wind_speed > getConfig("MAXAVWIND")) or (wx_wind_speed > getConfig("MAXWIND")):
-		    logger.info("Weather data is wind average ", wx_average_wind_speed," max is ",
+            logger.info("Weather data is wind average ", wx_average_wind_speed," max is ",
                   getConfig("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",
                   getConfig("MAXWIND")," returning False (weather not ok)")
-		    return False
-    	else:
-        	logger.info("Weather data is wind average ", wx_average_wind_speed," max is ",
-                     getConfig("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",
-                     getConfig("MAXWIND")," returning False (weather ok)")
-		    return True
-
+            return False
+        else:
+            logger.info("Weather data is wind average ",wx_average_wind_speed," max is ",getConfig("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",getConfig("MAXWIND")," returning False (weather ok)")
+            return True
+        
 #############################################################################################################
 ## E K O S D B U S                                                                                         ##
 #############################################################################################################
