@@ -1,14 +1,32 @@
-class IndiAllskySmokeUpdate(object):
-    longitude			=	getConfig("LONGITUDE")
-    latitude			=	getConfig("LATITUDE")
+import time
+from datetime import datetime
+from datetime import timedelta  # noqa: F401
+from collections import OrderedDict
+import socket
+import ssl
+import requests
+from lxml import etree
+import shapely
+import logging
+
+from . import mcpConstants
+from . import mcpConfig
+
+logger = logging.getLogger('MCP')
+config = mcpConfig()
+
+# derived from indi-allsky by Aaron Morris https://github.com/aaronwmorris/indi-allsky.git thanks Aaron!
+
+class mcpSmoke(object):
+
     hms_kml_base_url = 'https://satepsanone.nesdis.noaa.gov/pub/FIRE/web/HMS/Smoke_Polygons/KML/{now:%Y}/{now:%m}/hms_smoke{now:%Y}{now:%m}{now:%d}.kml'
 
     # folder name, rating
     hms_kml_folders = OrderedDict({
         # check from heavy to light, in order
-        'Smoke (Heavy)'  : constants.SMOKE_RATING_HEAVY,
-        'Smoke (Medium)' : constants.SMOKE_RATING_MEDIUM,
-        'Smoke (Light)'  : constants.SMOKE_RATING_LIGHT,
+        'Smoke (Heavy)'  : mcpConstants.SMOKE_RATING_HEAVY,
+        'Smoke (Medium)' : mcpConstants.SMOKE_RATING_MEDIUM,
+        'Smoke (Light)'  : mcpConstants.SMOKE_RATING_LIGHT,
     })
 
     def __init__(self, config):
@@ -28,20 +46,22 @@ class IndiAllskySmokeUpdate(object):
 
         else:
             # all other regions report no data
-            smoke_rating = constants.SMOKE_RATING_NODATA
+            smoke_rating = mcpConstants.SMOKE_RATING_NODATA
 
         if smoke_rating:
-            logger.info('Smoke rating: %s', constants.SMOKE_RATING_MAP_STR[smoke_rating])
+            logger.info('Smoke rating: %s', mcpConstants.SMOKE_RATING_MAP_STR[smoke_rating])
         else:
             logger.warning('Smoke data not updated')
 
 
-    def update_na_hms(self, camera):
+    def update_na_hms(self):
         # this pulls data from NOAA Hazard Mapping System
         # https://www.ospo.noaa.gov/Products/land/hms.html
 
         now = datetime.now()
         #now = datetime.now() - timedelta(days=1)  # testing
+        longitude			=	config.get("LONGITUDE")
+        latitude			=	config.get("LATITUDE")
 
         hms_kml_url = self.hms_kml_base_url.format(**{'now' : now})
 
@@ -136,7 +156,7 @@ class IndiAllskySmokeUpdate(object):
         if not found_kml_folders:
             # without folders, there was no data to match
             raise NoSmokeData('No folders in KML')
-        return constants.SMOKE_RATING_CLEAR  # no matches should mean clear
+        return mcpConstants.SMOKE_RATING_CLEAR  # no matches should mean clear
 
     def download_kml(self, url):
         logger.warning('Downloading %s', url)

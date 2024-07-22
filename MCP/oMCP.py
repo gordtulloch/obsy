@@ -14,26 +14,58 @@
 #
 ############################################################################################################
 import time
+from mcpConfig import McpConfig
+from mcpSmoke  import mcpSmoke
+from mcpAurora import mcpAurora
 
-# A whole bunch of setup and function definition happens here
-from oMCPFunctions import isRaining, isSun, isCloudy, isBadWeather, isSmoke, obsyOpen, obsyClose, getConfig
+# Functions 
+from oMCPFunctions import isRaining, isSun, isBadWeather
 
-############################################################################################################
-# CONFIGURATION AND SETUP
-############################################################################################################
-debug			=	True
-obsydir			=	"/home/stellarmate/obsy/"
-mcpdir			=	"/home/stellarmate/obsy/MCP/"
-runMCP			=	True
-maxPending		=	5
-#ekosProfile		=	"SPAO-PC"
-
-
+# Retrieve config
+config=McpConfig()
 
 # Set up logging
 import logging
+if not os.path.exists('oMCP.log'):
+	logging.basicConfig(filename='oMCP.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("oMCP")
-logging.basicConfig(filename='oMCP.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Connect the dome
+from domeClient import DomeClient
+domeClient=DomeClient()
+domeClient.setServer(config.get("INDI_DOME_SERVER"),int(config.get("INDI_DOME_PORT")))
+
+if (not(domeClient.connectServer())):
+    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
+    sys.exit(1)
+else:
+    logger.info("Dome: connected to "+domeClient.getHost()+":"+str(domeClient.getPort()))
+if (not(domeClient.connectDevice())): # Connect to the Dome Device
+    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
+    sys.exit(1)
+
+# Connect the Scope
+from scopeClient import ScopeClient
+scopeClient=ScopeClient()
+scopeClient.setServer(config.get("INDI_SCOPE_SERVER"),int(config.get("INDI_SCOPE_PORT")))
+
+if (not(scopeClient.connectServer())):
+    logger.error("Telescope: No indiserver running on "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
+    sys.exit(1)
+else:
+    logger.info("Telescope: connected to "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
+if (not(domeClient.connectDevice())): # Connect to the Dome Device
+    logger.error("Telescope: No indiserver running on "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
+    sys.exit(1)
+    
+# Set up Smoke object
+import mcpSmoke
+smoke=McpSmoke()
+
+# Set up Aurora object
+import mcpAurora
+aurora=McpAurora
+
 ############################################################################################################
 #                                    M  A  I  N  L  I  N  E 
 ############################################################################################################
@@ -44,7 +76,8 @@ while runMCP:
 	if isRaining() or isSun():
 		logger.info('Daytime or rain - Closed Roof')
 		obsyState = "Closed"
-		#obsyClose()
+		#scopeClient.park()
+		#domeClient.park()
 		time.sleep(300)
 		continue
 
@@ -61,7 +94,8 @@ while runMCP:
 			pendingCount+=1
 		if pendingCount == maxPending:
 			obsyState="Closed"
-#			obsyClose()
+			#scopeClient.park
+			#domeClient.park()
 			pendingCount=0
 	else:
 		# Good weather so set to Open Pending or Open
@@ -73,7 +107,8 @@ while runMCP:
 			pendingCount=1
 		if pendingCount==maxPending: 
 			obsyState="Open"
-#			obsyOpen()
+			#domeClient.unpark()
+			#scopeClient.unpark()
 			pendingCount=0
    
 	logger.info('Obsy state is '+obsyState)
@@ -82,9 +117,4 @@ while runMCP:
 ############################################################################################################
 # SHUTDOWN
 ############################################################################################################
-# Stop Ekos on the current computer
-#ekos_dbus.stop_ekos()
-
 logger.info('MCP execution terminated')
-#cur.close()
-#con.close()

@@ -1,7 +1,7 @@
 ############################################################################################################
 # FUNCTIONS
 ############################################################################################################
-import PyIndi
+
 import sys
 import astropy.coordinates as coord
 from astropy.time import Time
@@ -9,245 +9,38 @@ import astropy.units as u
 import astropy.io.fits as pyfits
 import warnings
 from datetime import datetime
-from datetime import timedelta  # noqa: F401
-from collections import OrderedDict
-import socket
-import ssl
-from lxml import etree
-import shapely
 import pytz
 import os.path
 import codecs
 import serial
-import PyIndi
 import numpy as np
 import skimage.io
 import time
 import threading
 import requests
-import dbus
 import os
 from pysolar.solar import *
 from keras.models import load_model  # TensorFlow is required for Keras to work
 from PIL import Image, ImageOps      # Install pillow instead of PIL
-import configparser
-import warnings
+
 # Suppress warnings
-warnings.filterwarnings("ignore")
+import warnings
+#warnings.filterwarnings("ignore")
 
 # Set up logging
 import logging
 logger = logging.getLogger("oMCP")
 
-#############################################################################################################
-## G E T C O N F I G                                                                                       ##
-#############################################################################################################
-# Function to retrieve configuration
-def getConfig(keyword):
-    config = configparser.ConfigParser()
-    file_path = "MCP.ini"
-	
-	# Check if the file exists
-    if not os.path.exists(file_path):
-        logger.info("Config file not found, creating with defaults.")
-        config['DEFAULT'] = {
-                'MCPHOME': '/home/gtulloch/obsy/MCP',
-                'INDI_TELESCOPE_SERVER'	: 'localhost',
-    	    	'INDI_DOME_SERVER'	    : 'localhost',
-              	'INDI_TELESCOPE_PORT'   : 7624,
-                'INDI_DOME_PORT'        : 7624,
-             	'INDITELESCOPE'	: 'Telescope Simulator',
-                'INDIDOME'	    : 'RollOff Simulator',
-                'WEATHERPORT'	: '/dev/ttyUSB0',
-                'RAINPORT'	    : '/dev/ttyUSB1',
-                'LATITUDE'      : '49.8954',
-                'LONGITUDE'     : '-97.1385',
-        }
-
-        with open('MCP.ini', 'w') as configfile:
-            config.write(configfile)
-            return config['DEFAULT'][keyword]
-    else:
-        config.read(file_path)
-        return config['DEFAULT'][keyword]
-
-# INDI Client Definition
-class domeClient(PyIndi.BaseClient):
-    def __init__(self):
-        super(domeClient, self).__init__()
-    def newDevice(self, d):
-        pass
-    def newProperty(self, p):
-        pass
-    def removeProperty(self, p):
-        pass
-    def newSwitch(self, svp):
-        pass
-    def newNumber(self, nvp):
-        pass
-    def newText(self, tvp):
-        pass
-    def newLight(self, lvp):
-        pass
-    def newMessage(self, d, m):
-        pass
-    def serverConnected(self):
-        pass
-    def serverDisconnected(self, code):
-        pass
-
-#############################################################################################################
-## S E R V E R  S E T U P                                                                                  ##
-#############################################################################################################
-# connect the dome server
-domeClient=domeClient()
-domeClient.setServer(getConfig("INDI_DOME_SERVER"),int(getConfig("INDI_DOME_PORT")))
-
-if (not(domeClient.connectServer())):
-    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
-    sys.exit(1)
-else:
-    logger.info("Dome: connected to "+domeClient.getHost()+":"+str(domeClient.getPort()))
-
-#############################################################################################################
-## D O M E  S E T U P                                                                                      ##
-#############################################################################################################
-# connect the dome
-dome=getConfig("INDIDOME")
-device_dome=None
-dome_connect=None
-
-# get the dome device
-
-device_dome=domeClient.getDevice(dome)
-while not(device_dome):
-    logger.info("Dome: Attempting to get device "+dome)
-    time.sleep(0.5)
-    device_dome=domeClient.getDevice(dome)
-logger.info("Dome: Connected to device "+dome)
-
-# wait CONNECTION property be defined for dome
-dome_connect=device_dome.getSwitch("CONNECTION")
-while not(dome_connect):
-    time.sleep(0.5)
-    dome_connect=device_dome.getSwitch("CONNECTION")
-logger.info("Dome: Connected to device "+dome)
-
-# if the dome device is not connected, we do connect it
-if not(device_dome.isConnected()):
-    dome_connect[0].s=PyIndi.ISS_ON  # the "CONNECT" switch
-    dome_connect[1].s=PyIndi.ISS_OFF # the "DISCONNECT" switch
-    telescopeClient.sendNewSwitch(dome_connect) # send this new value to the device
-
-#############################################################################################################
-## D O M E  O P E N                                                                                        ##
-#############################################################################################################
-def obsyOpen():
-    # Park the scope
-    telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
-    while not(telescope_parkstatus):
-        time.sleep(0.5)
-        telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
-
-    telescope_parkstatus[0].s=PyIndi.ISS_ON   # the "PARK" switch
-    telescope_parkstatus[1].s=PyIndi.ISS_OFF  # the "UNPARKED" switch
-    telescopeClient.sendNewSwitch(telescope_parkstatus) # send this new value to the device
-
-    telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
-    while not(telescope_parkstatus):
-        time.sleep(0.5)
-        telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
-
-    # Wait til the scope is finished moving
-    while (telescope_parkstatus.getState()==PyIndi.IPS_BUSY):
-        logger.info("Scope Parking")
-        time.sleep(2)
-
-    # Open the dome
-    dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-    while not(dome_parkstatus):
-        time.sleep(0.5)
-        dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-
-    dome_parkstatus[0].s=PyIndi.ISS_OFF   # the "PARK" switch
-    dome_parkstatus[1].s=PyIndi.ISS_ON    # the "UNPARKED" switch
-    domeClient.sendNewSwitch(dome_parkstatus) # send this new value to the device
-
-    dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-    while not(dome_parkstatus):
-        time.sleep(0.5)
-        dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-
-    # Wait til the dome is finished moving
-    while (dome_parkstatus.getState()==PyIndi.IPS_BUSY):
-        logger.info("Dome UnParking")
-        time.sleep(2)
-
-    return
-
-#############################################################################################################
-## D O M E  C L O S E                                                                                      ##
-#############################################################################################################
-def obsyClose():
-    # Stop the scheduler if it's running
-    if ekos_dbus.is_scheduler_running():
-        ekos_dbus.stop_scheduler()
-    
-    # Park the scope
-    telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
-    while not(telescope_parkstatus):
-        time.sleep(0.5)
-        telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
-    telescope_parkstatus[0].s=PyIndi.ISS_ON   # the "PARK" switch
-    telescope_parkstatus[1].s=PyIndi.ISS_OFF  # the "UNPARKED" switch
-    telescopeClient.sendNewSwitch(telescope_parkstatus) # send this new value to the device
-
-    telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
-    while not(telescope_parkstatus):
-        time.sleep(0.5)
-        telescope_parkstatus=device_telescope.getSwitch("TELESCOPE_PARK")
-
-	# Wait til the scope is finished moving
-    while (telescope_parkstatus.getState()==PyIndi.IPS_BUSY):
-        logger.info("Scope Parking")
-        time.sleep(2)
-
-    # Close the dome
-    dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-    while not(dome_parkstatus):
-        time.sleep(0.5)
-        dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-
-    dome_parkstatus[0].s=PyIndi.ISS_ON   # the "PARK" switch
-    dome_parkstatus[1].s=PyIndi.ISS_OFF  # the "UNPARKED" switch
-    domeClient.sendNewSwitch(dome_parkstatus) # send this new value to the device
-
-    dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-    while not(dome_parkstatus):
-        time.sleep(0.5)
-        dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-
-    # Wait til the dome is finished moving
-    while (dome_parkstatus.getState()==PyIndi.IPS_BUSY):
-        logger.info("Dome Parking")
-        time.sleep(2)
-
-    return
-
-#############################################################################################################
-## i s C L O U D Y                                                                                         ##
-#############################################################################################################
-# Get cloud status from AllSkyCam
-def isCloudy():
-     return False
+# Get config
+from mcpConfig import McpConfig
+config=McpConfig()
 
 #############################################################################################################
 ## i s S U N                                                                                               ##
 #############################################################################################################
 # Check if the Sun is up
 def isSun():
-    return False
-    loc = coord.EarthLocation(float(getConfig("LONGITUDE")) * u.deg, float(getConfig("LATITUDE")) * u.deg)
+    loc = coord.EarthLocation(float(config.get("LONGITUDE")) * u.deg, float(config.get("LATITUDE")) * u.deg)
     now = Time.now()
     altaz = coord.AltAz(location=loc, obstime=now)
     sun = coord.get_sun(now).transform_to(altaz)
@@ -266,9 +59,8 @@ def isSun():
 # Using circuit and Arduino sketch from 
 # https://www.cloudynights.com/topic/792701-arduino-based-rg-11-safety-monitor-for-nina-64bit/
 def isRaining():
-    return False
     packet=""
-    port = getConfig("RAINPORT")
+    port = config.get("RAINPORT")
 
     logger.info("Running getRain on "+port)
     try:
@@ -292,7 +84,7 @@ def isRaining():
 # Get local weather data from ADS-WS1
 def isBadWeather():
     try:
-        ser = serial.Serial(getConfig("WEATHERPORT"),2400,timeout=1)
+        ser = serial.Serial(config.get("WEATHERPORT"),2400,timeout=1)
         ser.flush()
         packet=ser.readline()
     except Exception as msg:
@@ -396,21 +188,15 @@ def isBadWeather():
         wx_today_rain_mm = today_rain / 24.5
 		    
         # Determine whether we should open dome
-        if (wx_average_wind_speed > getConfig("MAXAVWIND")) or (wx_wind_speed > getConfig("MAXWIND")):
+        if (wx_average_wind_speed > config.get("MAXAVWIND")) or (wx_wind_speed > config.get("MAXWIND")):
             logger.info("Weather data is wind average ", wx_average_wind_speed," max is ",
-                  getConfig("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",
-                  getConfig("MAXWIND")," returning True (weather not ok)")
+                  config.get("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",
+                  config.get("MAXWIND")," returning True (weather not ok)")
             return True
         else:
-            logger.info("Weather data is wind average ",wx_average_wind_speed," max is ",getConfig("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",getConfig("MAXWIND")," returning False (weather ok)")
+            logger.info("Weather data is wind average ",wx_average_wind_speed," max is ",config.get("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",config.get("MAXWIND")," returning False (weather ok)")
             return False
     else:
         logging.warning("No data received from weather station")
         return True
     
-#############################################################################################################
-## i s S M O K E                                                                                           ##
-#############################################################################################################
-# Get local smoke data from NOAA (copied from indi-allsky thanks Aaron!)
-def isSmoke():
-    return False

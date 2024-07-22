@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 ############################################################################################################
 #
-# Name        : oMCP.py
+# Name        : tMCP.py
 # Purpose     : The Master Control Program (nods to TRON) coordinates all recurring activities for OBSY for
-#				observatory operations. A similar script runs on telescope computers to manage telescope 
+#				telescope operations. A similar script runs on observatory computers to manage observatory 
 #				operations
 # Author      : Gord Tulloch
-# Date        : July 21 2024
+# Date        : July 22 2024
 # License     : GPL v3
 # Dependencies: Requires KStars/EKOS, DBUS, and an INDI Server local or remote
 # Usage       : Run as a service
@@ -15,32 +15,34 @@
 ############################################################################################################
 
 # A whole bunch of setup and function definition happens here
-from oMCPFunctions import isRaining, isSun, isCloudy, isBadWeather, obsyOpen, obsyClose, ekos_dbus, getConfig
+import time
+from mcpConfig import McpConfig
+from mcpEkosDbus  import EkosDbus
 
-############################################################################################################
-# CONFIGURATION AND SETUP
-############################################################################################################
-debug			=	True
-obsydir			=	"/home/stellarmate/obsy/"
-mcpdir			=	"/home/stellarmate/obsy/MCP/"
-long			=	-97.1385
-lat				=	 49.8954
 runMCP			=	True
-maxPending		=	5
-#ekosProfile		=	"SPAO-PC"
 
 # Suppress warnings
 #warnings.filterwarnings("ignore")
 
+# Set up config
+config=McpConfig()
+
+# Set up logging
+import logging
+if not os.path.exists('tMCP.log'):
+	logging.basicConfig(filename='tMCP.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger("tMCP")
+
 # Ensure Ekos is running or exit
-#ekosStartCounter=0
-#while not ekos_dbus.is_ekos_running():
-#	logger.info('DBus starting Ekos')
-#	ekos_dbus.start_ekos()
-#	time.sleep(5)
-#	if ekosStartCounter > 5:
-#		logger.error('Unable to start Ekos')
-#		exit(1)
+ekosDbus=EkosDbus()
+ekosStartCounter=0
+while not ekos_dbus.is_ekos_running():
+	logger.info('DBus starting Ekos')
+	ekos_dbus.start_ekos()
+	time.sleep(5)
+	if ekosStartCounter > 5:
+		logger.error('Unable to start Ekos')
+		exit(1)
 
 ############################################################################################################
 #                                    M  A  I  N  L  I  N  E 
