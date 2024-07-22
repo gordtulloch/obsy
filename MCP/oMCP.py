@@ -14,21 +14,27 @@
 #
 ############################################################################################################
 import time
+import sys
 from mcpConfig import McpConfig
-from mcpSmoke  import mcpSmoke
-from mcpAurora import mcpAurora
-
+from mcpSmoke  import McpSmoke
+from mcpAurora import McpAurora
+from mcpClouds import McpClouds
 # Functions 
-from oMCPFunctions import isRaining, isSun, isBadWeather
-
-# Retrieve config
-config=McpConfig()
+from mcpFunctions import isRaining, isSun, isBadWeather
 
 # Set up logging
 import logging
 if not os.path.exists('oMCP.log'):
 	logging.basicConfig(filename='oMCP.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("oMCP")
+
+# Retrieve config
+config=McpConfig()
+
+# Check to make sure we're running the right MCP program
+if (config.get('RUNMODE') !='DOME'):
+    logging.error('Runmode error, oMCP execution is not permitted in runmode'+config.get('RUNMODE'))
+    sys.exit(0)
 
 # Connect the dome
 from domeClient import DomeClient
@@ -58,13 +64,10 @@ if (not(domeClient.connectDevice())): # Connect to the Dome Device
     logger.error("Telescope: No indiserver running on "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
     sys.exit(1)
     
-# Set up Smoke object
-import mcpSmoke
+# Set up objects with various detectors
 smoke=McpSmoke()
-
-# Set up Aurora object
-import mcpAurora
-aurora=McpAurora
+aurora=McpAurora()
+clouds=McpClouds()
 
 ############################################################################################################
 #                                    M  A  I  N  L  I  N  E 
@@ -82,7 +85,7 @@ while runMCP:
 		continue
 
     # If weather looks unsuitable either stay closed or move to Close Pending if Open
-	if isCloudy() or isBadWeather():
+	if clouds.isCloudy() or isBadWeather() or isAurora():
 		logger.info('Clouds/Weather not within parameters - Closed Roof')
 		if obsyState == "Closed":
 			continue

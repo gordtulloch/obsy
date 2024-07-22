@@ -12,7 +12,8 @@ class McpConfig():
         if not os.path.exists(file_path):
             logger.info("Config file not found, creating with defaults.")
             config['DEFAULT'] = {
-                'MCPHOME': '/home/gtulloch/obsy/MCP',
+                'RUNMODE': 'DOME',                         # Can be DOME, TELESCOPE, or REMOTE
+                'MCPHOME': '/home/stellarmate/obsy/MCP/',
                 'INDI_TELESCOPE_SERVER'	: 'localhost',
     	    	'INDI_DOME_SERVER'	    : 'localhost',
               	'INDI_TELESCOPE_PORT'   : 7624,
@@ -23,6 +24,11 @@ class McpConfig():
                 'RAINPORT'	    : '/dev/ttyUSB1',
                 'LATITUDE'      : '49.8954',
                 'LONGITUDE'     : '-97.1385',
+                'EKOSHOMEPATH'  : '/home/stellarmate/Pictures/schedules/',
+                'EKOSPROFILE'   : 'SPAO-PC',
+                'EKOSSCHEDULE'  : 'daily.esl',
+                'ALLSKY_IMAGE'  : 'latest.jpg',
+                'MAX_AURORA_KPI': 5.0,
             }
             with open('MCP.ini', 'w') as configfile:
                 config.write(configfile)

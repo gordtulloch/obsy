@@ -15,9 +15,12 @@ from . import mcpConfig
 logger = logging.getLogger('MCP')
 config = mcpConfig()
 
+latitude  = config.get("LATITUDE")
+longitude = config.get("LONGITUDE")
+
 # derived from indi-allsky by Aaron Morris https://github.com/aaronwmorris/indi-allsky.git thanks Aaron!
 
-class mcpSmoke(object):
+class McpSmoke(object):
 
     hms_kml_base_url = 'https://satepsanone.nesdis.noaa.gov/pub/FIRE/web/HMS/Smoke_Polygons/KML/{now:%Y}/{now:%m}/hms_smoke{now:%Y}{now:%m}{now:%d}.kml'
 
@@ -29,20 +32,19 @@ class mcpSmoke(object):
         'Smoke (Light)'  : mcpConstants.SMOKE_RATING_LIGHT,
     })
 
-    def __init__(self, config):
+    def __init__(self):
         self.config = config
-        self._miscDb = miscDb(self.config)
         self.hms_kml_data = None
 
-    def update(self):
+    def updateSmoke(self):
         if latitude > 0 and longitude < 0:
             # HMS data is only good for north western hemisphere
             try:
-                smoke_rating = self.update_na_hms(camera)
+                smoke_rating = self.update_na_hms()
             except NoSmokeData as e:
                 # Leave previous values in place
                 logger.error('No smoke data: %s', str(e))
-                return
+                return 'No Data'
 
         else:
             # all other regions report no data
@@ -52,7 +54,15 @@ class mcpSmoke(object):
             logger.info('Smoke rating: %s', mcpConstants.SMOKE_RATING_MAP_STR[smoke_rating])
         else:
             logger.warning('Smoke data not updated')
+            
+        return smoke_rating
 
+    def isSmokey(self):
+        smoke_rating = self.updateSmoke()
+        if (smoke_rating=='Smoke (Heavy)') or (smoke_rating=='Smoke (Heavy)'):
+            return True
+        else:
+            return False
 
     def update_na_hms(self):
         # this pulls data from NOAA Hazard Mapping System

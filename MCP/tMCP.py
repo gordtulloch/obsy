@@ -16,22 +16,55 @@
 
 # A whole bunch of setup and function definition happens here
 import time
+import sys
 from mcpConfig import McpConfig
 from mcpEkosDbus  import EkosDbus
-
-runMCP			=	True
+from MCPFunctions import isSun
 
 # Suppress warnings
 #warnings.filterwarnings("ignore")
-
-# Set up config
-config=McpConfig()
 
 # Set up logging
 import logging
 if not os.path.exists('tMCP.log'):
 	logging.basicConfig(filename='tMCP.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("tMCP")
+
+# Set up config
+config=McpConfig()
+
+# Check to make sure we're running the right MCP program
+if (config.get('RUNMODE') !='TELESCOPE'):
+    logging.error('Runmode error, tMCP execution is not permitted in runmode'+config.get('RUNMODE'))
+    sys.exit(0)
+
+# Connect the dome
+from domeClient import DomeClient
+domeClient=DomeClient()
+domeClient.setServer(config.get("INDI_DOME_SERVER"),int(config.get("INDI_DOME_PORT")))
+
+if (not(domeClient.connectServer())):
+    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
+    sys.exit(1)
+else:
+    logger.info("Dome: connected to "+domeClient.getHost()+":"+str(domeClient.getPort()))
+if (not(domeClient.connectDevice())): # Connect to the Dome Device
+    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
+    sys.exit(1)
+
+# Connect the Scope
+from scopeClient import ScopeClient
+scopeClient=ScopeClient()
+scopeClient.setServer(config.get("INDI_SCOPE_SERVER"),int(config.get("INDI_SCOPE_PORT")))
+
+if (not(scopeClient.connectServer())):
+    logger.error("Telescope: No indiserver running on "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
+    sys.exit(1)
+else:
+    logger.info("Telescope: connected to "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
+if (not(domeClient.connectDevice())): # Connect to the Dome Device
+    logger.error("Telescope: No indiserver running on "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
+    sys.exit(1)
 
 # Ensure Ekos is running or exit
 ekosDbus=EkosDbus()
@@ -47,51 +80,33 @@ while not ekos_dbus.is_ekos_running():
 ############################################################################################################
 #                                    M  A  I  N  L  I  N  E 
 ############################################################################################################
+runMCP=True
 while runMCP:
-	# If it's raining or daytime, immediate shut down and wait 5 mins
-	if isRaining() or isSun():
-		logger.info('Daytime or rain - Closed Roof')
-		obsyState = "Closed"
-		#obsyClose()
-		time.sleep(300)
-		continue
-
-    # If weather looks unsuitable either stay closed or move to Close Pending if Open
-	if isCloudy() or isBadWeather():
-		logger.info('Clouds/Weather not within parameters - Closed Roof')
-		if obsyState == "Closed":
-			continue
-		# If Open give it PENDING minutes to change
-		if obsyState == "Open":
-			obsyState="Close Pending"
-			pendingCount=1
-		if obsyState == "Close Pending":
-			pendingCount+=1
-		if pendingCount == maxPending:
-			obsyState="Closed"
-#			obsyClose()
-			pendingCount=0
-	else:
-		# Good weather so set to Open Pending or Open
-		logger.info('Clouds/Weather within parameters - Open Roof')
-		if obsyState != "Open":
-			obsyState="Open Pending"
-			pendingCount=1
-		if obsyState == "Open Pending":
-			pendingCount=1
-		if pendingCount==maxPending: 
-			obsyState="Open"
-#			obsyOpen()
-			pendingCount=0
-   
-	logger.info('Obsy state is '+obsyState)
-	time.sleep(60)
+    # If it's daytime nothing to do
+    if isSun():
+        time.sleep(300)
+        continue
+    # If the dome is parked nothing to do, wait a minute and try again
+    # Dome client is reponsible for parking both Dome and Telescope 
+    if domeClient.isParked():
+        time.sleep(10)
+        continue
+    else:
+        # Run the daily.esl schedule
+        ekosDbus.load_and_start_profile(config.get("EKOSPROFILE"))
+        ekosDbus.load_schedule(config.get("EKOSHOMEPATH")+config.get("EKOSSCHEDULE")
+        ekosDbus.start_scheduler()
+        # Loop until the dome is parked
+        while not domeClient.isParked():
+            time.sleep(1)
+        # Shut down the schedule
+        ekosDbus.stop_scheduler()
 
 ############################################################################################################
 # SHUTDOWN
 ############################################################################################################
 # Stop Ekos on the current computer
-#ekos_dbus.stop_ekos()
+ekosDbus.stop_ekos()
 
 logger.info('MCP execution terminated')
 #cur.close()
