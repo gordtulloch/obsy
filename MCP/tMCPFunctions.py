@@ -28,8 +28,10 @@ import configparser
 
 # Set up logging
 import logging
-logger = logging.getLogger('MCP.py')
-logger.basicConfig(filename='MCP.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='oMCP.log', encoding='utf-8', level=logging.DEBUG)
+#logger.basicConfig(filename=mcpdir+'MCP.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger.info('oMCP starting')
 
 #############################################################################################################
 ## G E T C O N F I G                                                                                       ##
@@ -53,6 +55,7 @@ def getConfig(keyword):
                 'WEATHERPORT'	: '/dev/ttyUSB0',
                 'RAINPORT'	    : '/dev/ttyUSB1',
         }
+
         with open('MCP.ini', 'w') as configfile:
             config.write(configfile)
             return config['DEFAULT'][keyword]

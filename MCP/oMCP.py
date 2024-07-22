@@ -2,63 +2,49 @@
 # -*- coding: utf-8 -*-
 ############################################################################################################
 #
-# Name        : MCP.py
-# Purpose     : The Master Control Program (nods to TRON) coordinates all recurring activities for OBSY
+# Name        : oMCP.py
+# Purpose     : The Master Control Program (nods to TRON) coordinates all recurring activities for OBSY for
+#				observatory operations. A similar script runs on telescope computers to manage telescope 
+#				operations
 # Author      : Gord Tulloch
-# Date        : February 14 2024
+# Date        : July 21 2024
 # License     : GPL v3
 # Dependencies: Requires KStars/EKOS, DBUS, and an INDI Server local or remote
 # Usage       : Run as a service
 #
 ############################################################################################################
+import time
 
 # A whole bunch of setup and function definition happens here
-from MCPFunctions import isRaining, isSun, isCloudy, isBadWeather, obsyOpen, obsyClose, ekos_dbus, getConfig
+from oMCPFunctions import isRaining, isSun, isCloudy, isBadWeather, isSmoke, obsyOpen, obsyClose, getConfig
 
 ############################################################################################################
 # CONFIGURATION AND SETUP
 ############################################################################################################
 debug			=	True
-homedir			=	"/usr/local/share/indi/scripts"
-long			=	-97.1385
-lat				=	 49.8954
+obsydir			=	"/home/stellarmate/obsy/"
+mcpdir			=	"/home/stellarmate/obsy/MCP/"
 runMCP			=	True
 maxPending		=	5
-ekosProfile		=	"SPAO-PC"
+#ekosProfile		=	"SPAO-PC"
 
-# Suppress warnings
-#warnings.filterwarnings("ignore")
 
-# Set up database
-dbName = "obsy.db"
-con = sqlite3.connect(dbName)
-cur = con.cursor()
 
 # Set up logging
 import logging
-logger = logging.getLogger('MCP.py')
-logger.basicConfig(filename='MCP.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger.info('MCP starting')
-
-# Ensure Ekos is running or exit
-ekosStartCounter=0
-while not ekos_dbus.is_ekos_running():
-	logger.info('DBus starting Ekos')
-	ekos_dbus.start_ekos()
-	time.sleep(5)
-	if ekosStartCounter > 5:
-		logger.error('Unable to start Ekos')
-		exit(1)
-
+logger = logging.getLogger("oMCP")
+logging.basicConfig(filename='oMCP.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ############################################################################################################
 #                                    M  A  I  N  L  I  N  E 
 ############################################################################################################
 while runMCP:
+	logger.info('Main loop start')
+	obsyState = "Closed"
 	# If it's raining or daytime, immediate shut down and wait 5 mins
 	if isRaining() or isSun():
 		logger.info('Daytime or rain - Closed Roof')
 		obsyState = "Closed"
-		obsyClose()
+		#obsyClose()
 		time.sleep(300)
 		continue
 
@@ -75,7 +61,7 @@ while runMCP:
 			pendingCount+=1
 		if pendingCount == maxPending:
 			obsyState="Closed"
-			obsyClose()
+#			obsyClose()
 			pendingCount=0
 	else:
 		# Good weather so set to Open Pending or Open
@@ -87,7 +73,7 @@ while runMCP:
 			pendingCount=1
 		if pendingCount==maxPending: 
 			obsyState="Open"
-			obsyOpen()
+#			obsyOpen()
 			pendingCount=0
    
 	logger.info('Obsy state is '+obsyState)
@@ -97,8 +83,8 @@ while runMCP:
 # SHUTDOWN
 ############################################################################################################
 # Stop Ekos on the current computer
-ekos_dbus.stop_ekos()
+#ekos_dbus.stop_ekos()
 
 logger.info('MCP execution terminated')
-cur.close()
-con.close()
+#cur.close()
+#con.close()
