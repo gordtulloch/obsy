@@ -19,8 +19,7 @@ from mcpConfig import McpConfig
 from mcpSmoke  import McpSmoke
 from mcpAurora import McpAurora
 from mcpClouds import McpClouds
-# Functions 
-from mcpFunctions import isRaining, isSun, isBadWeather
+from mcp
 
 # Set up logging
 import logging

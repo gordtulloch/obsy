@@ -12,8 +12,8 @@ import logging
 from . import mcpConstants
 from . import mcpConfig
 
-logger = logging.getLogger('MCP')
-config = mcpConfig()
+logger = logging.getLogger('oMCP')
+config = McpConfig()
 
 latitude  = config.get("LATITUDE")
 longitude = config.get("LONGITUDE")
