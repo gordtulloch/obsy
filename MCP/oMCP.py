@@ -19,7 +19,8 @@ from mcpConfig import McpConfig
 from mcpSmoke  import McpSmoke
 from mcpAurora import McpAurora
 from mcpClouds import McpClouds
-from mcp
+from mcpRain   import McpRain
+from mcpSun	   import McpSun
 
 # Set up logging
 import logging
@@ -67,6 +68,8 @@ if (not(domeClient.connectDevice())): # Connect to the Dome Device
 smoke=McpSmoke()
 aurora=McpAurora()
 clouds=McpClouds()
+rain=McpRain()
+sun=McpSun()
 
 ############################################################################################################
 #                                    M  A  I  N  L  I  N  E 
