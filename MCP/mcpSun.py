@@ -15,7 +15,7 @@ class mcpSun:
         self.config=McpConfig()
         self.logger = logging.getLogger('oMCP')
         
-    def isSun(self):
+    def isDaytime(self):
         loc = coord.EarthLocation(float(self.config.get("LONGITUDE")) * u.deg, float(self.config.get("LATITUDE")) * u.deg)
         now = Time.now()
         altaz = coord.AltAz(location=loc, obstime=now)
