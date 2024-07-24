@@ -29,6 +29,8 @@ class McpConfig():
                 'EKOSSCHEDULE'  : 'daily.esl',
                 'ALLSKY_IMAGE'  : 'latest.jpg',
                 'MAX_AURORA_KPI': 5.0,
+                'ALLSKYCAM'     : 'INDI-ALLSKY', # Can be one of INDI-ALLSKY, TJ, or NONE
+                'ALLSKYCAMNO'   : '1' # indi-allsky camera number
             }
             with open('MCP.ini', 'w') as configfile:
                 config.write(configfile)

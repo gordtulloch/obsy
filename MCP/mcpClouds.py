@@ -31,12 +31,33 @@ class McpClouds(object):
     
     def __init__(self):
         self.config = config
+        
 
     def isCloudy(self):
         logger.warning('Using keras model: %s', KERAS_MODEL)
         self.model = keras.models.load_model(KERAS_MODEL)
 
-        image_file = config.get("ALLSKY_IMAGE")
+        if (self.config.get("ALLSKYCAM" == "NONE")):
+            logger.info('No allsky camera for cloud detection')
+        else:
+            if (self.config.get("ALLSKYCAM" == "INDI-ALLSKY")):
+                # Query the database for the latest file
+                try:
+                    conn = sqlite3.connect()
+                    cur = conn.cursor()
+                    sqlStmt='SELECT image.filename AS image_filename FROM image ' + \
+                    'JOIN camera ON camera.id = image.camera_id WHERE camera.id = '+ self.config.get("ALLSKYCAMNO") +\
+                    'ORDER BY image.createDate DESC LIMIT 1'
+                    logger.info('Running SQL Statement: '+sqlStmt)
+                    cur.execute(sqlStmt)
+                    image_file=cur.fetchone()
+                    conn.close()
+                except sqlite3.Error as e:
+                    logger.error("SQLITE Error accessing indi-allsky "+str(e))
+            else:
+                # Grab the image file from whereever
+                image_file = config.get("ALLSKY_IMAGE")
+                
         logger.info('Loading image: %s', image_file)
 
         ### PIL
