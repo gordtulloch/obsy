@@ -2,9 +2,11 @@
 ![](static/images/github-cover.png)
 OBSY is an Open Source observatory management system intended for amateur astronomers who want to automate data collection in their observatories. The system forms a meta layer over the KStars/EKOS imaging and telescope control system, feeding nightly schedules to the EKOS Scheduler and capturing the results. 
 
+NOTE THIS SOFTWARE IS IN ACTIVE DEVELOPMENT AND NO RELEASE CANDIDATE IS AVAILABLE YET.
+
 ## Features:
 * Multinode support for seperate telescope and observatory computers
-* Support for ultiple workload types, all from the same code base
+* Support for multiple workload types, all from the same code base
 * Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
 * Live stacking and update of remote sites with current imaging activities
 * Automatic deposits into data repositories including FITS file metadata
