@@ -19,8 +19,9 @@ from mcpConfig import McpConfig
 from mcpSmoke  import McpSmoke
 from mcpAurora import McpAurora
 from mcpClouds import McpClouds
-# Functions 
-from mcpFunctions import isRaining, isSun, isBadWeather
+from mcpRain   import McpRain
+from mcpSun	   import McpSun
+from mcpWeather import McpWeather
 
 # Set up logging
 import logging
@@ -68,6 +69,9 @@ if (not(domeClient.connectDevice())): # Connect to the Dome Device
 smoke=McpSmoke()
 aurora=McpAurora()
 clouds=McpClouds()
+rain=McpRain()
+sun=McpSun()
+weather=McpWeather()
 
 ############################################################################################################
 #                                    M  A  I  N  L  I  N  E 
@@ -76,7 +80,7 @@ while runMCP:
 	logger.info('Main loop start')
 	obsyState = "Closed"
 	# If it's raining or daytime, immediate shut down and wait 5 mins
-	if isRaining() or isSun():
+	if rain.isRaining() or sun.isDaytime():
 		logger.info('Daytime or rain - Closed Roof')
 		obsyState = "Closed"
 		#scopeClient.park()
@@ -84,8 +88,8 @@ while runMCP:
 		time.sleep(300)
 		continue
 
-    # If weather looks unsuitable either stay closed or move to Close Pending if Open
-	if clouds.isCloudy() or isBadWeather() or isAurora():
+    # If conditions look unsuitable either stay closed or move to Close Pending if Open
+	if clouds.isCloudy() or weather.isBadWeather() or aurora.isAurora():
 		logger.info('Clouds/Weather not within parameters - Closed Roof')
 		if obsyState == "Closed":
 			continue

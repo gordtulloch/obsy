@@ -12,7 +12,7 @@ class McpConfig():
         if not os.path.exists(file_path):
             logger.info("Config file not found, creating with defaults.")
             config['DEFAULT'] = {
-                'RUNMODE': 'DOME',                         # Can be DOME, TELESCOPE, or REMOTE
+                'RUNMODE': 'DOME',                         # Can be MASTER, DOME, TELESCOPE, or REMOTE
                 'MCPHOME': '/home/stellarmate/obsy/MCP/',
                 'INDI_TELESCOPE_SERVER'	: 'localhost',
     	    	'INDI_DOME_SERVER'	    : 'localhost',
