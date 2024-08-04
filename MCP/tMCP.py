@@ -17,9 +17,11 @@
 # A whole bunch of setup and function definition happens here
 import time
 import sys
+from mcpObsy import McpObsy
 from mcpConfig import McpConfig
 from mcpEkosDbus  import EkosDbus
-from MCPFunctions import isSun
+
+obsy=McpObsy()
 
 # Suppress warnings
 #warnings.filterwarnings("ignore")
@@ -82,25 +84,27 @@ while not ekos_dbus.is_ekos_running():
 ############################################################################################################
 runMCP=True
 while runMCP:
-    # If it's daytime nothing to do
-    if isSun():
+    # If the scope is parked nothing to do, wait ten minutes and try again
+    # Dome client is reponsible for parking both Dome and Telescope 
+    if scopeClient.isParked():
         time.sleep(300)
         continue
-    # If the dome is parked nothing to do, wait a minute and try again
-    # Dome client is reponsible for parking both Dome and Telescope 
-    if domeClient.isParked():
-        time.sleep(10)
-        continue
     else:
-        # Run the daily.esl schedule
-        ekosDbus.load_and_start_profile(config.get("EKOSPROFILE"))
-        ekosDbus.load_schedule(config.get("EKOSHOMEPATH")+config.get("EKOSSCHEDULE")
-        ekosDbus.start_scheduler()
-        # Loop until the dome is parked
-        while not domeClient.isParked():
-            time.sleep(1)
-        # Shut down the schedule
-        ekosDbus.stop_scheduler()
+        # Any jobs to run?
+        if (obsy.isJobs() > 0):
+            # Download jobs into a schedule file
+            if (not obsy.getSchedule(config.get("EKOSHOMEPATH")+'autoschedule.esl')):
+                logger.error('Unable to get schedule file')
+            else:
+                # Run the daily.esl schedule
+                ekosDbus.load_and_start_profile(config.get("EKOSPROFILE"))
+                ekosDbus.load_schedule(config.get("EKOSHOMEPATH")+'autoschedule.esl')
+                ekosDbus.start_scheduler()
+                # Loop until the scope is parked by the observatory controller
+                while not scopeClient.isParked():
+                    time.sleep(1)
+                # Shut down the schedule
+                ekosDbus.stop_scheduler()
 
 ############################################################################################################
 # SHUTDOWN
