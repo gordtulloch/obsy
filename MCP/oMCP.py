@@ -15,6 +15,7 @@
 ############################################################################################################
 import time
 import sys
+import os
 from mcpConfig import McpConfig
 from mcpSmoke  import McpSmoke
 from mcpAurora import McpAurora

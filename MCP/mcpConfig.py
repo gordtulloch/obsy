@@ -3,15 +3,18 @@
 #############################################################################################################
 # Object to retrieve configuration
 import configparser
+import os
+import logging
+logger = logging.getLogger('oMCP')
 
 class McpConfig():
     def __init__(self):
-        config = configparser.ConfigParser()
-        file_path = "MCP.ini"
+        self.config = configparser.ConfigParser()
+        self.file_path = "MCP.ini"
         # Check if the file exists
-        if not os.path.exists(file_path):
+        if not os.path.exists(self.file_path):
             logger.info("Config file not found, creating with defaults.")
-            config['DEFAULT'] = {
+            self.config['DEFAULT'] = {
                 'RUNMODE': 'DOME',                         # Can be MASTER, DOME, TELESCOPE, or REMOTE
                 'MCPHOME': '/home/stellarmate/obsy/MCP/',
                 'INDI_TELESCOPE_SERVER'	: 'localhost',
@@ -33,10 +36,10 @@ class McpConfig():
                 'ALLSKYCAMNO'   : '1' # indi-allsky camera number
             }
             with open('MCP.ini', 'w') as configfile:
-                config.write(configfile)
+                self.config.write(configfile)
                 return      
-    def get(keyword):
-        with open('MCP.ini', 'w') as configfile:
-                config.write(configfile)
-                return config['DEFAULT'][keyword]
+    def get(self,keyword):
+                self.config = configparser.ConfigParser()
+                self.config.read(self.file_path)
+                return self.config['DEFAULT'][keyword]
 

@@ -7,7 +7,7 @@ class DomeClient(PyIndi.BaseClient):
     tries=0
     
     def __init__(self):
-        super(domeClient, self).__init__()
+        super(DomeClient, self).__init__()
         
     # Methods for MCP
     # connect the dome

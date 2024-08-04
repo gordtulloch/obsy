@@ -1,4 +1,5 @@
 import time
+import os
 from datetime import datetime
 from datetime import timedelta  # noqa: F401
 from collections import OrderedDict
@@ -9,14 +10,10 @@ from lxml import etree
 import shapely
 import logging
 
-from . import mcpConstants
-from . import mcpConfig
+import mcpConstants
+from mcpConfig import McpConfig
 
 logger = logging.getLogger('oMCP')
-config = McpConfig()
-
-latitude  = config.get("LATITUDE")
-longitude = config.get("LONGITUDE")
 
 # derived from indi-allsky by Aaron Morris https://github.com/aaronwmorris/indi-allsky.git thanks Aaron!
 
@@ -33,11 +30,13 @@ class McpSmoke(object):
     })
 
     def __init__(self):
-        self.config = config
+        self.config = McpConfig()
         self.hms_kml_data = None
+        self.latitude  = float(config.get("LATITUDE"))
+        self.longitude = float(config.get("LONGITUDE"))
 
     def updateSmoke(self):
-        if latitude > 0 and longitude < 0:
+        if self.latitude > 0 and self.longitude < 0:
             # HMS data is only good for north western hemisphere
             try:
                 smoke_rating = self.update_na_hms()
@@ -70,8 +69,6 @@ class McpSmoke(object):
 
         now = datetime.now()
         #now = datetime.now() - timedelta(days=1)  # testing
-        longitude			=	config.get("LONGITUDE")
-        latitude			=	config.get("LATITUDE")
 
         hms_kml_url = self.hms_kml_base_url.format(**{'now' : now})
 
@@ -118,10 +115,10 @@ class McpSmoke(object):
 
         # look for a 1 square degree area (smoke within ~35 miles)
         location_area = shapely.Polygon((
-            (float(longitude) - 0.5, float(latitude) - 0.5),
-            (float(longitude) + 0.5, float(latitude) - 0.5),
-            (float(longitude) + 0.5, float(latitude) + 0.5),
-            (float(longitude) - 0.5, float(latitude) + 0.5),
+            (float(self.longitude) - 0.5, float(self.latitude) - 0.5),
+            (float(self.longitude) + 0.5, float(self.latitude) - 0.5),
+            (float(self.longitude) + 0.5, float(self.latitude) + 0.5),
+            (float(self.longitude) - 0.5, float(self.latitude) + 0.5),
         ))
         NS = {
             "kml" : "http://www.opengis.net/kml/2.2",

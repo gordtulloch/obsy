@@ -10,7 +10,7 @@ import astropy.io.fits as pyfits
 import logging
 from mcpConfig import McpConfig
 
-class mcpSun:
+class McpSun:
     def __init__(self):
         self.config=McpConfig()
         self.logger = logging.getLogger('oMCP')
