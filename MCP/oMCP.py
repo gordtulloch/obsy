@@ -26,9 +26,13 @@ from mcpWeather import McpWeather
 
 # Set up logging
 import logging
-if not os.path.exists('oMCP.log'):
-	logging.basicConfig(filename='oMCP.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("oMCP")
+logFilename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'oMCP.log')
+logger = logging.getLogger()
+fhandler = logging.FileHandler(filename=logFilename, mode='a')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fhandler.setFormatter(formatter)
+logger.addHandler(fhandler)
+logger.setLevel(logging.DEBUG)
 
 # Retrieve config
 config=McpConfig()
@@ -48,6 +52,7 @@ if (not(domeClient.connectServer())):
     sys.exit(1)
 else:
     logger.info("Dome: connected to "+domeClient.getHost()+":"+str(domeClient.getPort()))
+
 if (not(domeClient.connectDevice())): # Connect to the Dome Device
     logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
     sys.exit(1)

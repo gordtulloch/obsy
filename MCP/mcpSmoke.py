@@ -32,8 +32,8 @@ class McpSmoke(object):
     def __init__(self):
         self.config = McpConfig()
         self.hms_kml_data = None
-        self.latitude  = float(config.get("LATITUDE"))
-        self.longitude = float(config.get("LONGITUDE"))
+        self.latitude  = float(self.config.get("LATITUDE"))
+        self.longitude = float(self.config.get("LONGITUDE"))
 
     def updateSmoke(self):
         if self.latitude > 0 and self.longitude < 0:

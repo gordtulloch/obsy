@@ -10,7 +10,6 @@ import logging
 logger = logging.getLogger('oMCP')
 
 from mcpConfig import McpConfig
-config = McpConfig()
 
 # derived from indi-allsky by Aaron Morris https://github.com/aaronwmorris/indi-allsky.git thanks Aaron!
 
@@ -21,11 +20,10 @@ class McpAurora(object):
 
 
     def __init__(self):
-        self.config = config
-
+        self.config = McpConfig()
         self.ovation_json_data = None
         self.kpindex_json_data = None
-
+        return
 
     def update(self):
         # allow data to be reused
@@ -85,8 +83,8 @@ class McpAurora(object):
                 self.kpindex_json_data = None
 
 
-        latitude  = config.get("LATITUDE")
-        longitude = config.get("LONGITUDE")
+        latitude  = float(self.config.get("LATITUDE"))
+        longitude = float(self.config.get("LONGITUDE"))
 
         if self.ovation_json_data:
             max_ovation, avg_ovation = self.processOvationLocationData(self.ovation_json_data, latitude, longitude)
@@ -101,7 +99,8 @@ class McpAurora(object):
         return kpindex
             
     def isAurora(self):
-        if (self.update() > config.get("MAX_AURORA_KPI")):
+        result=self.update()
+        if (result > float(self.config.get("MAXAURORAKPI"))):
             return True
 
     def download_json(self, url):
@@ -114,7 +113,7 @@ class McpAurora(object):
             return None
 
         json_data = json.loads(r.text)
-        logger.warning('Response: %s', json_data)
+        #logger.warning('Response: %s', json_data)
 
         return json_data
 
@@ -179,7 +178,7 @@ class McpAurora(object):
 
         data_list = list()
         for i in json_data['coordinates']:
-            logger.info('%s', i)
+            #logger.info('%s', i)
 
             for long_val in long_list:
                 for lat_val in lat_list:
@@ -187,7 +186,7 @@ class McpAurora(object):
                         data_list.append(int(i[2]))
 
 
-        logger.info('Data: %s', data_list)
+        #logger.info('Data: %s', data_list)
 
         return max(data_list), sum(data_list) / len(data_list)
 

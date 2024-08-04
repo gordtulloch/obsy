@@ -13,21 +13,25 @@ class McpRain:
     def __init__(self):
         self.config=McpConfig()
         self.port = self.config.get("RAINPORT")
-        self.ser = serial.Serial(port,2400,timeout=1)
+        #self.port = "/dev/ttyUSB0"
+        self.ser = serial.Serial(self.port,int(self.config.get("RAINBPS")),timeout=1)
+        self.ser.flush()
+        packet=self.ser.readline()
         self.logger = logging.getLogger('oMCP')
+        return
         
     def isRaining(self):
         packet=""
         self.logger.info("Running getRain on "+self.port)
         try:  
-            self.ser.flush()
+            #self.ser.flush()
             packet=self.ser.readline()
         except Exception as msg:
             self.logger.error("getRain error: "+str(msg))
 
         if (packet != b"safe#"):
-            self.logger.info("Rain detected by Hydreon RG-11!")
+            self.logger.info("Rain detected by Hydreon RG-11! ("+str(packet)+")")
             return True
         else:
-            self.logger.info("Rain not detected by Hydreon RG-11.")
+            self.logger.info("Rain not detected by Hydreon RG-11. ("+str(packet)+")")
             return False
