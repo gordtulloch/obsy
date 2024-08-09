@@ -1,7 +1,7 @@
 import time
 import sys
 import os
-from mcpRain   import McpRain
+from mcpRain import McpRain
 
 # Set up logging
 import logging
