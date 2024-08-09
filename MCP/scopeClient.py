@@ -1,108 +1,133 @@
 # INDI Client Definition
 import PyIndi
 import sys
+import logging
+from mcpConfig import McpConfig
+import time
 
 class ScopeClient(PyIndi.BaseClient):
     MAXLOOPS=10
-    tries=0
     
     def __init__(self):
-        super(domeClient, self).__init__()
+        super(ScopeClient, self).__init__()
+        self.logger = logging.getLogger('oMCP')
+        self.config = McpConfig()
+        self.device_scope=None
+        self.scope_connect=None
+        self.MAXLOOPS = 10
         
     # Methods for MCP
-    # connect the dome
-    def connectDevice():
-        dome=config.get("INDIDOME")
-        device_dome=None
-        dome_connect=None
+    # connect the scope
+    def connectDevice(self):
+        scope=self.config.get("INDITELESCOPE")
+        self.device_scope=None
+        self.scope_connect=None
 
-        # get the dome device
-        device_dome=domeClient.getDevice(dome)
-        tries=0
-        while not(device_dome) and (tries<=MAPLOOPS):
-            logger.info("Dome: Attempting to get device "+dome)
+        # get the scope device
+        self.device_scope=self.getDevice(scope)
+        loopCount=0
+        while not(self.device_scope) and (loopCount<=self.MAXLOOPS):
+            self.logger.info("Scope: Attempting to get device "+scope)
             time.sleep(0.5)
-            device_dome=domeClient.getDevice(dome)
-            tries+=1
-        logger.info("Dome: Connected to device "+dome)
+            self.device_scope=self.getDevice(scope)
+            loopCount+=1
+        if not(self.device_scope):
+            self.logger.info("Scope: Unable to get device "+scope)
+            exit(0)
+        self.logger.info("Scope: Connected to device "+scope)
 
-        # wait CONNECTION property be defined for dome
-        dome_connect=device_dome.getSwitch("CONNECTION")
-        while not(dome_connect):
+        # wait CONNECTION property be defined for scope
+        self.scope_connect=self.device_scope.getSwitch("CONNECTION")
+        loopCount=0
+        while not(self.scope_connect) and (loopCount<=self.MAXLOOPS):
             time.sleep(0.5)
-            dome_connect=device_dome.getSwitch("CONNECTION")
-        logger.info("Dome: Connected to device "+dome)
+            self.scope_connect=self.device_scope.getSwitch("CONNECTION")
+            loopCount+=1
+        if not(self.scope_connect):
+            self.logger.info("Scope: Unable to connect to device "+scope)
+            exit(0)
+        self.logger.info("Scope: Connected to device "+scope)
 
-        # if the dome device is not connected, we do connect it
-        if not(device_dome.isConnected()):
-            dome_connect[0].s=PyIndi.ISS_ON  # the "CONNECT" switch
-            dome_connect[1].s=PyIndi.ISS_OFF # the "DISCONNECT" switch
-            domeClient.sendNewSwitch(dome_connect) # send this new value to the device
+        # if the scope device is not connected, we do connect it
+        if not(self.device_scope.isConnected()):
+            self.scope_connect[0].s=PyIndi.ISS_ON  # the "CONNECT" switch
+            self.scope_connect[1].s=PyIndi.ISS_OFF # the "DISCONNECT" switch
+            self.sendNewSwitch(self.scope_connect) # send this new value to the device
         return True
     
-    def unpark():
-        # Open the dome
-        dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-        while not(dome_parkstatus):
+    def unpark(self):
+        # Open the scope
+        scope_parkstatus=self.device_scope.getSwitch("SCOPE_PARK")
+        while not(scope_parkstatus):
             time.sleep(0.5)
-            dome_parkstatus=device_dome.getSwitch("DOME_PARK")
+            scope_parkstatus=self.device_scope.getSwitch("SCOPE_PARK")
 
-        dome_parkstatus[0].s=PyIndi.ISS_OFF   # the "PARK" switch
-        dome_parkstatus[1].s=PyIndi.ISS_ON    # the "UNPARKED" switch
-        domeClient.sendNewSwitch(dome_parkstatus) # send this new value to the device
+        scope_parkstatus[0].s=PyIndi.ISS_OFF   # the "PARK" switch
+        scope_parkstatus[1].s=PyIndi.ISS_ON    # the "UNPARKED" switch
+        self.sendNewSwitch(scope_parkstatus) # send this new value to the device
 
-        dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-        while not(dome_parkstatus):
+        scope_parkstatus=self.device_scope.getSwitch("SCOPE_PARK")
+        while not(scope_parkstatus):
             time.sleep(0.5)
-            dome_parkstatus=device_dome.getSwitch("DOME_PARK")
+            scope_parkstatus=self.device_scope.getSwitch("SCOPE_PARK")
 
-        # Wait til the dome is finished moving
-        while (dome_parkstatus.getState()==PyIndi.IPS_BUSY):
-            logger.info("Dome UnParking")
+        # Wait til the scope is finished moving
+        while (scope_parkstatus.getState()==PyIndi.IPS_BUSY):
+            self.logger.info("Scope UnParking")
             time.sleep(2)
             
         return
             
-    def park():
-        # Close the dome
-        dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-        while not(dome_parkstatus):
+    def park(self):
+        # Close the scope
+        scope_parkstatus=self.device_scope.getSwitch("SCOPE_PARK")
+        while not(scope_parkstatus):
             time.sleep(0.5)
-            dome_parkstatus=device_dome.getSwitch("DOME_PARK")
+            scope_parkstatus=self.device_scope.getSwitch("SCOPE_PARK")
 
-        dome_parkstatus[0].s=PyIndi.ISS_ON   # the "PARK" switch
-        dome_parkstatus[1].s=PyIndi.ISS_OFF  # the "UNPARKED" switch
-        domeClient.sendNewSwitch(dome_parkstatus) # send this new value to the device
-        dome_parkstatus=device_dome.getSwitch("DOME_PARK")
-        while not(dome_parkstatus):
+        scope_parkstatus[0].s=PyIndi.ISS_ON   # the "PARK" switch
+        scope_parkstatus[1].s=PyIndi.ISS_OFF  # the "UNPARKED" switch
+        self.sendNewSwitch(scope_parkstatus) # send this new value to the device
+        scope_parkstatus=self.device_scope.getSwitch("SCOPE_PARK")
+        while not(scope_parkstatus):
             time.sleep(0.5)
-            dome_parkstatus=device_dome.getSwitch("DOME_PARK")
+            scope_parkstatus=self.device_scope.getSwitch("SCOPE_PARK")
 
-        # Wait til the dome is finished moving
-        while (dome_parkstatus.getState()==PyIndi.IPS_BUSY):
-            logger.info("Dome Parking")
+        # Wait til the scope is finished moving
+        while (scope_parkstatus.getState()==PyIndi.IPS_BUSY):
+            self.logger.info("Scope Parking")
             time.sleep(2)
             
         return
-    
-    # Standard INDI methods    
+    # Standard INDI methods
     def newDevice(self, d):
-        pass
+        '''Emmited when a new device is created from INDI server.'''
+        self.logger.debug(f"new device {d.getDeviceName()}")
+
+    def removeDevice(self, d):
+        '''Emmited when a device is deleted from INDI server.'''
+        self.logger.debug(f"remove device {d.getDeviceName()}")
+
     def newProperty(self, p):
-        pass
+        '''Emmited when a new property is created for an INDI driver.'''
+        self.logger.debug(f"new property {p.getName()} as {p.getTypeAsString()} for device {p.getDeviceName()}")
+
+    def updateProperty(self, p):
+        '''Emmited when a new property value arrives from INDI server.'''
+        self.logger.debug(f"update property {p.getName()} as {p.getTypeAsString()} for device {p.getDeviceName()}")
+
     def removeProperty(self, p):
-        pass
-    def newSwitch(self, svp):
-        pass
-    def newNumber(self, nvp):
-        pass
-    def newText(self, tvp):
-        pass
-    def newLight(self, lvp):
-        pass
+        '''Emmited when a property is deleted for an INDI driver.'''
+        self.logger.debug(f"remove property {p.getName()} as {p.getTypeAsString()} for device {p.getDeviceName()}")
+
     def newMessage(self, d, m):
-        pass
+        '''Emmited when a new message arrives from INDI server.'''
+        self.logger.debug(f"new Message {d.messageQueue(m)}")
+
     def serverConnected(self):
-        pass
+        '''Emmited when the server is connected.'''
+        self.logger.debug(f"Server connected ({self.getHost()}:{self.getPort()})")
+
     def serverDisconnected(self, code):
-        pass
+        '''Emmited when the server gets disconnected.'''
+        self.logger.debug(f"Server disconnected (exit code = {code},{self.getHost()}:{self.getPort()})")

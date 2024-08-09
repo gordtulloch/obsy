@@ -7,7 +7,7 @@ import requests
 import numpy
 
 import logging
-logger = logging.getLogger('oMCP')
+
 
 from mcpConfig import McpConfig
 
@@ -23,6 +23,7 @@ class McpAurora(object):
         self.config = McpConfig()
         self.ovation_json_data = None
         self.kpindex_json_data = None
+        self.logger = logging.getLogger('oMCP')
         return
 
     def update(self):
@@ -31,28 +32,28 @@ class McpAurora(object):
             try:
                 self.ovation_json_data = self.download_json(self.ovation_json_url)
             except json.JSONDecodeError as e:
-                logger.error('JSON parse error: %s', str(e))
+                self.logger.error('JSON parse error: %s', str(e))
                 self.ovation_json_data = None
             except socket.gaierror as e:
-                logger.error('Name resolution error: %s', str(e))
+                self.logger.error('Name resolution error: %s', str(e))
                 self.ovation_json_data = None
             except socket.timeout as e:
-                logger.error('Timeout error: %s', str(e))
+                self.logger.error('Timeout error: %s', str(e))
                 self.ovation_json_data = None
             except requests.exceptions.ConnectTimeout as e:
-                logger.error('Connection timeout: %s', str(e))
+                self.logger.error('Connection timeout: %s', str(e))
                 self.ovation_json_data = None
             except requests.exceptions.ConnectionError as e:
-                logger.error('Connection error: %s', str(e))
+                self.logger.error('Connection error: %s', str(e))
                 self.ovation_json_data = None
             except requests.exceptions.ReadTimeout as e:
-                logger.error('Connection error: %s', str(e))
+                self.logger.error('Connection error: %s', str(e))
                 self.ovation_json_data = None
             except ssl.SSLCertVerificationError as e:
-                logger.error('Certificate error: %s', str(e))
+                self.logger.error('Certificate error: %s', str(e))
                 self.ovation_json_data = None
             except requests.exceptions.SSLError as e:
-                logger.error('Certificate error: %s', str(e))
+                self.logger.error('Certificate error: %s', str(e))
                 self.ovation_json_data = None
 
 
@@ -61,25 +62,25 @@ class McpAurora(object):
             try:
                 self.kpindex_json_data = self.download_json(self.kpindex_json_url)
             except json.JSONDecodeError as e:
-                logger.error('JSON parse error: %s', str(e))
+                self.logger.error('JSON parse error: %s', str(e))
                 self.kpindex_json_data = None
             except socket.gaierror as e:
-                logger.error('Name resolution error: %s', str(e))
+                self.logger.error('Name resolution error: %s', str(e))
                 self.kpindex_json_data = None
             except socket.timeout as e:
-                logger.error('Timeout error: %s', str(e))
+                self.logger.error('Timeout error: %s', str(e))
                 self.kpindex_json_data = None
             except requests.exceptions.ConnectTimeout as e:
-                logger.error('Connection timeout: %s', str(e))
+                self.logger.error('Connection timeout: %s', str(e))
                 self.kpindex_json_data = None
             except requests.exceptions.ConnectionError as e:
-                logger.error('Connection error: %s', str(e))
+                self.logger.error('Connection error: %s', str(e))
                 self.kpindex_json_data = None
             except ssl.SSLCertVerificationError as e:
-                logger.error('Certificate error: %s', str(e))
+                self.logger.error('Certificate error: %s', str(e))
                 self.kpindex_json_data = None
             except requests.exceptions.SSLError as e:
-                logger.error('Certificate error: %s', str(e))
+                self.logger.error('Certificate error: %s', str(e))
                 self.kpindex_json_data = None
 
 
@@ -88,13 +89,13 @@ class McpAurora(object):
 
         if self.ovation_json_data:
             max_ovation, avg_ovation = self.processOvationLocationData(self.ovation_json_data, latitude, longitude)
-            logger.info('Max Ovation: %d', max_ovation)
-            logger.info('Avg Ovation: %0.2f', avg_ovation)
+            self.logger.info('Max Ovation: %d', max_ovation)
+            self.logger.info('Avg Ovation: %0.2f', avg_ovation)
 
         if self.kpindex_json_data:
             kpindex, kpindex_poly = self.processKpindexPoly(self.kpindex_json_data)
-            logger.info('kpindex: %0.2f', kpindex)
-            logger.info('Data: x = %0.2f, b = %0.2f', kpindex_poly.coef[0], kpindex_poly.coef[1])
+            self.logger.info('kpindex: %0.2f', kpindex)
+            self.logger.info('Data: x = %0.2f, b = %0.2f', kpindex_poly.coef[0], kpindex_poly.coef[1])
         
         return kpindex
             
@@ -104,23 +105,23 @@ class McpAurora(object):
             return True
 
     def download_json(self, url):
-        logger.warning('Downloading %s', url)
+        self.logger.warning('Downloading %s', url)
 
         r = requests.get(url, allow_redirects=True, verify=True, timeout=(15.0, 30.0))
 
         if r.status_code >= 400:
-            logger.error('URL returned %d', r.status_code)
+            self.logger.error('URL returned %d', r.status_code)
             return None
 
         json_data = json.loads(r.text)
-        #logger.warning('Response: %s', json_data)
+        #self.logger.warning('Response: %s', json_data)
 
         return json_data
 
     def processOvationLocationData(self, json_data, latitude, longitude):
         # this will check a 5 degree by 5 degree grid and aggregate all of the ovation scores
 
-        logger.warning('Looking up data for %0.1f, %0.1f', latitude, longitude)
+        self.logger.warning('Looking up data for %0.1f, %0.1f', latitude, longitude)
 
         if longitude < 0:
             longitude = 360 + longitude  # logitude is negative
@@ -178,7 +179,7 @@ class McpAurora(object):
 
         data_list = list()
         for i in json_data['coordinates']:
-            #logger.info('%s', i)
+            #self.logger.info('%s', i)
 
             for long_val in long_list:
                 for lat_val in lat_list:
@@ -186,7 +187,7 @@ class McpAurora(object):
                         data_list.append(int(i[2]))
 
 
-        #logger.info('Data: %s', data_list)
+        #self.logger.info('Data: %s', data_list)
 
         return max(data_list), sum(data_list) / len(data_list)
 
@@ -202,11 +203,11 @@ class McpAurora(object):
             try:
                 kp_list.append(float(k[1]))
             except ValueError:
-                logger.error('Invalid float: %s', str(k[1]))
+                self.logger.error('Invalid float: %s', str(k[1]))
                 continue
 
 
-        #logger.info('kpindex data: %s', kp_list)
+        #self.logger.info('kpindex data: %s', kp_list)
 
         x = numpy.arange(0, len(kp_list))
         y = numpy.array(kp_list)

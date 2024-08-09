@@ -17,7 +17,7 @@ import time
 import sys
 import os
 from mcpConfig import McpConfig
-from mcpSmoke  import McpSmoke
+#from mcpSmoke  import McpSmoke
 from mcpAurora import McpAurora
 from mcpClouds import McpClouds
 from mcpRain   import McpRain
@@ -32,7 +32,8 @@ fhandler = logging.FileHandler(filename=logFilename, mode='a')
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fhandler.setFormatter(formatter)
 logger.addHandler(fhandler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
+logger.info("Program Start - oMCP Obsy Master Control Program v0.1")
 
 # Retrieve config
 config=McpConfig()
@@ -60,19 +61,19 @@ if (not(domeClient.connectDevice())): # Connect to the Dome Device
 # Connect the Scope
 from scopeClient import ScopeClient
 scopeClient=ScopeClient()
-scopeClient.setServer(config.get("INDI_SCOPE_SERVER"),int(config.get("INDI_SCOPE_PORT")))
+scopeClient.setServer(config.get("INDI_TELESCOPE_SERVER"),int(config.get("INDI_TELESCOPE_PORT")))
 
 if (not(scopeClient.connectServer())):
     logger.error("Telescope: No indiserver running on "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
     sys.exit(1)
 else:
     logger.info("Telescope: connected to "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
-if (not(domeClient.connectDevice())): # Connect to the Dome Device
+if (not(scopeClient.connectDevice())): # Connect to the Scope Device
     logger.error("Telescope: No indiserver running on "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
     sys.exit(1)
     
 # Set up objects with various detectors
-smoke=McpSmoke()
+#smoke=McpSmoke()
 aurora=McpAurora()
 clouds=McpClouds()
 rain=McpRain()
@@ -82,11 +83,15 @@ weather=McpWeather()
 ############################################################################################################
 #                                    M  A  I  N  L  I  N  E 
 ############################################################################################################
+runMCP=True
+logger.info('Main loop start')
+obsyState = "Closed"
+maxPending=10
+
 while runMCP:
-	logger.info('Main loop start')
-	obsyState = "Closed"
 	# If it's raining or daytime, immediate shut down and wait 5 mins
-	if rain.isRaining() or sun.isDaytime():
+	#if rain.isRaining() or sun.isDaytime():
+	if sun.isDaytime():
 		logger.info('Daytime or rain - Closed Roof')
 		obsyState = "Closed"
 		#scopeClient.park()
@@ -107,8 +112,8 @@ while runMCP:
 			pendingCount+=1
 		if pendingCount == maxPending:
 			obsyState="Closed"
-			#scopeClient.park
-			#domeClient.park()
+			scopeClient.park
+			domeClient.park()
 			pendingCount=0
 	else:
 		# Good weather so set to Open Pending or Open
@@ -120,8 +125,8 @@ while runMCP:
 			pendingCount=1
 		if pendingCount==maxPending: 
 			obsyState="Open"
-			#domeClient.unpark()
-			#scopeClient.unpark()
+			domeClient.unpark()
+			scopeClient.unpark()
 			pendingCount=0
    
 	logger.info('Obsy state is '+obsyState)

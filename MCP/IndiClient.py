@@ -93,6 +93,10 @@ class IndiClient(PyIndi.BaseClient):
     @telescope_device.setter
     def telescope_device(self, new_telescope_device):
         self._telescope_device = new_telescope_device
+        
+    @dome_device.setter
+    def dome_device(self, new_dome_device):
+        self._dome_device = new_dome_device
 
     @property
     def timeout(self):

@@ -34,30 +34,31 @@ class McpClouds(object):
         
 
     def isCloudy(self):
-        logger.warning('Using keras model: %s', KERAS_MODEL)
-        self.model = keras.models.load_model(KERAS_MODEL)
+        logger.info('Using keras model: %s', KERAS_MODEL)
+        self.model = keras.models.load_model(KERAS_MODEL, compile=False)
 
-        if (self.config.get("ALLSKYCAM" == "NONE")):
-            logger.info('No allsky camera for cloud detection')
+        if (self.config.get("ALLSKYCAM") == "NONE"):
+            logger.error('No allsky camera for cloud detection')
         else:
-            if (self.config.get("ALLSKYCAM" == "INDI-ALLSKY")):
+            if (self.config.get("ALLSKYCAM") == "INDI-ALLSKY"):
                 # Query the database for the latest file
                 try:
-                    conn = sqlite3.connect()
+                    conn = sqlite3.connect('/var/lib/indi-allsky/indi-allsky.sqlite')
                     cur = conn.cursor()
                     sqlStmt='SELECT image.filename AS image_filename FROM image ' + \
                     'JOIN camera ON camera.id = image.camera_id WHERE camera.id = '+ self.config.get("ALLSKYCAMNO") +\
-                    'ORDER BY image.createDate DESC LIMIT 1'
+                    ' ORDER BY image.createDate DESC LIMIT 1'
                     logger.info('Running SQL Statement: '+sqlStmt)
                     cur.execute(sqlStmt)
                     image_file=cur.fetchone()
                     conn.close()
                 except sqlite3.Error as e:
                     logger.error("SQLITE Error accessing indi-allsky "+str(e))
+                    exit(0)
             else:
                 # Grab the image file from whereever
                 image_file = config.get("ALLSKY_IMAGE")
-                
+        image_file='/var/www/html/allsky/images/'+image_file[0]
         logger.info('Loading image: %s', image_file)
 
         ### PIL
