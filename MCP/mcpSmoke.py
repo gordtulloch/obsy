@@ -13,7 +13,7 @@ import logging
 import mcpConstants
 from mcpConfig import McpConfig
 
-logger = logging.getLogger('oMCP')
+logger = logging.getLogger('mcpSmoke')
 
 # derived from indi-allsky by Aaron Morris https://github.com/aaronwmorris/indi-allsky.git thanks Aaron!
 

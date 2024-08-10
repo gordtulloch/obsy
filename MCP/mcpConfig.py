@@ -5,7 +5,7 @@
 import configparser
 import os
 import logging
-logger = logging.getLogger('oMCP')
+logger = logging.getLogger('mcpConfig')
 
 class McpConfig():
     def __init__(self):
@@ -38,6 +38,7 @@ class McpConfig():
                 'WEATHERBPS'    : '2400', # Weather station bps
                 'MAXWIND'       : '10',
                 'MAXAVWIND'     : '10',
+                'ALLSKYOUTPUT'  : 'yes',
             }
             with open(self.file_path, 'w') as configfile:
                 self.config.write(configfile)

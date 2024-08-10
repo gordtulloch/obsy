@@ -17,7 +17,7 @@ class McpRain:
         self.ser = serial.Serial(self.port,int(self.config.get("RAINBPS")),timeout=1)
         self.ser.flush()
         packet=self.ser.readline()
-        self.logger = logging.getLogger('oMCP')
+        self.logger = logging.getLogger('mcpRain')
         return
         
     def isRaining(self):

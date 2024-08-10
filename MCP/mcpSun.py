@@ -13,7 +13,7 @@ from mcpConfig import McpConfig
 class McpSun:
     def __init__(self):
         self.config=McpConfig()
-        self.logger = logging.getLogger('oMCP')
+        self.logger = logging.getLogger('mcpSun')
         
     def isDaytime(self):
         loc = coord.EarthLocation(float(self.config.get("LONGITUDE")) * u.deg, float(self.config.get("LATITUDE")) * u.deg)

@@ -14,7 +14,7 @@ logger.addHandler(fhandler)
 logger.setLevel(logging.DEBUG)
 
 clouds=McpClouds()
-result = clouds.isCloudy()
+result = clouds.isCloudy(allSkyOutput=True)
 if (result):
     logger.info("Cloud detector reports True")
 else:

@@ -69,7 +69,7 @@ if (not(scopeClient.connectServer())):
 else:
     logger.info("Telescope: connected to "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
 if (not(scopeClient.connectDevice())): # Connect to the Scope Device
-    logger.error("Telescope: No indiserver running on "+scopeClient.getHost()+":"+str(scopeClient.getPort()))
+    logger.error("Telescope: Unable to connect to device, exiting...")
     sys.exit(1)
     
 # Set up objects with various detectors
@@ -90,17 +90,23 @@ maxPending=10
 
 while runMCP:
 	# If it's raining or daytime, immediate shut down and wait 5 mins
-	#if rain.isRaining() or sun.isDaytime():
-	if sun.isDaytime():
+	if rain.isRaining() or sun.isDaytime():
 		logger.info('Daytime or rain - Closed Roof')
+		if (config.get('ALLSKYOUTPUT') == 'true'):
+			filename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'allskycam.txt')
+			f = open(filename, "w")
+			f.write("Daytime")
+			f.close()
 		obsyState = "Closed"
-		#scopeClient.park()
-		#domeClient.park()
+		logger.info('Confirming telescope park')
+		scopeClient.park()
+		logger.info('Confirming roof park')
+		domeClient.park()
 		time.sleep(300)
 		continue
 
     # If conditions look unsuitable either stay closed or move to Close Pending if Open
-	if clouds.isCloudy() or weather.isBadWeather() or aurora.isAurora():
+	if clouds.isCloudy(allSkyOutput) or weather.isBadWeather() or aurora.isAurora():
 		logger.info('Clouds/Weather not within parameters - Closed Roof')
 		if obsyState == "Closed":
 			continue
@@ -112,8 +118,10 @@ while runMCP:
 			pendingCount+=1
 		if pendingCount == maxPending:
 			obsyState="Closed"
-			scopeClient.park
-			domeClient.park()
+			if not(scopeClient.park()):
+				logger.error("Unable to confirm telescope park!")
+			if not(domeClient.park()):
+				logger.error("Unable to confirm dome park!")
 			pendingCount=0
 	else:
 		# Good weather so set to Open Pending or Open

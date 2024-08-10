@@ -11,13 +11,14 @@ from PIL import Image
 import logging
 import sqlite3
 import keras
+import os
 
 from mcpConfig import McpConfig
 config=McpConfig()
 
 sys.path.append(str(Path(__file__).parent.absolute().parent))
 
-logger = logging.getLogger("oMCP")
+logger = logging.getLogger("mcpClouds")
 
 KERAS_MODEL = 'keras_model.h5'
 
@@ -31,9 +32,9 @@ class McpClouds(object):
     
     def __init__(self):
         self.config = config
-        
 
-    def isCloudy(self):
+
+    def isCloudy(self,allSkyOutput=False):
         logger.info('Using keras model: %s', KERAS_MODEL)
         self.model = keras.models.load_model(KERAS_MODEL, compile=False)
 
@@ -69,7 +70,14 @@ class McpClouds(object):
             logger.error('Invalid image file: %s', image_file)
             return True
 
-        return (self.detect(image_data) != 'Clear')
+        result=self.detect(image_data)
+        if (allSkyOutput):
+            filename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'allskycam.txt')
+            f = open(filename, "w")
+            f.write(result)
+            f.close()
+
+        return (result != 'Clear')
 
     def detect(self, image):
         thumbnail = cv2.resize(image, (224, 224))

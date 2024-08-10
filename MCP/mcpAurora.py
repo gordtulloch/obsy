@@ -23,7 +23,7 @@ class McpAurora(object):
         self.config = McpConfig()
         self.ovation_json_data = None
         self.kpindex_json_data = None
-        self.logger = logging.getLogger('oMCP')
+        self.logger = logging.getLogger('mcpAurora')
         return
 
     def update(self):
