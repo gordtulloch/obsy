@@ -17,7 +17,7 @@ import time
 import sys
 import os
 from mcpConfig import McpConfig
-#from mcpSmoke  import McpSmoke
+from mcpSmoke  import McpSmoke
 from mcpAurora import McpAurora
 from mcpClouds import McpClouds
 from mcpRain   import McpRain
@@ -49,13 +49,13 @@ domeClient=DomeClient()
 domeClient.setServer(config.get("INDI_DOME_SERVER"),int(config.get("INDI_DOME_PORT")))
 
 if (not(domeClient.connectServer())):
-    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
+    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort())+" exiting...")
     sys.exit(1)
 else:
     logger.info("Dome: connected to "+domeClient.getHost()+":"+str(domeClient.getPort()))
 
 if (not(domeClient.connectDevice())): # Connect to the Dome Device
-    logger.error("Dome: No indiserver running on "+domeClient.getHost()+":"+str(domeClient.getPort()))
+    logger.error("Dome: Unable to connect to dome device, exiting...")
     sys.exit(1)
 
 # Connect the Scope
@@ -73,7 +73,7 @@ if (not(scopeClient.connectDevice())): # Connect to the Scope Device
     sys.exit(1)
     
 # Set up objects with various detectors
-#smoke=McpSmoke()
+smoke=McpSmoke()
 aurora=McpAurora()
 clouds=McpClouds()
 rain=McpRain()

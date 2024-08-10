@@ -22,8 +22,8 @@ class McpSun:
         sun = coord.get_sun(now).transform_to(altaz)
 
         if (sun.alt.degree > -6.0):
-            self.logger.info("Sun is up")
+            self.logger.debug("Sun is up")
             return True
         else:
-            self.logger.info("Sun is down")
+            self.logger.debug("Sun is down")
             return False
