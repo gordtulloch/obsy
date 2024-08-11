@@ -15,6 +15,9 @@ logger.setLevel(logging.DEBUG)
 
 rain=McpRain()
 result = rain.isRaining()
+if result==b'':
+    logger.error("Rain detector: No Data")
+    print("Rain detector reports no data.")
 if (result):
     logger.info("Rain detector reports True")
 else:

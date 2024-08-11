@@ -14,8 +14,6 @@ logger.setLevel(logging.DEBUG)
 
 # Retrieve config
 config=McpConfig()
-print("Max Aurora: "+config.get("MAXAURORAKPI"))
-
 smoke=McpSmoke()
 if (smoke.isSmokey()):
     print("Current Smoke is > Max")

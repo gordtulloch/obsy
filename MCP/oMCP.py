@@ -102,6 +102,7 @@ while runMCP:
 		scopeClient.park()
 		logger.info('Confirming roof park')
 		domeClient.park()
+		logger.info('Waiting for 5m to check again...')
 		time.sleep(300)
 		continue
 
@@ -138,6 +139,7 @@ while runMCP:
 			pendingCount=0
    
 	logger.info('Obsy state is '+obsyState)
+	logger.info('Waiting for 1m...')
 	time.sleep(60)
 
 ############################################################################################################
