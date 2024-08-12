@@ -107,7 +107,7 @@ while runMCP:
 		continue
 
     # If conditions look unsuitable either stay closed or move to Close Pending if Open
-	if clouds.isCloudy(allSkyOutput) or weather.isBadWeather() or aurora.isAurora():
+	if clouds.isCloudy(config.get("ALLSKYOUTPUT"),config.get("ALLSKYSAMPLING")) or weather.isBadWeather() or aurora.isAurora():
 		logger.info('Clouds/Weather not within parameters - Closed Roof')
 		if obsyState == "Closed":
 			continue

@@ -12,6 +12,7 @@ import logging
 import sqlite3
 import keras
 import os
+import shutil
 
 from mcpConfig import McpConfig
 config=McpConfig()
@@ -32,9 +33,15 @@ class McpClouds(object):
     
     def __init__(self):
         self.config = config
+        self.imageCount=0
+        # Set up the image paths if required
+        if not os.path.exists(config.get("ALLSKYSAMPLEDIR")):
+            os.makedirs(config.get("ALLSKYSAMPLEDIR"))
+        with CLASS_NAMES as className:
+            if not os.path.exists(config.get("ALLSKYSAMPLEDIR")+"/"+className):
+            os.makedirs(config.get("ALLSKYSAMPLEDIR")+"/"+className)
 
-
-    def isCloudy(self,allSkyOutput=False):
+    def isCloudy(self,allSkyOutput=False,allskysampling=False):
         logger.info('Using keras model: %s', KERAS_MODEL)
         self.model = keras.models.load_model(KERAS_MODEL, compile=False)
 
@@ -61,7 +68,7 @@ class McpClouds(object):
                 image_file = config.get("ALLSKY_IMAGE")
         image_file='/var/www/html/allsky/images/'+image_file[0]
         logger.info('Loading image: %s', image_file)
-
+        
         ### PIL
         try:
             with Image.open(str(image_file)) as img:
@@ -76,6 +83,13 @@ class McpClouds(object):
             f = open(filename, "w")
             f.write(result)
             f.close()
+
+        # If allskysampling turned on save a copy of the image if count = allskysamplerate
+        if (self.imageCount==config.get("ALLSKYSAMPLERATE")):
+            shutil.copy(image_file, config.get("ALLSKYSAMPLEDIR")+"/"+result)
+            self.imageCount=0
+        else:
+            self.imageCount+=1
 
         return (result != 'Clear')
 

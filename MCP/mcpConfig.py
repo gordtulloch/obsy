@@ -15,30 +15,35 @@ class McpConfig():
         if not os.path.exists(self.file_path):
             logger.info("Config file not found, creating with defaults.")
             self.config['DEFAULT'] = {
-                'RUNMODE': 'DOME',                         # Can be MASTER, DOME, TELESCOPE, or REMOTE
-                'MCPHOME': '/home/stellarmate/obsy/MCP/',
-                'INDI_TELESCOPE_SERVER'	: 'localhost',
-    	    	'INDI_DOME_SERVER'	    : 'localhost',
-              	'INDI_TELESCOPE_PORT'   : '7624',
-                'INDI_DOME_PORT'        : '7624',
-             	'INDITELESCOPE'	: 'Telescope Simulator',
-                'INDIDOME'	    : 'RollOff Simulator',
-                'WEATHERPORT'	: '/dev/ttyUSB1',
-                'RAINPORT'	    : '/dev/ttyUSB0',
-                'LATITUDE'      : '49.8954',
-                'LONGITUDE'     : '-97.1385',
-                'EKOSHOMEPATH'  : '/home/stellarmate/Pictures/schedules/',
-                'EKOSPROFILE'   : 'SPAO-PC',
-                'EKOSSCHEDULE'  : 'daily.esl',
-                'ALLSKY_IMAGE'  : 'latest.jpg',
-                'MAXAURORAKPI'  : '5.0',
-                'ALLSKYCAM'     : 'INDI-ALLSKY', # Can be one of INDI-ALLSKY, TJ, or NONE
-                'ALLSKYCAMNO'   : '1', # indi-allsky camera number
-                'RAINBPS'       : '9600', # Rain detector bps 
-                'WEATHERBPS'    : '2400', # Weather station bps
-                'MAXWIND'       : '10',
-                'MAXAVWIND'     : '10',
-                'ALLSKYOUTPUT'  : 'yes',
+                'RUNMODE': 'DOME',                          # Can be MASTER, DOME, TELESCOPE, or REMOTE
+                'MCPHOME': '/home/stellarmate/obsy/MCP/',   # MCP home folder
+                'INDI_TELESCOPE_SERVER'	: 'localhost',      # INDI server for Telescope
+    	    	'INDI_DOME_SERVER'	    : 'localhost',      # INDI server for observatory
+              	'INDI_TELESCOPE_PORT'   : '7624',           # Port for Telescope
+                'INDI_DOME_PORT'        : '7624',           # Port for observatory
+             	'INDITELESCOPE'	: 'Telescope Simulator',    # Driver to use for telescope
+                'INDIDOME'	    : 'RollOff Simulator',      # Driver to use for Observatory
+                'WEATHERPORT'	: '/dev/ttyUSB1',           # Port weather station connected to
+                'RAINPORT'	    : '/dev/ttyUSB0',           # Port rain detector connected to
+                'LATITUDE'      : '49.8954',                # Observatory latitude
+                'LONGITUDE'     : '-97.1385',               # Observatory longitude
+                'EKOSHOMEPATH'  :                           # EKOS path to store schedules
+                  '/home/stellarmate/Pictures/schedules/',
+                'EKOSPROFILE'   : 'SPAO-PC',                # EKOS Profile to run in tMCP
+                'EKOSSCHEDULE'  : 'daily.esl',              # EKOS schedule file to create
+                'ALLSKY_IMAGE'  : 'latest.jpg',             # Allskycam image name (non-indi-allsky)
+                'MAXAURORAKPI'  : '5.0',                    # How high can aurora kpi be before we just won't bother opening the roof?
+                'ALLSKYCAM'     : 'INDI-ALLSKY',            # Can be one of INDI-ALLSKY, TJ, or NONE
+                'ALLSKYCAMNO'   : '1',                      # indi-allsky camera number
+                'RAINBPS'       : '9600',                   # Rain detector bps 
+                'WEATHERBPS'    : '2400',                   # Weather station bps
+                'MAXWIND'       : '10',                     # Max wind before closing
+                'MAXAVWIND'     : '10',                     # Max average wind before closing
+                'ALLSKYOUTPUT'  : 'True',                   # Output an allskycam.txt file
+                'ALLSKYSAMPLING'  : 'True',                 # Create sample images from allskycam every n images
+                'ALLSKYSAMPLEDIR'  : 
+                  '/home/stellarmate/allskyimages',         # Directory for sample images from allskycam
+                'ALLSKYSAMPLERATE'  : '10',                 # How many images to wait before sampling
             }
             with open(self.file_path, 'w') as configfile:
                 self.config.write(configfile)
