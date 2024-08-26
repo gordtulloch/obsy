@@ -5,20 +5,24 @@ OBSY is an Open Source observatory management system intended for amateur astron
 NOTE THIS SOFTWARE IS IN ACTIVE DEVELOPMENT AND NO RELEASE CANDIDATE IS AVAILABLE YET.
 
 ## Features:
+Initial release scope is as follows:
 * Multinode support for seperate telescope and observatory computers
 * Support for multiple workload types, all from the same code base
 * Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
-* Live stacking and update of remote sites with current imaging activities
-* Automatic deposits into data repositories including FITS file metadata
-* Multiuser support with authentication, plus anonymous "public" access for web sites 
 * Support for automated science and astrophotography imaging using KStars/EKOS on Linux
-* Automated image calibration and basic processing for science and astrophotography using Siril
+* Automatic collection of data into data repositories including FITS file metadata
 * Automated cloud detection from any allsky camera that can produce a current image on disk
 * Support for rain detectors to automatically park the telescope and close the dome/roof of the observatory 
-* Suppor for weather stations to determine if the weather is suitable for imaging operations
+* Support for weather stations to determine if the weather is suitable for imaging operations
 * Support for Smoke and Aurora forecasts to assist in determining whether imaging operations can proceed
+
+Future releases will include:
+* Live stacking and update of remote sites with current imaging activities
+* Multiuser support with authentication, plus anonymous "public" access for web sites 
+* Automated image calibration and basic processing for science and astrophotography using Siril
 * Automated processing of photometry imaging
 * Automated processing of exoplanet imaging
+* Integrated image viewer with FITS/XISF support
 
 ## Technology Architecture
 The two primary components of OBSY are:
