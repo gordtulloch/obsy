@@ -41,7 +41,7 @@ Currently working on sub-projects as follows:
 * [PythonEkosFiles](https://github.com/gordtulloch/pythonEkosFiles) Python objects for reading and writing Ekos sequence and schedule files (STARTED)
 
 ## Other contributors
-
+I stand on the shoulders of:
 **Aaron Morris** (decep on CN) - Aaron's indi-allsky has a lot of functions similar to those needed in oMCP.py so many thanks for allowing me to modify some of the code for my purposes https://github.com/aaronwmorris/indi-allsky
 **Dušan Poizl** (nou on CN) - I took a fork of nou's tenmon repo from https://gitea.nouspiro.space/nou/tenmon to serve as a reference for the same code developed in Python for web deployment. While nou's code is C++/JS intended for desktop use the algorithms are going to be extremely handy!!
 
