@@ -42,8 +42,8 @@ Currently working on sub-projects as follows:
 
 ## Other contributors
 I stand on the shoulders of:
-**Aaron Morris** (decep on CN) - Aaron's indi-allsky has a lot of functions similar to those needed in oMCP.py so many thanks for allowing me to modify some of the code for my purposes https://github.com/aaronwmorris/indi-allsky
-**Dušan Poizl** (nou on CN) - I took a fork of nou's tenmon repo from https://gitea.nouspiro.space/nou/tenmon to serve as a reference for the same code developed in Python for web deployment. While nou's code is C++/JS intended for desktop use the algorithms are going to be extremely handy!!
+* **Aaron Morris** (decep on CN) - Aaron's indi-allsky has a lot of functions similar to those needed in oMCP.py so many thanks for allowing me to modify some of the code for my purposes https://github.com/aaronwmorris/indi-allsky
+* **Dušan Poizl** (nou on CN) - I took a fork of nou's tenmon repo from https://gitea.nouspiro.space/nou/tenmon to serve as a reference for the same code developed in Python for web deployment. While nou's code is C++/JS intended for desktop use the algorithms are going to be extremely handy!!
 
 ## Installation
 Full installation instructions will be provided when the initial release is created. Essentially the process will be to clone the repository via git and run a setup.sh script with a parameter (observatory, telescope, remote, master) to determine what the node should be configured as. Auto-discovery of nodes on the same network.
