@@ -5,7 +5,7 @@
 
 # Set up logging
 import logging
-logger = logging.getLogger("tMCP")
+logger = logging.getLogger("mcpEkosDbus")
 
 class EkosDbus():
 	def __init__(self):

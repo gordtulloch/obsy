@@ -8,26 +8,29 @@
 import logging
 import serial
 from mcpConfig import McpConfig
+import time
 
+# Note time.sleep statements are important to ensure the serial port has time to respond
 class McpRain:
     def __init__(self):
         self.config=McpConfig()
         self.port = self.config.get("RAINPORT")
-        self.ser = serial.Serial(port,2400,timeout=1)
-        self.logger = logging.getLogger('oMCP')
+        self.bps=self.config.get("RAINBPS")
+        self.ser = serial.Serial(self.port,int(self.bps),timeout=1)
+        time.sleep(2)
+        self.logger = logging.getLogger('mcpRain')
+        return
         
     def isRaining(self):
-        packet=""
-        self.logger.info("Running getRain on "+self.port)
-        try:  
-            self.ser.flush()
-            packet=self.ser.readline()
-        except Exception as msg:
-            self.logger.error("getRain error: "+str(msg))
+        self.ser.write(b"S#")
+        time.sleep(2)
+        self.ser.flush()
+        time.sleep(2)
+        packet=self.ser.readline()
 
         if (packet != b"safe#"):
-            self.logger.info("Rain detected by Hydreon RG-11!")
+            self.logger.info("Rain detected by Hydreon RG-11! ("+str(packet)+")")
             return True
         else:
-            self.logger.info("Rain not detected by Hydreon RG-11.")
+            self.logger.info("Rain not detected by Hydreon RG-11. ("+str(packet)+")")
             return False

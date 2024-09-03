@@ -5,25 +5,30 @@ OBSY is an Open Source observatory management system intended for amateur astron
 NOTE THIS SOFTWARE IS IN ACTIVE DEVELOPMENT AND NO RELEASE CANDIDATE IS AVAILABLE YET.
 
 ## Features:
+Initial release scope is as follows:
 * Multinode support for seperate telescope and observatory computers
 * Support for multiple workload types, all from the same code base
-* Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
-* Live stacking and update of remote sites with current imaging activities
-* Automatic deposits into data repositories including FITS file metadata
-* Multiuser support with authentication, plus anonymous "public" access for web sites 
 * Support for automated science and astrophotography imaging using KStars/EKOS on Linux
-* Automated image calibration and basic processing for science and astrophotography using Siril
+* Automatic collection of data into data repositories including FITS file metadata
 * Automated cloud detection from any allsky camera that can produce a current image on disk
 * Support for rain detectors to automatically park the telescope and close the dome/roof of the observatory 
-* Suppor for weather stations to determine if the weather is suitable for imaging operations
+* Support for weather stations to determine if the weather is suitable for imaging operations
 * Support for Smoke and Aurora forecasts to assist in determining whether imaging operations can proceed
+
+Future releases will include:
+* Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
+* Live stacking and update of remote sites with current imaging activities
+* Multiuser support with authentication, plus anonymous "public" access for web sites 
+* Automated image calibration and basic processing for science and astrophotography using Siril
 * Automated processing of photometry imaging
 * Automated processing of exoplanet imaging
+* Automated processing of spectroheliograph captures (Sol'ex)
+* Integrated image viewer with FITS/XISF support
 
 ## Technology Architecture
 The two primary components of OBSY are:
 * **MCP.py (Master Control Program(s))** is a pair of Python based services which control all integration with **INDI**, **KStars/EKOS**, Weather, Rain, **INDI-Allskycam**, and machine learning based cloud detection. There are two scripts - **oMCP.py** to run on observatory nodes, and **tMCP.py** to run on Telescope nodes. Initially this code will be very specific to my personal installation but will be generalized over time. Results are stored in a SQL database for use by the OBSY User interface, with assets (eg FITS files with images) stored in a Data Repository linked to the database. MCP will also initiate jobs such as automated master generation, calibration of images, and stacking of sequences of images (depending on target attributes) using **Siril**.
-* **Obsy-Web** - using the SQL database populated by MCP operations, the web site provides a user interface where the user can select targets, view collected data, analyze and report on the data, and configure the overall system. Schedules are then created to drive MCP operations. 
+* **Obsy-Web** - using the SQL database populated by MCP operations, the web site provides a user interface where the user can select targets, view collected data, analyze and report on the data, and configure the overall system. Schedules are then created to drive MCP operations. This code is built in Python and Django.
 
 OBSY will run on Linux/Unix environments, with all development occurring on the Stellarmate X OS, which is a Kubuntu derived distribution of Linux with bundled astronomy software and a IOS/Android app.  All code is written in Python3 with web infrastructure provided by Django. Obsy will be implicitly distributed, with four types of nodes - Master, Observatory, Telescope, and Remote. The Observatory and Telescope nodes will run complementary Python scripts that perform the workloads required. 
 
@@ -40,5 +45,23 @@ Currently working on sub-projects as follows:
 * [MLCloudDetect](https://github.com/gordtulloch/mlCloudDetect) Machine Learning based cloud detection for allsky cameras (COMPLETE)
 * [PythonEkosFiles](https://github.com/gordtulloch/pythonEkosFiles) Python objects for reading and writing Ekos sequence and schedule files (STARTED)
 
+## Other contributors
+I stand on the shoulders of:
+* **Aaron Morris** (decep on CN) - Aaron's indi-allsky has a lot of functions similar to those needed in oMCP.py so many thanks for allowing me to modify some of the code for my purposes https://github.com/aaronwmorris/indi-allsky
+* **Dušan Poizl** (nou on CN) - I took a fork of nou's tenmon repo from https://gitea.nouspiro.space/nou/tenmon to serve as a reference for the same code developed in Python for web deployment. While nou's code is C++/JS intended for desktop use the algorithms are going to be extremely handy!!
+
 ## Installation
-Full installation instructions will be provided when the initial release is created. Essentially the process will be to clone the repository via git and run a setup.sh script with a parameter (observatory, telescope, remote, master) to determine what the node should be configured as. Auto-discovery of nodes on the same network.
+Full installation instructions will be provided when the initial release is created. Essentially the process will be to clone the repository via git and run a setup.sh script with a parameter (observatory, telescope, remote, master) to determine what the node should be configured as. Auto-discovery of nodes on the same network will hopefully be implemented on release.
+
+Installation will most likely look like the following:
+
+1. git clone https://github.com/gordtulloch/obsy.git
+2. cd obsy
+3. ./setup.sh (dome|telescope) --noscan --port=8888
+
+The setup script will start up the Django/Unicorn environment, set up the environment for MCP, and schedule MCP execution. Once installed the user can access the obsy user interface at:
+
+https://localhost:8888
+
+The installation program will optionally scan your local network for other obsy nodes at the same port specified and will configure itself to interact with them. Other nodes can also be specified in the user interface. Master and remote nodes will be available in a later release.
+

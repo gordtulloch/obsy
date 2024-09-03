@@ -1,0 +1,14 @@
+astropy==4.3.1
+configparser==5.3.0
+keras==2.11.0
+lxml==5.2.2
+numpy==1.21.6
+opencv-python==4.10.0.84
+Pillow==9.5.0
+pyindi-client==1.9.1
+pyserial==3.5
+pysolar==0.11
+pytz==2024.1
+requests==2.31.0
+shapely==2.0.5
+tensorflow==2.11.0

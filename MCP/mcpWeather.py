@@ -2,21 +2,23 @@
 ## i s B A D W E A T H E R                                                                                 ##
 #############################################################################################################
 # Get local weather data from ADS-WS1
-import serial
+# Thanks to Evan Vander Stoep https://github.com/EvanVS/WXparser
+import serial, codecs
 
 # Set up logging
 import logging
 logger = logging.getLogger("oMCP")
 
-# Retrieve config
 from mcpConfig import McpConfig
-config=McpConfig()
 
 class McpWeather:
     def __init__(self):
-        self.debug=True
+        self.debug=False
+        self.config=McpConfig()
         try:
-            self.ser = serial.Serial(config.get("WEATHERPORT"),2400,timeout=1)
+            self.ser = serial.Serial(self.config.get("WEATHERPORT"),self.config.get("WEATHERBPS"),timeout=1)
+            self.ser.flush()
+            packet=self.ser.readline()
         except Exception as msg:
             logger.error("getWeather error: "+str(msg))
             return False
@@ -93,21 +95,6 @@ class McpWeather:
             humidity = (humidity / 10)
             wx_humidity = humidity
             
-            # Dewpoint Calculations
-            T = wx_temperature_celsius
-            RH = wx_humidity
-            a = 17.271
-            b = 237.7
-            def dewpoint_approximation(T,RH):
-                Td = (b * gamma(T,RH)) / (a - gamma(T,RH))
-                return Td
-            def gamma(T,RH):
-                g = (a * T / (b + T)) + np.log(RH/100.0)
-                return g
-            Td = dewpoint_approximation(T,RH)
-            DewPoint = 9.0/5.0 * Td + 32
-            wx_dewpoint = round(DewPoint + 0.01, 2)
-
             # Total Rain Calculations
             total_rain = int(codecs.decode(packet[14:18], 'UTF-8'), 16)
             total_rain = (total_rain / 100)
@@ -121,13 +108,14 @@ class McpWeather:
             wx_today_rain_mm = today_rain / 24.5
                 
             # Determine whether we should open dome
-            if (wx_average_wind_speed > config.get("MAXAVWIND")) or (wx_wind_speed > config.get("MAXWIND")):
-                logger.info("Weather data is wind average ", wx_average_wind_speed," max is ",
-                    config.get("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",
-                    config.get("MAXWIND")," returning True (weather not ok)")
+            if (wx_average_wind_speed > float(self.config.get("MAXAVWIND"))) or (wx_wind_speed > float(self.config.get("MAXWIND"))):
+                logger.info("Weather data is wind average "+str(wx_average_wind_speed)+" max is "+
+                    self.config.get("MAXAVWIND")+"wind speed ",str(wx_wind_speed)+" max is ",
+                    self.config.get("MAXWIND")+" returning True (weather not ok)")
                 return True
             else:
-                logger.info("Weather data is wind average ",wx_average_wind_speed," max is ",config.get("MAXAVWIND"),"wind speed ",wx_wind_speed," max is ",config.get("MAXWIND")," returning False (weather ok)")
+                logger.info("Weather data is wind average "+str(wx_average_wind_speed)+" max is "+self.config.get("MAXAVWIND")+"wind speed "
+                            +str(wx_wind_speed)+" max is "+self.config.get("MAXWIND")+" returning False (weather ok)")
                 return False
         else:
             logging.warning("No data received from weather station")

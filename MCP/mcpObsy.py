@@ -5,7 +5,7 @@
 
 # Set up logging
 import logging
-logger = logging.getLogger("tMCP")
+logger = logging.getLogger("mcpObsy")
 
 from mcpConfig import McpConfig
 

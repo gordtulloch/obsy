@@ -11,13 +11,15 @@ from PIL import Image
 import logging
 import sqlite3
 import keras
+import os
+import shutil
 
 from mcpConfig import McpConfig
 config=McpConfig()
 
 sys.path.append(str(Path(__file__).parent.absolute().parent))
 
-logger = logging.getLogger("oMCP")
+logger = logging.getLogger("mcpClouds")
 
 KERAS_MODEL = 'keras_model.h5'
 
@@ -31,35 +33,42 @@ class McpClouds(object):
     
     def __init__(self):
         self.config = config
-        
+        self.imageCount=0
+        # Set up the image paths if required
+        if not os.path.exists(config.get("ALLSKYSAMPLEDIR")):
+            os.makedirs(config.get("ALLSKYSAMPLEDIR"))
+        with CLASS_NAMES as className:
+            if not os.path.exists(config.get("ALLSKYSAMPLEDIR")+"/"+className):
+            os.makedirs(config.get("ALLSKYSAMPLEDIR")+"/"+className)
 
-    def isCloudy(self):
-        logger.warning('Using keras model: %s', KERAS_MODEL)
-        self.model = keras.models.load_model(KERAS_MODEL)
+    def isCloudy(self,allSkyOutput=False,allskysampling=False):
+        logger.info('Using keras model: %s', KERAS_MODEL)
+        self.model = keras.models.load_model(KERAS_MODEL, compile=False)
 
-        if (self.config.get("ALLSKYCAM" == "NONE")):
-            logger.info('No allsky camera for cloud detection')
+        if (self.config.get("ALLSKYCAM") == "NONE"):
+            logger.error('No allsky camera for cloud detection')
         else:
-            if (self.config.get("ALLSKYCAM" == "INDI-ALLSKY")):
+            if (self.config.get("ALLSKYCAM") == "INDI-ALLSKY"):
                 # Query the database for the latest file
                 try:
-                    conn = sqlite3.connect()
+                    conn = sqlite3.connect('/var/lib/indi-allsky/indi-allsky.sqlite')
                     cur = conn.cursor()
                     sqlStmt='SELECT image.filename AS image_filename FROM image ' + \
                     'JOIN camera ON camera.id = image.camera_id WHERE camera.id = '+ self.config.get("ALLSKYCAMNO") +\
-                    'ORDER BY image.createDate DESC LIMIT 1'
+                    ' ORDER BY image.createDate DESC LIMIT 1'
                     logger.info('Running SQL Statement: '+sqlStmt)
                     cur.execute(sqlStmt)
                     image_file=cur.fetchone()
                     conn.close()
                 except sqlite3.Error as e:
                     logger.error("SQLITE Error accessing indi-allsky "+str(e))
+                    exit(0)
             else:
                 # Grab the image file from whereever
                 image_file = config.get("ALLSKY_IMAGE")
-                
+        image_file='/var/www/html/allsky/images/'+image_file[0]
         logger.info('Loading image: %s', image_file)
-
+        
         ### PIL
         try:
             with Image.open(str(image_file)) as img:
@@ -68,7 +77,21 @@ class McpClouds(object):
             logger.error('Invalid image file: %s', image_file)
             return True
 
-        return (self.detect(image_data) != 'Clear')
+        result=self.detect(image_data)
+        if (allSkyOutput):
+            filename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'allskycam.txt')
+            f = open(filename, "w")
+            f.write(result)
+            f.close()
+
+        # If allskysampling turned on save a copy of the image if count = allskysamplerate
+        if (self.imageCount==config.get("ALLSKYSAMPLERATE")):
+            shutil.copy(image_file, config.get("ALLSKYSAMPLEDIR")+"/"+result)
+            self.imageCount=0
+        else:
+            self.imageCount+=1
+
+        return (result != 'Clear')
 
     def detect(self, image):
         thumbnail = cv2.resize(image, (224, 224))
