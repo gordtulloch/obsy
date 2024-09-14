@@ -1,0 +1,4 @@
+TODO
+
+Add notifications to mobile devices using https://pushover.net/
+Communicate with Home Automation via MQTTT (look at code in indi-allsky)

@@ -13,3 +13,4 @@ scikit-image
 scipy
 shapely
 tensorflow
+requests

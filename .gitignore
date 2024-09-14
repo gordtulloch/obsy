@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# ML Models
+*.keras
+
 # Distribution / packaging
 .Python
 build/

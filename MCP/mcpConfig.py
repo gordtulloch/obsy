@@ -23,8 +23,10 @@ class McpConfig():
                 'INDI_DOME_PORT'        : '7624',           # Port for observatory
              	'INDITELESCOPE'	: 'Telescope Simulator',    # Driver to use for telescope
                 'INDIDOME'	    : 'RollOff Simulator',      # Driver to use for Observatory
-                'WEATHERPORT'	: '/dev/ttyUSB1',           # Port weather station connected to
-                'RAINPORT'	    : '/dev/ttyUSB0',           # Port rain detector connected to
+                'WEATHERPORT'	: '/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_55838343533351209112-if00',           
+                                                            # Port weather station connected to
+                'RAINPORT'	    : '/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0',
+                                                            # Port rain detector connected to
                 'LATITUDE'      : '49.8954',                # Observatory latitude
                 'LONGITUDE'     : '-97.1385',               # Observatory longitude
                 'EKOSHOMEPATH'  :                           # EKOS path to store schedules
@@ -44,6 +46,7 @@ class McpConfig():
                 'ALLSKYSAMPLEDIR'  : 
                   '/home/stellarmate/allskyimages',         # Directory for sample images from allskycam
                 'ALLSKYSAMPLERATE'  : '10',                 # How many images to wait before sampling
+                'KERASMODEL'    : 'mlCloudDetect.keras',    # Model file for cloud detection
             }
             with open(self.file_path, 'w') as configfile:
                 self.config.write(configfile)

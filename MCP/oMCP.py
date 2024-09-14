@@ -87,15 +87,16 @@ runMCP=True
 logger.info('Main loop start')
 obsyState = "Closed"
 maxPending=10
+pendingCount=0
 
 while runMCP:
 	# If it's raining or daytime, immediate shut down and wait 5 mins
 	if rain.isRaining() or sun.isDaytime():
 		logger.info('Daytime or rain - Closed Roof')
-		if (config.get('ALLSKYOUTPUT') == 'true'):
+		if (config.get('ALLSKYOUTPUT') == 'True'):
 			filename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'allskycam.txt')
 			f = open(filename, "w")
-			f.write("Daytime")
+			f.write("Closed\nDaytime/Rain")
 			f.close()
 		obsyState = "Closed"
 		logger.info('Confirming telescope park')
@@ -107,16 +108,28 @@ while runMCP:
 		continue
 
     # If conditions look unsuitable either stay closed or move to Close Pending if Open
-	if clouds.isCloudy(config.get("ALLSKYOUTPUT"),config.get("ALLSKYSAMPLING")) or weather.isBadWeather() or aurora.isAurora():
-		logger.info('Clouds/Weather not within parameters - Closed Roof')
+	isClouds,cloudResult=clouds.isCloudy(config.get("ALLSKYSAMPLING"))
+	if isClouds or weather.isBadWeather() or aurora.isAurora():
+		logger.info('Clouds/Weather not within parameters - Close Roof')
 		if obsyState == "Closed":
-			continue
+			logger.info('Obsy state is '+obsyState)
+			logger.info('Confirming telescope park')
+			scopeClient.park()
+			logger.info('Confirming roof park')
+			domeClient.park()
+
 		# If Open give it PENDING minutes to change
 		if obsyState == "Open":
 			obsyState="Close Pending"
 			pendingCount=1
+			logger.info('Obsy state is '+obsyState)
+			logger.info('Waiting for 1m...')
+
 		if obsyState == "Close Pending":
 			pendingCount+=1
+			logger.info('Obsy state is '+obsyState)
+			logger.info('Waiting for 1m...')
+
 		if pendingCount == maxPending:
 			obsyState="Closed"
 			if not(scopeClient.park()):
@@ -139,6 +152,12 @@ while runMCP:
 			pendingCount=0
    
 	logger.info('Obsy state is '+obsyState)
+
+	# If Allskyoutput is turned on send results to allskycam.txt
+	if (config.get("ALLSKYOUTPUT")):
+		f = open("allskycam.txt", "w")
+		f.write(cloudResult+'\n'+obsyState)
+		f.close()
 	logger.info('Waiting for 1m...')
 	time.sleep(60)
 
