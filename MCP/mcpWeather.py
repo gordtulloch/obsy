@@ -13,7 +13,7 @@ from mcpConfig import McpConfig
 
 class McpWeather:
     def __init__(self):
-        self.debug=False
+        self.debug=True
         self.config=McpConfig()
         try:
             self.ser = serial.Serial(self.config.get("WEATHERPORT"),self.config.get("WEATHERBPS"),timeout=1)
