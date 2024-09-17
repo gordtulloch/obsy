@@ -1,1 +1,14 @@
+Eventually setup will be just ./setup.sh
+
+
+tMCP:
+sudo apt install build-essential libdbus-glib-1-dev libgirepository1.0-dev cmake
+python -m venv .venv
 pip3 install git+https://github.com/indilib/pyindi-client.git
+pip install -r requirements.txt.tMCP
+
+oMCP:
+python -m venv .venv
+pip3 install git+https://github.com/indilib/pyindi-client.git
+pip install -r requirements.txt.oMCP
+

@@ -9,6 +9,9 @@ __pycache__/
 # ML Models
 *.keras
 
+# Init files
+*.ini
+
 # Distribution / packaging
 .Python
 build/

@@ -28,9 +28,14 @@ obsy=McpObsy()
 
 # Set up logging
 import logging
-if not os.path.exists('tMCP.log'):
-	logging.basicConfig(filename='tMCP.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("tMCP")
+logFilename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'tMCP.log')
+logger = logging.getLogger()
+fhandler = logging.FileHandler(filename=logFilename, mode='a')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fhandler.setFormatter(formatter)
+logger.addHandler(fhandler)
+logger.setLevel(logging.INFO)
+logger.info("Program Start - tMCP Obsy Master Control Program v0.1")
 
 # Set up config
 config=McpConfig()
@@ -87,6 +92,7 @@ while runMCP:
     # If the scope is parked nothing to do, wait ten minutes and try again
     # Dome client is reponsible for parking both Dome and Telescope 
     if scopeClient.isParked():
+        logger.info('Telescope parked, nothing to do, sleeping for 5 mins')
         time.sleep(300)
         continue
     else:
