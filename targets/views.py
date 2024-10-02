@@ -1,11 +1,13 @@
 # targets/views.py
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, redirect
 from .models import target,simbadType,scheduleMaster,scheduleDetail
 from setup.models import observatory,telescope,imager
-from .forms import TargetUpdateForm
+from .forms import TargetUpdateForm, TargetImportForm
 from django.urls import reverse_lazy,reverse
 from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+
 import logging
 
 import astroquery
@@ -184,5 +186,17 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
             detailRow.targetId              = targetRec.targetId
              
 
+def targetUpload(request):
+    if request.method == 'POST':
+        form = TargetImportForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('targetUploadSuccess')
+    else:
+        form = TargetImportForm()
+    return render(request, 'targets/target_upload.html', {'form': form})
 
+def targetUploadSuccess(request):
+    # Actually import the data
+    return HttpResponse('File uploaded successfully')
 

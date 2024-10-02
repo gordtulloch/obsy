@@ -1,5 +1,5 @@
 from django import forms
-from .models import target, scheduleMaster 
+from .models import target, scheduleMaster, importTarget 
 import datetime
 
 class TargetUpdateForm(forms.ModelForm):
@@ -21,3 +21,8 @@ class ScheduleEditForm(forms.ModelForm):
      class Meta:
         model = scheduleMaster
         fields = '__all__'
+
+class TargetImportForm(forms.ModelForm):
+    class Meta:
+        model = importTarget
+        fields = ('document',)

@@ -163,3 +163,10 @@ class simbadType(models.Model):
         return f"{self.id}"
     def get_absolute_url(self):
         return reverse("target_detail", args=[str(self.id)])
+    
+##################################################################################################
+## importUpload - model for data for uploading target files                                     ##
+##################################################################################################
+class importTarget(models.Model):
+    document = models.FileField(upload_to='documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
