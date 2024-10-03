@@ -200,3 +200,19 @@ def targetUploadSuccess(request):
     # Actually import the data
     return HttpResponse('File uploaded successfully')
 
+def importNGC(request):
+    # Import the NGC catalog
+    from pyongc import ongc
+    objectList = ongc.listObjects()
+    for obj in objectList:
+        target.objects.create(
+            userId=request.user.id,
+            targetName=obj['name'],
+            targetType=obj['type'],
+            targetClass=assignTargetClass(obj['type']),
+            targetRA2000=obj['ra'],
+            targetDec2000=obj['dec'],
+            targetConst=obj['constellation'],
+            targetMag=obj['magnitude'],
+            )
+    return redirect('targetUploadSuccess')

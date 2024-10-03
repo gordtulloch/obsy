@@ -6,17 +6,6 @@ from setup.models import observatory, telescope, imager
 from datetime import datetime
 
 class target(models.Model):
-    # Initial data loaded
-    TARGET_CLASSES=(
-        ("VS", "Variable Star"),
-        ("EX", "Exoplanet"),
-        ("DS", "Deep Sky Object"),
-        ("PL", "Planet"),
-        ("LU", "Luna"),
-        ("SU", "Sun"),
-        ("SA", "Satellite"),
-        ("OT", "Other")
-    )
     targetId        = models.UUIDField( 
                         primary_key=True,
                         default=uuid.uuid4,
@@ -29,14 +18,8 @@ class target(models.Model):
     targetDec2000   = models.CharField(max_length=200)
     targetConst     = models.CharField(max_length=200)
     targetMag       = models.CharField(max_length=200)
-    targetPA        = models.DecimalField(default=0.0,max_digits=6, decimal_places=2)
-    targetInactive  = models.BooleanField(default=False)
-    observeOnce     = models.BooleanField(default=True)
-    # Additional data selected
-    observatoryId     = models.ForeignKey(observatory, on_delete=models.CASCADE,null=True, blank=True)
-    telescopeId       = models.ForeignKey(telescope, on_delete=models.CASCADE,null=True, blank=True)
-    imagerId          = models.ForeignKey(imager, on_delete=models.CASCADE,null=True, blank=True)
-    
+    targetSize      = models.CharField(max_length=200)
+
     def __str__(self):
         return f"{self.targetId}"
     def get_absolute_url(self):
