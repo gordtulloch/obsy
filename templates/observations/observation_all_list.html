@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+{% block title %}All observations List{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <br><br>
+    <H2>All Bbservations List</H2>
+    <table class="table">
+        {% for observation in observation_list %}
+            {% if forloop.first %}
+                <tr><th>Catalog</th><th>RA (2000)</th><th>Dec (2000)</th><th>Constellation</th><th>Mag</th><th>Type</th><th>Class</th></tr>
+                {% endif %}    
+            <tr><td><A HREF="{{ observation.get_absolute_url }}">{{ observation.targetName }}</A></td>
+                <td>{{ observation.targetRA2000 }}</td>
+                <td>{{ observation.targetDec2000 }}</td>
+                <td>{{ observation.targetConst }}</td>
+                <td>{{ observation.targetMag }}</td>
+                <td>{{ observation.targetType }}</td>
+                <td>{{ observation.targetClass }}</td>
+            </tr>
+        {% empty %}
+            <p><i>No results found.</i></p>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock content %}

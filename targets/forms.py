@@ -6,8 +6,8 @@ class TargetUpdateForm(forms.ModelForm):
      template_name = 'targets/target_form.html'
      class Meta:
         model = target 
-        #fields = '__all__'
-        exclude = ('userId',) 
+        fields = '__all__'
+
 
 class ScheduleQueryForm(forms.ModelForm):
      template_name = 'targets/schedule_query.html'

@@ -1,16 +1,28 @@
 import uuid
 from django.db import models
 from django.urls import reverse
-from django.core.validators import MaxValueValidator, MinValueValidator
 from setup.models import observatory, telescope, imager
+from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
 
+##################################################################################################
+## target - aan object for which we may wish to create an observation                           ##
+################################################################################################## 
 class target(models.Model):
+    TARGET_CLASSES=(
+    ("VS", "Variable Star"),
+    ("EX", "Exoplanet"),
+    ("DS", "Deep Sky Object"),
+    ("PL", "Planet"),
+    ("LU", "Luna"),
+    ("SU", "Sun"),
+    ("SA", "Satellite"),
+    ("OT", "Other")
+    )
     targetId        = models.UUIDField( 
                         primary_key=True,
                         default=uuid.uuid4,
                         editable=False)
-    userId          = models.CharField(max_length=255)
     targetName      = models.CharField(max_length=255)
     targetClass     = models.CharField(max_length=2,choices=TARGET_CLASSES)
     targetType      = models.CharField(max_length=255)
@@ -18,12 +30,12 @@ class target(models.Model):
     targetDec2000   = models.CharField(max_length=200)
     targetConst     = models.CharField(max_length=200)
     targetMag       = models.CharField(max_length=200)
-    targetSize      = models.CharField(max_length=200)
 
     def __str__(self):
         return f"{self.targetId}"
     def get_absolute_url(self):
         return reverse("target_detail", args=[str(self.targetId)])
+
 
 ##################################################################################################
 ## scheduleMaster -   this model is the master record for a schedule and has n children         ##

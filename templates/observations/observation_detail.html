@@ -1,0 +1,27 @@
+{% extends "_base.html" %}
+{% block title %}All Observations List{% endblock title %}
+{% block content %}
+<div class="observation-detail"> 
+    <div class="container">
+    <br><br>
+    <H2>Observations Detail</H2>
+    <table class="table">
+        <tr><td>Target Name:</td><td>{{ observation.targetName }}</td></tr>
+        <tr><td>RA(2000)</td><td>{{ observation.targetRA2000 }}</td></tr>
+        <tr><td>Dec(2000)</td><td>{{ observation.targetDec2000 }}</td></tr>
+        <tr><td>Magnitude</td><td>{{ observation.targetMag }}</td></tr>
+        <tr><td>Target Type</td><td>{{ observation.targetType }}</td></tr>
+        <tr><td>Target Class</td><td>{{ observation.targetClass }}</td></tr>
+        <tr><td>Name</td><td>{{ observation.targetName }}</td></tr>
+        <tr><td>Constellation</td><td>{{ observation.targetConst }}</td></tr>
+        <tr><td>Requested Observatory</td><td>{{ observation.observatory }}</td></tr>
+        <tr><td>Requested Telescope</td><td>{{ observation.telescope }}</td></tr>
+        <tr><td>Requested Imager</td><td>{{ observation.imager }}</td></tr>
+    </table>
+    <button type="button" class="btn btn-primary">< </button>
+    <A HREF="edit/{{ observation.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
+    <A HREF="delete/{{ observation.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
+    <button type="button" class="btn btn-primary"> ></button>
+    </div>
+</div>
+{% endblock content %}

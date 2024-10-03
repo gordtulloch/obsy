@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}All Observations List{% endblock title %}
+{% block content %}
+<div class="container">
+    <br><br>
+    <h1>Confirm Delete</h1>
+    <p>Are you sure you want to delete the observation "{{ observation.targetName }} on {{ observation.observationDate }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Delete</button>
+    </form>
+</div>
+{% endblock content %}
