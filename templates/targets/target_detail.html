@@ -17,6 +17,7 @@
     <button type="button" class="btn btn-primary">< </button>
     <A HREF="edit/{{ target.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
     <A HREF="delete/{{ target.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
+    <A HREF="{% url 'observation_create' target.targetId %}""><button type="button" class="btn btn-info">Observe</button></A>
     <button type="button" class="btn btn-primary"> ></button>
     </div>
 </div>

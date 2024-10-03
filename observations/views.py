@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import observation
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy,reverse
 from django.views.generic.edit import UpdateView, DeleteView
-from .forms import ObservationUpdateForm
+from .forms import ObservationUpdateForm, ObservationForm
+from targets.models import target
 
 import logging
 
@@ -47,9 +48,15 @@ class observation_delete(DeleteView):
 ##################################################################################################
 ## Observation create     -  Use the DeleteView class to edit observation records               ##
 ################################################################################################## 
-class observation_create(CreateView):
-    template_name = 'observations/observation_form.html'
-    class Meta:
-        model = observation
-        fields = '__all__'
-        #exclude = ('userId',)
+def observation_create(request,target_uuid):
+    targetObject = get_object_or_404(target, targetId=target_uuid)
+    if request.method == 'POST':
+        form = ObservationForm(request.POST)
+        if form.is_valid(): 
+            observation = form.save(commit=False)
+            observation.targetId = target_uuid
+            observation.save()
+            return redirect('target_detail', targetId=target_uuid)  # Redirect to the target detail view
+    else:
+        form = ObservationForm()
+    return render(request, 'observations/observation_create.html', {'form': form})   

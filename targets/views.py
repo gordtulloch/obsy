@@ -74,7 +74,6 @@ def target_query(request):
                     
                     # Add the target record
                     target.objects.create(               
-                        userId=request.user.id,
                         targetName = row["MAIN_ID"],
                         targetType  =row["OTYPE_main"],
                         targetClass=assignTargetClass(row["OTYPE_main"]),
@@ -157,7 +156,6 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
         
         # Create the new schedule record
         newSchedule=scheduleMaster()
-        newSchedule.userId          = request.user.id
         if start_date=="TONIGHT": 
             newSchedule.scheduleDate    = datetime.now()
         else:
@@ -206,7 +204,6 @@ def importNGC(request):
     objectList = ongc.listObjects()
     for obj in objectList:
         target.objects.create(
-            userId=request.user.id,
             targetName=obj['name'],
             targetType=obj['type'],
             targetClass=assignTargetClass(obj['type']),
