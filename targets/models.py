@@ -4,6 +4,7 @@ from django.urls import reverse
 from setup.models import observatory, telescope, imager
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
+import csv
 
 ##################################################################################################
 ## target - aan object for which we may wish to create an observation                           ##
