@@ -12,6 +12,9 @@ __pycache__/
 # Init files
 *.ini
 
+# Django file
+manage.py
+
 # Distribution / packaging
 .Python
 build/
