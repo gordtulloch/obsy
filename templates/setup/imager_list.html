@@ -11,16 +11,18 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Resolution</th>
-                        <th>Sensor Size</th>
+                        <th>Type</th>
+                        <th>Pixels</th>
+                        <th>Pixel Size</th>
                     </tr>
                 </thead>
                 <tbody>
             {% endif %}
             <tr>
                 <td><a href="{{ imager.get_absolute_url }}">{{ imager.name }}</a></td>
-                <td>{{ imager.resolution }}</td>
-                <td>{{ imager.sensor_size }}</td>
+                <td>{{ imager.imagerType }}</td>
+                <td>{{ imager.xDim }} x {{ imager.yDim }}</td>
+                <td>{{ imager.xPixelSize }} x {{ imager.yPixelSize }}</td>
             </tr>
         {% empty %}
             <tr>

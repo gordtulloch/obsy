@@ -1,7 +1,11 @@
 from django.db import models
+import uuid
 
 class observatory(models.Model):
-    observatoryId  =models.AutoField(primary_key=True)
+    observatoryId  = models.UUIDField( 
+                        primary_key=True,
+                        default=uuid.uuid4,
+                        editable=False)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
     latitude  =models.DecimalField(max_digits = 8,decimal_places = 6,default=0.0)
@@ -13,7 +17,10 @@ class observatory(models.Model):
         return self.name
     
 class observer(models.Model):
-    observerId  =models.AutoField(primary_key=True)
+    observerId  = models.UUIDField( 
+                        primary_key=True,
+                        default=uuid.uuid4,
+                        editable=False)
     firstname  =models.CharField(max_length=200)
     middlename =models.CharField(max_length=200,blank=True)
     lastname   =models.CharField(max_length=200)
@@ -34,7 +41,10 @@ class telescope(models.Model):
         ("OT", "Other"),
     )
     
-    telescopeId   =models.AutoField(primary_key=True)
+    telescopeId   =models.UUIDField( 
+                        primary_key=True,
+                        default=uuid.uuid4,
+                        editable=False)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
     telescopeType=models.CharField(max_length=2,choices=TELESCOPE_TYPES, default='NE')
@@ -50,7 +60,10 @@ class imager(models.Model):
         ("CMOS", "CMOS"),
         ("CCD", "CCD"),
         )
-    imagerId  =models.AutoField(primary_key=True)
+    imagerId  = models.UUIDField( 
+                        primary_key=True,
+                        default=uuid.uuid4,
+                        editable=False)
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
     imagerType=models.CharField(max_length=4,choices=IMAGER_TYPES, default='CMOS')
