@@ -12,6 +12,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <!-- Include custom CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <title>Obsy</title>
 </head>
  
@@ -70,11 +72,12 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-cog"></i> Setup</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownSetup">
-                            <a class="dropdown-item" href="SetupObservatory.html" >Observatories</a>
-                            <a class="dropdown-item" href="SetupObservers.html"   >Observers</a>
-                            <a class="dropdown-item" href="SetupInstrumentss.html">Instruments</a>
-                            <a class="dropdown-item" href="SetupObjectsDB.html"   >Objects</a>
-                            <a class="dropdown-item" href="ViewLogs.html"         >Log Viewer</a>
+                            <a class="dropdown-item" href="/setup/observatory_list" >Observatories</a>
+                            <a class="dropdown-item" href="/setup/observatory/create/" >New Observatory</a>
+                            <a class="dropdown-item" href="/setup/telescope_list" >Telescopes</a>
+                            <a class="dropdown-item" href="/setup/telescope/create">New Telescope</a>
+                            <a class="dropdown-item" href="/setup/imager_list" >Imagers</a>
+                            <a class="dropdown-item" href="/setup/imager/create">New Imager</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -96,7 +99,7 @@
         <br><br>
         {% endblock content %}
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

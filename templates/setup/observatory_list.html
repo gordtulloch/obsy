@@ -1,0 +1,38 @@
+{% extends "_base.html" %}
+{% block title %}Observatory List{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <br><br>
+    <h2>Observatory List</h2>
+    <table class="table table-striped">
+        {% for observatory in observatory_list %}
+            {% if forloop.first %}
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Short Name</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Timezone</th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% endif %}
+            <tr>
+                <td><a href="{{ observatory.get_absolute_url }}">{{ observatory.name }}</a></td>
+                <td>{{ observatory.shortname }}</td>
+                <td>{{ observatory.latitude }}</td>
+                <td>{{ observatory.longitude }}</td>
+                <td>{{ observatory.tz }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5"><i>No observatories found.</i></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

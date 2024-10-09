@@ -11,4 +11,13 @@
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr(".datetimepicker", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            time_24hr: true
+        });
+    });
+</script>
 {% endblock content %}

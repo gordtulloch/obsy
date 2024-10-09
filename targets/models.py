@@ -32,7 +32,7 @@ class target(models.Model):
     targetMag       = models.CharField(max_length=200)
 
     def __str__(self):
-        return f"{self.targetId}"
+        return f"{self.targetName}"
     def get_absolute_url(self):
         return reverse("target_detail", args=[str(self.targetId)])
 

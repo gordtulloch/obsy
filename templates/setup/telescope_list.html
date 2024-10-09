@@ -1,0 +1,38 @@
+{% extends "_base.html" %}
+{% block title %}Telescope List{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <br><br>
+    <h2>Telescope List</h2>
+    <table class="table table-striped">
+        {% for telescope in telescope_list %}
+            {% if forloop.first %}
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Aperture</th>
+                        <th>Focal Length</th>
+                        <th>Observatory</th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% endif %}
+            <tr>
+                <td><a href="{{ telescope.get_absolute_url }}">{{ telescope.name }}</a></td>
+                <td>{{ telescope.telescopeType }}</td>
+                <td>{{ telescope.aperture }}</td>
+                <td>{{ telescope.focalLength }}</td>
+                <td>{{ telescope.observatoryId.name }}
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3"><i>No telescopes found.</i></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}
