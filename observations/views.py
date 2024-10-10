@@ -46,17 +46,14 @@ class observation_delete(DeleteView):
     success_url = reverse_lazy('observation_all_list')
 
 ##################################################################################################
-## Observation create     -  Use the DeleteView class to edit observation records               ##
+## Observation create     -  Use the class to edit observation records               ##
 ################################################################################################## 
-def observation_create(request,target_uuid):
-    targetObject = get_object_or_404(target, targetId=target_uuid)
+def observation_create(request,target_uuid):    
     if request.method == 'POST':
         form = ObservationForm(request.POST)
-        if form.is_valid(): 
-            observation = form.save(commit=False)
-            observation.targetId = target_uuid
-            observation.save()
-            return redirect('target_detail', targetId=target_uuid)  # Redirect to the target detail view
+        if form.is_valid():
+            form.save()
+            return redirect('observation_all_list')  
     else:
         form = ObservationForm()
-    return render(request, 'observations/observation_create.html', {'form': form})   
+    return render(request, 'observations/observation_create.html', {'form': form})

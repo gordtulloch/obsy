@@ -28,5 +28,4 @@ class observation(models.Model):
     def __str__(self):
         return f"{self.targetId}"
     def get_absolute_url(self):
-        return reverse("target_detail", args=[str(self.targetId)])
-
+        return reverse("observation_detail", args=[str(self.observationId)])
