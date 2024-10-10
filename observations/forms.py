@@ -1,7 +1,8 @@
 from django import forms
-from .models import observation
+from .models import observation, scheduleMaster
 from targets.models import target
 from setup.models import observatory,telescope,imager 
+import datetime
 
 class ObservationUpdateForm(forms.ModelForm):
      template_name = 'observations/observation_form.html'
@@ -47,3 +48,16 @@ class ObservationForm(forms.ModelForm):
             'targetInactive': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'observeOnce': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+class ScheduleQueryForm(forms.ModelForm):
+     template_name = 'observations/schedule_query.html'
+     class Meta:
+        model = scheduleMaster
+        fields = ('scheduleDate','scheduleDays','observatoryId','telescopeId','imagerId')
+        scheduleDate = forms.DateField(initial=datetime.date.today)
+        
+class ScheduleEditForm(forms.ModelForm):
+     template_name = 'observations/schedule_edit.html'
+     class Meta:
+        model = scheduleMaster
+        fields = '__all__'

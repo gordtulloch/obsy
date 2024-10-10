@@ -1,5 +1,5 @@
 from django import forms
-from .models import target, scheduleMaster, importTarget 
+from .models import target,importTarget 
 import datetime
 
 class TargetUpdateForm(forms.ModelForm):
@@ -8,19 +8,6 @@ class TargetUpdateForm(forms.ModelForm):
         model = target 
         fields = '__all__'
 
-
-class ScheduleQueryForm(forms.ModelForm):
-     template_name = 'targets/schedule_query.html'
-     class Meta:
-        model = scheduleMaster
-        fields = ('scheduleDate','scheduleDays','observatoryId','telescopeId','imagerId')
-        scheduleDate = forms.DateField(initial=datetime.date.today)
-        
-class ScheduleEditForm(forms.ModelForm):
-     template_name = 'targets/schedule_edit.html'
-     class Meta:
-        model = scheduleMaster
-        fields = '__all__'
 
 class TargetImportForm(forms.ModelForm):
     class Meta:

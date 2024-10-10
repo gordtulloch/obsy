@@ -4,19 +4,15 @@
 <div class="observation-detail"> 
     <div class="container">
     <br><br>
-    <H2>Observations Detail</H2>
+    <H2>Observation Detail for {{ observation.targetId }}</H2>
     <table class="table">
-        <tr><td>Target Name:</td><td>{{ observation.targetName }}</td></tr>
-        <tr><td>RA(2000)</td><td>{{ observation.targetRA2000 }}</td></tr>
-        <tr><td>Dec(2000)</td><td>{{ observation.targetDec2000 }}</td></tr>
-        <tr><td>Magnitude</td><td>{{ observation.targetMag }}</td></tr>
-        <tr><td>Target Type</td><td>{{ observation.targetType }}</td></tr>
-        <tr><td>Target Class</td><td>{{ observation.targetClass }}</td></tr>
-        <tr><td>Name</td><td>{{ observation.targetName }}</td></tr>
-        <tr><td>Constellation</td><td>{{ observation.targetConst }}</td></tr>
-        <tr><td>Requested Observatory</td><td>{{ observation.observatory }}</td></tr>
-        <tr><td>Requested Telescope</td><td>{{ observation.telescope }}</td></tr>
-        <tr><td>Requested Imager</td><td>{{ observation.imager }}</td></tr>
+        <tr><td>Target Name:</td><td>{{ observation.targetId }}</td></tr>
+        <tr><td>Observation Date</td><td>{{ observation.observationDate }}</td></tr>
+        <tr><td>Do Not Schedule</td><td>{{ observation.targetInactive }}</td></tr>
+        <tr><td>Schedule Once</td><td>{{ observation.observeOnce }}</td></tr>
+        <tr><td>Observatory</td><td>{{ observation.observatoryId}}</td></tr>
+        <tr><td>Telescope</td><td>{{ observation.telescopeId}}</td></tr>
+        <tr><td>Imager</td><td>{{ observation.imagerId }}</td></tr>
     </table>
     <button type="button" class="btn btn-primary">< </button>
     <A HREF="edit/{{ observation.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
