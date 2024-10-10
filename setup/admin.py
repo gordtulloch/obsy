@@ -10,6 +10,9 @@ class observerAdmin(admin.ModelAdmin):
 class telescopeAdmin(admin.ModelAdmin):
     list_display = ("telescopeId","name","shortname","telescopeType","aperture","focalLength",)
     
+class currentConfigAdmin(admin.ModelAdmin):
+    list_display = ("observatoryId","telescopeId", "imagerId",)
+
 class imagerAdmin(admin.ModelAdmin):
     list_display = ("imagerId","name","shortname","imagerType","xDim","yDim","xPixelSize","yPixelSize",)
     

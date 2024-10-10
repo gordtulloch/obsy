@@ -1,7 +1,6 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 from .models import observatory, telescope, imager
 from .forms import ObservatoryForm, TelescopeForm, ImagerForm
@@ -59,3 +58,4 @@ class ImagerUpdateView(UpdateView):
     form_class = ImagerForm
     template_name = 'setup/imager_form.html'
     success_url = reverse_lazy('imager_list')
+

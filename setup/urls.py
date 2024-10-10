@@ -3,7 +3,9 @@ from django.urls import path
 from .views import (
     ObservatoryCreateView, ObservatoryUpdateView,
     TelescopeCreateView, TelescopeUpdateView,
-    ImagerCreateView, ImagerUpdateView, ObservatoryListView, TelescopeListView, ImagerListView
+    ImagerCreateView, ImagerUpdateView, 
+    ObservatoryListView, 
+    TelescopeListView, ImagerListView
 )
 
 urlpatterns = [

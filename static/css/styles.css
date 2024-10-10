@@ -10,3 +10,11 @@
     background-position: center;
     color: #fff;
 }
+
+.slider-container {
+    margin-bottom: 15px;
+}
+
+.slider-container label {
+    margin-right: 10px;
+}

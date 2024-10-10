@@ -1,0 +1,37 @@
+<!-- realtime_log.html -->
+
+{% extends "_base.html" %}
+{% block title %}Realtime Log Viewer{% endblock title %}
+{% block content %}
+<div class="container">
+    <h2>Realtime Log Viewer</h2>
+    <pre id="log-content"></pre>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const logContent = document.getElementById('log-content');
+    const socketUrl = 'ws://' + window.location.host + '/ws/logs/';
+    console.log('Connecting to WebSocket at:', socketUrl);
+    const socket = new WebSocket(socketUrl);
+
+    socket.onopen = function(event) {
+        console.log('WebSocket connection opened:', event);
+    };
+
+    socket.onmessage = function(event) {
+        const message = event.data;
+        console.log('Received message:', message);
+        logContent.textContent += message;
+        logContent.scrollTop = logContent.scrollHeight;
+    };
+
+    socket.onerror = function(event) {
+        console.error('WebSocket error:', event);
+    };
+
+    socket.onclose = function(event) {
+        console.warn('WebSocket closed:', event);
+    };
+});
+</script>
+{% endblock %}

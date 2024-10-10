@@ -7,7 +7,7 @@ from datetime import datetime
 import csv
 
 ##################################################################################################
-## target - aan object for which we may wish to create an observation                           ##
+## target - an object for which we may wish to create an observation                           ##
 ################################################################################################## 
 class target(models.Model):
     TARGET_CLASSES=(
@@ -37,9 +37,6 @@ class target(models.Model):
     def get_absolute_url(self):
         return reverse("target_detail", args=[str(self.targetId)])
 
-
-
-    
 ##################################################################################################
 ## simbadType - this model allows mapping between SIMBAD object types and obsy object classes   ##
 ##################################################################################################
