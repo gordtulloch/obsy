@@ -6,7 +6,7 @@ from .views import (
     CurrentConfigUpdateView, 
     CurrentConfigDeleteView,
     power110PanelView,
-    power12PanelView,
+    power12PanelView, LogView
 )
 
 urlpatterns = [
@@ -16,4 +16,5 @@ urlpatterns = [
     path('currentConfig/delete/<uuid:pk>/', CurrentConfigDeleteView.as_view(), name='currentConfig_delete'),
     path('power110_panel/', power110PanelView, name='power110_panel'),
     path('power12_panel/', power12PanelView, name='power12_panel'),
+    path('logViewer/', LogView, name='logViewer'),
 ]
