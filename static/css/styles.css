@@ -1,7 +1,7 @@
 /* styles.css */
 .hero-section {
     display: flex;
-    align-items: center; /* Vertically center items */
+
     justify-content: center; /* Horizontally center items */
     height: 100vh; /* Set the desired height for the hero section */
     width: 100vw;
@@ -17,4 +17,8 @@
 
 .slider-container label {
     margin-right: 10px;
+}
+
+body {
+    background-color: #96a7b9ce; /* Light gray background */
 }

@@ -36,5 +36,3 @@ def power110PanelView(request):
 def power12PanelView(request):
     return render(request, 'operations/power12_panel.html',{'range': range(1, 16)})
 
-def realtimeLogView(request):
-    return render(request, 'operations/realtimeLog.html')

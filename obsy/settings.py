@@ -48,11 +48,8 @@ INSTALLED_APPS = [
     "targets.apps.TargetsConfig",
     "observations.apps.ObservationsConfig",
     "operations.apps.OperationsConfig",
-    # Third-party
-    'channels',
 ]
 
-ASGI_APPLICATION = 'operations.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
