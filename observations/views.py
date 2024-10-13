@@ -1,14 +1,21 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import ObservationUpdateForm, ObservationForm
-from .models import observation, scheduleMaster, scheduleDetail, sequenceFile, scheduleFile
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy,reverse
 from django.views.generic.edit import UpdateView, DeleteView
 from .forms import ObservationUpdateForm, ObservationForm
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+
+from .models import observation, scheduleMaster, scheduleDetail
 from targets.models import target
 from setup.models import observatory,telescope,imager
+from observations.models import observation
 import logging
 
+from datetime import datetime, timedelta
+from astroquery import get_sun
+from astropy.time import Time
+from astropy.coordinates import EarthLocation, AltAz
 import astroquery
 from astroquery.simbad import Simbad
 import pandas as pd
@@ -17,10 +24,10 @@ from astropy.coordinates import SkyCoord, get_constellation
 import ephem
 from datetime import datetime
 
-logger = logging.getLogger("obsy")
+logger = logging.getLogger("obsy.observations.views")
 
 ##################################################################################################
-## observationDetailView - List observation detail with DetailView template                               ## 
+## observationDetailView - List observation detail with DetailView template                     ## 
 ##################################################################################################
 class observation_detail_view(DetailView):
     model = observation
@@ -29,7 +36,7 @@ class observation_detail_view(DetailView):
     login_url = "account_login"
      
 ##################################################################################################
-## observationAllList - List all observations                                                             ## 
+## observationAllList - List all observations                                                   ## 
 ##################################################################################################
 class observation_all_list(ListView):
     model=observation
@@ -38,7 +45,7 @@ class observation_all_list(ListView):
     login_url = "account_login"
 
 ##################################################################################################
-## Observation Update     -  Use the UpdateView class to edit observation records                         ##
+## Observation Update     -  Use the UpdateView class to edit observation records               ##
 ##################################################################################################
 class observation_update(UpdateView):
     model = observation
@@ -55,7 +62,7 @@ class observation_delete(DeleteView):
     success_url = reverse_lazy('observation_all_list')
 
 ##################################################################################################
-## Observation create     -  Use the class to edit observation records               ##
+## Observation create     -  Use the class to edit observation records                          ##
 ################################################################################################## 
 def observation_create(request,target_uuid):    
     if request.method == 'POST':
@@ -104,41 +111,54 @@ class scheduleDetailsItem(UpdateView):
 ##                           end of the schedule to be scheduled another night.                 ##
 ##################################################################################################
 def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_id,imager_id):
-        # Load the appropriate objects
-        observatoryToSched=observatory.objects.filter(observatoryId=observatory_id)
-        telescopeToSched=telescope.objects.filter(telescopeId=telescope_id)
-        imagerToSched=imager.objects.filter(imagerId=imager_id)
-        
-        # Wipe the schedule tables (the details will be deleted by the foerign key relationship)
-        scheduleMaster.objects.delete_everything()
-        
-        # Create the new schedule record
-        newSchedule=scheduleMaster()
-        if start_date=="TONIGHT": 
-            newSchedule.scheduleDate    = datetime.now()
-        else:
-            newSchedule.scheduleDate = ephem.Date(start_date).datetime()
+    # Validate inputs
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    except ValueError:
+        return JsonResponse({'error': 'Invalid start_date format. Use YYYY-MM-DD.'}, status=400)
 
-        # Copy all active entries in targets that are active to the scheduleDetail table
-        for targetRec in target.objects.filter(Active=True):
-            detailRow             = scheduleDetail()
-            detailRow.scheduleId  = newSchedule.scheduleId
-            if start_date=="TONIGHT": 
-                detailRow.requiredStartTime = datetime.now()
-                observer.date = datetime.now().strftime('%Y-%m-%d')
-            else:
-                observer.date               = ephem.Date(start_date)
-                detailRow.requiredStartTime = ephem.Date(start_date).datetime()
-                
-            # Determine start of astronomical dark
-            observer            = ephem.Observer()       # Create an observer object
-            observer.lon        = observatory.longitude  # Longitude in string format
-            observer.lat        = observatory.latitude   # Latitude in string format
-            observer.elev       = observatory.elevation  # Elevation in meters
-            observer.horizon    = "-18"                  # Desired position of sun
-            
-            # Populate the required fields - take the defaults on most things
-            detailRow.scheduledDateTime     = observer.next_setting(ephem.Sun(), use_center=True)
-            detailRow.targetId              = targetRec.targetId
-             
+    try:
+        observatory_obj = observatory.objects.get(id=observatory_id)
+    except observatory.DoesNotExist:
+        return JsonResponse({'error': 'Invalid observatoryId.'}, status=400)
+    
+    # Calculate astronomical twilight and dawn
+    location = EarthLocation(lat=observatory_obj.latitude, lon=observatory_obj.longitude)
+    times = []
+    for day in range(days_to_schedule):
+        date = start_date + timedelta(days=day)
+        midnight = Time(date.isoformat() + ' 00:00:00')
+        delta_midnight = np.linspace(-12, 12, 1000) * u.hour
+        frame = AltAz(obstime=midnight + delta_midnight, location=location)
+        sunaltazs = get_sun(midnight + delta_midnight).transform_to(frame)
+        twilight_evening = delta_midnight[sunaltazs.alt < -18 * u.deg][0]
+        twilight_morning = delta_midnight[sunaltazs.alt < -18 * u.deg][-1]
+        times.append((midnight + twilight_evening, midnight + twilight_morning))
 
+    # Create a new scheduleMaster record
+    schedule_master = scheduleMaster.objects.create(
+        userId=request.user.id,
+        scheduleDate=start_date,
+        scheduleDays=days_to_schedule,
+        observatoryId=observatory_obj,
+        telescopeId=telescope.objects.get(id=telescope_id),
+        imagerId=imager.objects.get(id=imager_id)
+    )
+
+    # Query the database and add observations to the scheduleMaster
+    for twilight_evening, twilight_morning in times:
+        observations = observation.objects.filter(
+            observatoryId=observatory_id,
+            telescopeId=telescope_id,
+            imagerId=imager_id,
+            observationDate__range=(twilight_evening.datetime, twilight_morning.datetime)
+        )
+        for obs in observations:
+            obs_time = Time(obs.observationDate)
+            obs_altaz = AltAz(obstime=obs_time, location=location)
+            obs_altitude = obs.target.transform_to(obs_altaz).alt
+
+            if obs_altitude > 15 * u.deg:
+                schedule_master.observations.add(obs)
+
+    return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
