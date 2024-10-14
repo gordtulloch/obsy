@@ -13,7 +13,7 @@ from observations.models import observation
 import logging
 
 from datetime import datetime, timedelta
-from astroquery import get_sun
+from astroquery.sun import get_sun
 from astropy.time import Time
 from astropy.coordinates import EarthLocation, AltAz
 import astroquery
@@ -23,6 +23,7 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord, get_constellation
 import ephem
 from datetime import datetime
+import numpy as np
 
 logger = logging.getLogger("obsy.observations.views")
 
@@ -121,41 +122,40 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
         observatory_obj = observatory.objects.get(id=observatory_id)
     except observatory.DoesNotExist:
         return JsonResponse({'error': 'Invalid observatoryId.'}, status=400)
-    
-    # Calculate astronomical twilight and dawn
-    location = EarthLocation(lat=observatory_obj.latitude, lon=observatory_obj.longitude)
+ 
+    # Calculate astronomical twilight and dawn using ephem
+    location = ephem.Observer()
+    location.lat = str(observatory_obj.latitude)
+    location.lon = str(observatory_obj.longitude)
     times = []
     for day in range(days_to_schedule):
         date = start_date + timedelta(days=day)
-        midnight = Time(date.isoformat() + ' 00:00:00')
-        delta_midnight = np.linspace(-12, 12, 1000) * u.hour
-        frame = AltAz(obstime=midnight + delta_midnight, location=location)
-        sunaltazs = get_sun(midnight + delta_midnight).transform_to(frame)
-        twilight_evening = delta_midnight[sunaltazs.alt < -18 * u.deg][0]
-        twilight_morning = delta_midnight[sunaltazs.alt < -18 * u.deg][-1]
-        times.append((midnight + twilight_evening, midnight + twilight_morning))
+        location.date = date
+        twilight_evening = location.next_setting(ephem.Sun(), use_center=True)
+        twilight_morning = location.next_rising(ephem.Sun(), use_center=True)
+        times.append((twilight_evening.datetime(), twilight_morning.datetime()))
 
     # Create a new scheduleMaster record
     schedule_master = scheduleMaster.objects.create(
-        userId=request.user.id,
-        scheduleDate=start_date,
-        scheduleDays=days_to_schedule,
-        observatoryId=observatory_obj,
-        telescopeId=telescope.objects.get(id=telescope_id),
-        imagerId=imager.objects.get(id=imager_id)
+        userId=request.user,
+        schedule_date=start_date,
+        schedule_days=days_to_schedule,
+        observatory=observatory_obj,
+        telescope=telescope.objects.get(id=telescope_id),
+        imager=imager.objects.get(id=imager_id)
     )
 
     # Query the database and add observations to the scheduleMaster
     for twilight_evening, twilight_morning in times:
         observations = observation.objects.filter(
-            observatoryId=observatory_id,
-            telescopeId=telescope_id,
-            imagerId=imager_id,
-            observationDate__range=(twilight_evening.datetime, twilight_morning.datetime)
+            observatory=observatory_id,
+            telescope=telescope_id,
+            imager=imager_id,
+            observation_date__range=(twilight_evening, twilight_morning)
         )
         for obs in observations:
-            obs_time = Time(obs.observationDate)
-            obs_altaz = AltAz(obstime=obs_time, location=location)
+            obs_time = Time(obs.observation_date)
+            obs_altaz = AltAz(obstime=obs_time, location=EarthLocation(lat=observatory_obj.latitude, lon=observatory_obj.longitude))
             obs_altitude = obs.target.transform_to(obs_altaz).alt
 
             if obs_altitude > 15 * u.deg:

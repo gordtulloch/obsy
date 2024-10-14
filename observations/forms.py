@@ -1,9 +1,9 @@
 from django import forms
-from .models import observation, scheduleMaster
+from .models import observation, scheduleMaster, scheduleDetail
 from targets.models import target
 from setup.models import observatory,telescope,imager 
 import datetime
-
+ 
 class ObservationUpdateForm(forms.ModelForm):
      template_name = 'observations/observation_form.html'
      class Meta:
@@ -53,7 +53,7 @@ class ScheduleQueryForm(forms.ModelForm):
      template_name = 'observations/schedule_query.html'
      class Meta:
         model = scheduleMaster
-        fields = ('scheduleDate','scheduleDays','observatoryId','telescopeId','imagerId')
+        fields = '__all__'
         scheduleDate = forms.DateField(initial=datetime.date.today)
         
 class ScheduleEditForm(forms.ModelForm):
