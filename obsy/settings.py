@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-m=ct8%jslv^q*-%o5y-zw7k_=5kc#h9_#khyq#a34y%85la9zv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['spao-master.local']
+ALLOWED_HOSTS = ['spao-master.local','localhost','127.0.0.1']
 
 
 # Application definition

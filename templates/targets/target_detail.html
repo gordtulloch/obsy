@@ -1,11 +1,11 @@
 {% extends "_base.html" %}
-{% block title %}All Targets List{% endblock title %}
+{% block title %}{{ target.targetName }}{% endblock title %}
 {% block content %}
 {% csrf_token %}
 <div class="target-detail"> 
     <div class="container">
     <br><br>
-    <H2>Targets Detail</H2>
+    <H2>{{ target.targetName }}</H2>
     <table class="table table-dark">
         <tr>
         <td><div id="aladin-lite-div" style="width:400px;height:400px;"></div>
@@ -32,7 +32,6 @@
     </table>
     <div id="altitude-graph" style="width:100%;height:400px;"></div>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <p>Graph for {{ target.targetId }}</p>
     <script type="text/javascript">
         fetch("{% url 'target_altitude' target.targetId %}")
         .then(response => response.json())
@@ -52,13 +51,13 @@
             Plotly.newPlot('altitude-graph', [trace], layout);
         });
     </script>
-    </div>
+    </div><center>
     <button type="button" class="btn btn-primary">< </button>
     <A HREF="edit/{{ target.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
     <A HREF="delete/{{ target.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
     <A HREF="{% url 'observation_create' target.targetId %}""><button type="button" class="btn btn-info">Observe</button></A>
     <button type="button" class="btn btn-primary"> ></button>
-    </div>    
+</center></div>    
 
 </div>
 {% endblock content %}

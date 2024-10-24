@@ -12,5 +12,5 @@ urlpatterns = [
     path("<uuid:pk>/edit/", views.target_update.as_view(), name="target_update"),
     path("<uuid:pk>/delete/", views.target_delete.as_view(), name="target_delete"),
     path("create/", views.target_query, name="target_search"),
-    path('target/<uuid:targetId>/altitude/', target_altitude, name='target_altitude'),
+    path('<uuid:target_id>/altitude/', target_altitude, name='target_altitude'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

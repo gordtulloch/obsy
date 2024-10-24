@@ -118,9 +118,12 @@ import ephem
 from datetime import datetime, timedelta
 
 def target_altitude(request, target_id):
+    
     # Get target and observatory details
-    target_obj = target.objects.get(uuid=target_id)
+    target_obj = target.objects.get(targetId=target_id)
+    logger.info(f"Calculating altitude for target {target_obj.targetName}")
     observatory_obj = observatory.objects.first()  # Assuming a single observatory
+    logger.info(f"Calculating altitude at observatory {observatory_obj.name}")
 
     # Calculate astronomical twilight and dawn
     location = ephem.Observer()
