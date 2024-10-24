@@ -13,7 +13,6 @@ from observations.models import observation
 import logging
 
 from datetime import datetime, timedelta
-from astroquery.sun import get_sun
 from astropy.time import Time
 from astropy.coordinates import EarthLocation, AltAz
 import astroquery
@@ -101,7 +100,7 @@ class scheduleDetailsItem(UpdateView):
     context_object_name="scheduleDetailItem_list"
     template_name="targets/schedule_detail_edit.html"
     login_url = "account_login"
-
+'''
 ##################################################################################################
 ## buildSchedule function -  this function accepts parameters from the user and loads the       ##
 ##                           scheduleMaster and scheduleDetail tables with details from the     ##
@@ -162,3 +161,4 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
                 schedule_master.observations.add(obs)
 
     return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
+'''

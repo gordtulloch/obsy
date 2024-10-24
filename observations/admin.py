@@ -5,10 +5,10 @@ class observationAdmin(admin.ModelAdmin):
     list_display = ("targetId","observationDate")
 
 class scheduleMasterAdmin(admin.ModelAdmin):
-    list_display = ("scheduleMasterId","userId","scheduleDate")
+    list_display = ("userId","schedule_date")
     
 class scheduleDetailAdmin(admin.ModelAdmin):
-    list_display = ("scheduleDetailId","scheduleMasterId","targetId")
+    list_display = ("scheduleDetailId","targetId")
     
 class sequenceFileAdmin(admin.ModelAdmin):
     list_display = ("sequenceFileId","sequenceFileName")

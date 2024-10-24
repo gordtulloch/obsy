@@ -29,6 +29,7 @@ class observation(models.Model):
         return f"{self.targetId}"
     def get_absolute_url(self):
         return reverse("observation_detail", args=[str(self.observationId)])
+    
 
 
 ##################################################################################################
@@ -40,8 +41,7 @@ class scheduleDetail(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    targetId                = models.ForeignKey('target', on_delete=models.CASCADE)  
-    scheduleMasterId        = models.ForeignKey('scheduleMaster', on_delete=models.CASCADE)
+    targetId                = models.ForeignKey(target, on_delete=models.CASCADE)  
     scheduledDateTime       = models.DateTimeField()
     targetPriority          = models.IntegerField(default=1,validators=[MaxValueValidator(100),MinValueValidator(1)])
     requiredStartTime       = models.DateTimeField()
@@ -73,9 +73,9 @@ class scheduleMaster(models.Model):
     userId              = models.CharField(max_length=255)
     schedule_date       = models.DateField()
     schedule_days       = models.IntegerField()
-    observatoryId         = models.ForeignKey(observatory, on_delete=models.CASCADE)
-    telescopeId           = models.ForeignKey(telescope, on_delete=models.CASCADE)
-    imagerId              = models.ForeignKey(imager, on_delete=models.CASCADE)
+    observatoryId       = models.ForeignKey(observatory, on_delete=models.CASCADE)
+    telescopeId         = models.ForeignKey(telescope, on_delete=models.CASCADE)
+    imagerId            = models.ForeignKey(imager, on_delete=models.CASCADE)
     observations        = models.ManyToManyField(scheduleDetail)
 
     def __str__(self):
