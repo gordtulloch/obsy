@@ -30,11 +30,35 @@
         </td>
     </tr>
     </table>
+    <div id="altitude-graph" style="width:100%;height:400px;"></div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <p>Graph for {{ target.targetId }}</p>
+    <script type="text/javascript">
+        fetch("{% url 'target_altitude' target.targetId %}")
+        .then(response => response.json())
+        .then(data => {
+            const times = data.times;
+            const altitudes = data.altitudes;
+            const trace = {
+                x: times,
+                y: altitudes,
+                type: 'scatter'
+            };
+            const layout = {
+                title: 'Altitude of {{ target.targetName }} Over Time',
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Altitude (degrees)' }
+            };
+            Plotly.newPlot('altitude-graph', [trace], layout);
+        });
+    </script>
+    </div>
     <button type="button" class="btn btn-primary">< </button>
     <A HREF="edit/{{ target.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
     <A HREF="delete/{{ target.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
     <A HREF="{% url 'observation_create' target.targetId %}""><button type="button" class="btn btn-info">Observe</button></A>
     <button type="button" class="btn btn-primary"> ></button>
-    </div>
+    </div>    
+
 </div>
 {% endblock content %}

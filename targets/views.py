@@ -110,5 +110,40 @@ class target_delete(DeleteView):
     template_name = "targets/target_confirm_delete.html"
     success_url = reverse_lazy('target_all_list')
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from setup.models import observatory
+from targets.models import target
+import ephem
+from datetime import datetime, timedelta
 
+def target_altitude(request, target_id):
+    # Get target and observatory details
+    target_obj = target.objects.get(uuid=target_id)
+    observatory_obj = observatory.objects.first()  # Assuming a single observatory
+
+    # Calculate astronomical twilight and dawn
+    location = ephem.Observer()
+    location.lat = str(observatory_obj.latitude)
+    location.lon = str(observatory_obj.longitude)
+    location.date = datetime.utcnow()
+    twilight_evening = location.next_setting(ephem.Sun(), use_center=True)
+    twilight_morning = location.next_rising(ephem.Sun(), use_center=True)
+
+    # Calculate altitude data
+    altitudes = []
+    times = []
+    delta = timedelta(minutes=10)
+    current_time = twilight_evening.datetime()
+    while current_time <= twilight_morning.datetime():
+        location.date = current_time
+        target_ephem = ephem.FixedBody()
+        target_ephem._ra = target_obj.targetRA2000
+        target_ephem._dec = target_obj.targetDec2000
+        target_ephem.compute(location)
+        altitudes.append(target_ephem.alt * 180.0 / ephem.pi)  # Convert radians to degrees
+        times.append(current_time.isoformat())
+        current_time += delta
+
+    return JsonResponse({'times': times, 'altitudes': altitudes})
 
