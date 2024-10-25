@@ -19,6 +19,7 @@ import ephem
 from datetime import datetime
 
 logger = logging.getLogger("targets.views")
+logger.level = logging.INFO
 
 ##################################################################################################
 ## targetDetailView - List target detail with DetailView template                               ## 
@@ -48,7 +49,7 @@ def assignTargetClass(targetType):
     if firstentry != None: 
         return firstentry.category
     else:
-        logger.warning("Type "+targetType+" not found in simbadTypes table")
+        logger.info("Type "+targetType+" not found in simbadTypes table")
         return "Unknown"
 
 ##################################################################################################
@@ -117,8 +118,10 @@ from targets.models import target
 import ephem
 from datetime import datetime, timedelta
 
+
+
 def target_altitude(request, target_id):
-    
+    logger.info(f"Calculating target altitude")
     # Get target and observatory details
     target_obj = target.objects.get(targetId=target_id)
     logger.info(f"Calculating altitude for target {target_obj.targetName}")
@@ -127,8 +130,9 @@ def target_altitude(request, target_id):
 
     # Calculate astronomical twilight and dawn
     location = ephem.Observer()
-    location.lat = str(observatory_obj.latitude)
-    location.lon = str(observatory_obj.longitude)
+    logger.info(f"Observatory details: {observatory_obj.latitude}, {observatory_obj.longitude}")
+    location.lat = float(observatory_obj.latitude)
+    location.lon = float(observatory_obj.longitude)
     location.date = datetime.utcnow()
     twilight_evening = location.next_setting(ephem.Sun(), use_center=True)
     twilight_morning = location.next_rising(ephem.Sun(), use_center=True)
@@ -147,6 +151,6 @@ def target_altitude(request, target_id):
         altitudes.append(target_ephem.alt * 180.0 / ephem.pi)  # Convert radians to degrees
         times.append(current_time.isoformat())
         current_time += delta
-
+   
     return JsonResponse({'times': times, 'altitudes': altitudes})
 
