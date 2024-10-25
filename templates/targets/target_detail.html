@@ -8,7 +8,7 @@
     <H2>{{ target.targetName }}</H2>
     <table class="table table-dark">
         <tr>
-        <td><div id="aladin-lite-div" style="width:400px;height:400px;"></div>
+        <td width="33%"><div id="aladin-lite-div" style="width:400px;height:400px;"></div>
             <script type="text/javascript" src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
             <script type="text/javascript">
             let aladin;
@@ -16,9 +16,35 @@
                 aladin = A.aladin('#aladin-lite-div', {survey: "P/DSS2/color", fov:1, target: "{{ target.targetName }}"});
             });
             </script></td>
+        <td width="33%"><div id="altitude-graph" style="width:100%;height:400px;"></div>
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+            <script type="text/javascript">
+                fetch("{% url 'target_altitude' target.targetId %}")
+                .then(response => response.json())
+                .then(data => {
+                    const times = data.times;
+                    const altitudes = data.altitudes;
+                    const trace = {
+                        x: times,
+                        y: altitudes,
+                        type: 'scatter',
+                        line: { color: '#00ccff' }  // Line color for better visibility on dark background
+                    };
+                    const layout = {
+                        title: 'Altitude of {{ target.targetName }} Over Time',
+                        xaxis: { title: 'Time', color: '#ffffff' },  // Axis title color
+                        yaxis: { title: 'Altitude (degrees)', color: '#ffffff' },  // Axis title color
+                        plot_bgcolor: '#000000',  // Plot background color
+                        paper_bgcolor: '#000000',  // Paper background color
+                        font: { color: '#ffffff' },  // Font color
+                        grid: { color: '#444444' }  // Grid line color
+                    };
+                    Plotly.newPlot('altitude-graph', [trace], layout);
+                });
+            </script>
+            </div></td>
         <td>
           <table class="table table-dark">
-          <tr><td>Target Name:</td><td>{{ target.targetName }}</td></tr>
           <tr><td>RA(2000)</td><td>{{ target.targetRA2000 }}</td></tr>
           <tr><td>Dec(2000)</td><td>{{ target.targetDec2000 }}</td></tr>
           <tr><td>Magnitude</td><td>{{ target.targetMag }}</td></tr>
@@ -30,28 +56,7 @@
         </td>
     </tr>
     </table>
-    <div id="altitude-graph" style="width:100%;height:400px;"></div>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script type="text/javascript">
-        fetch("{% url 'target_altitude' target.targetId %}")
-        .then(response => response.json())
-        .then(data => {
-            const times = data.times;
-            const altitudes = data.altitudes;
-            const trace = {
-                x: times,
-                y: altitudes,
-                type: 'scatter'
-            };
-            const layout = {
-                title: 'Altitude of {{ target.targetName }} Over Time',
-                xaxis: { title: 'Time' },
-                yaxis: { title: 'Altitude (degrees)' }
-            };
-            Plotly.newPlot('altitude-graph', [trace], layout);
-        });
-    </script>
-    </div><center>
+    <center>
     <button type="button" class="btn btn-primary">< </button>
     <A HREF="edit/{{ target.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
     <A HREF="delete/{{ target.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
