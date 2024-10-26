@@ -3,11 +3,13 @@
 ############################################################################################################
 # Description : This script is used to process images taken by Ekos and store them in a repository.       
 # Author      : Gord Tulloch
-# Date        : January 25 2024
+# Date        : October 25 2024
 # TODO:
 #      - Add support for non-FITS images like JPG and TIFF Exif data
 #      - Add support for other databases like MySQL
 #      - Calibrate image prior to storing and stacking it (master dark/flat/bias)
+#      - Add support for GCS storage
+#      - Email summary of processing to user
 ############################################################################################################ 
 import os
 from astropy.io import fits
@@ -33,6 +35,7 @@ logger.addHandler(fhandler)
 logger.setLevel(logging.INFO)
 logger.info("Program Start - Obsy PostProcessing Program "+VERSION)
 
+
 class PostProcess(object):
     def __init__(self):
         logging.info("Initializing Post Processing object")
@@ -43,6 +46,14 @@ class PostProcess(object):
         self.dbName = self.config.get("DBPATH")
         self.con = sqlite3.connect(self.dbName)
         self.cur = self.con.cursor()
+        if DEBUG:
+            # Clear the tables
+            sqlstmt="DELETE from observations_fitsHeader where 1;"
+            self.cur.execute(sqlstmt)
+            self.con.commit()
+            sqlstmt="DELETE from observations_fitsFile where 1;"
+            self.cur.execute(sqlstmt)
+            self.con.commit()
 
     # Function definitions
     def submitFileToDB(self,fileName,hdr):
@@ -50,8 +61,7 @@ class PostProcess(object):
         cur = con.cursor()
         if "DATE-OBS" in hdr:
             uuidStr=uuid.uuid4()
-            sqlStmt="INSERT INTO fitsFile (fitsFileId, fitsFileName,fitsFileDate) VALUES ('{0}','{1}','{2}')".format(uuidStr,hdr["DATE-OBS"],fileName)
-            logger.info(f"Executing "+sqlStmt)
+            sqlStmt="INSERT INTO observations_fitsFile (fitsFileId, fitsFileName,fitsFileDate) VALUES ('{0}','{1}','{2}')".format(uuidStr,fileName,hdr["DATE-OBS"])
             try:
                 self.cur.execute(sqlStmt)
                 self.con.commit()
@@ -65,8 +75,7 @@ class PostProcess(object):
                     keywordValue=str(hdr[card]).replace('\'',' ')
                 else:
                     keywordValue = hdr[card]
-                sqlStmt="INSERT INTO fitsHeader (fitsHeaderId, fitsFileId, fitsHeaderKey, fitsHeaderValue) VALUES ('{0}','{1}','{2}','{3}')".format(uuid.uuid4(),uuidStr,card,keywordValue)
-                logger.info(f"Executing "+sqlStmt)
+                sqlStmt="INSERT INTO observations_fitsHeader (fitsHeaderId, fitsFileId_id, fitsHeaderKey, fitsHeaderValue) VALUES ('{0}','{1}','{2}','{3}')".format(uuid.uuid4(),uuidStr,card,keywordValue)
                 try:
                     self.cur.execute(sqlStmt)
                     self.con.commit()
@@ -101,6 +110,9 @@ class PostProcess(object):
                 if "FRAME" in hdr:
                     # Create an os-friendly date
                     try:
+                        if "DATE-OBS" not in hdr:
+                            logging.warning("No DATE-OBS card in header. File not processed is "+str(os.path.join(root, file)))
+                            continue
                         datestr=hdr["DATE-OBS"].replace("T", " ")
                         datestr=datestr[0:datestr.find('.')]
                         dateobj=datetime.strptime(datestr, '%Y-%m-%d %H:%M:%S')

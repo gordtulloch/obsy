@@ -17,10 +17,10 @@ class Config():
             logger.info("Config file not found, creating with defaults.")
             self.config['DEFAULT'] = {
                 'REPOSTORE'     : 'File',   # File or GCS for Google Cloud Storage
-                'SOURCEPATH'	: '/home/gtulloch/Dropbox/Astronomy/00 Telescope Data/SPAO/NGC_6888/Light/ASI294MC/1x1/',
+                'SOURCEPATH'	: '/home/gtulloch/Dropbox/Astronomy/00 Telescope Data/SPAO/NGC_6888',
                 'REPOPATH'	    : '/home/gtulloch/REPOSITORY/',
                 'DBPATH'	    : '/home/gtulloch/obsy/db.sqlite3',
-            }
+                }
             with open(self.file_path, 'w') as configfile:
                 self.config.write(configfile)
                 return      

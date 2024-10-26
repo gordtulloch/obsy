@@ -71,8 +71,8 @@ class scheduleMaster(models.Model):
                                 default=uuid.uuid4,
                                 editable=False)
     userId              = models.CharField(max_length=255)
-    schedule_date       = models.DateField()
-    schedule_days       = models.IntegerField()
+    schedule_date       = models.DateField(default=datetime.now, blank=True)
+    schedule_days       = models.IntegerField(default=1,validators=[MaxValueValidator(365),MinValueValidator(1)])
     observatoryId       = models.ForeignKey(observatory, on_delete=models.CASCADE)
     telescopeId         = models.ForeignKey(telescope, on_delete=models.CASCADE)
     imagerId            = models.ForeignKey(imager, on_delete=models.CASCADE)
@@ -133,4 +133,4 @@ class fitsHeader(models.Model):
                                 editable=False)
     fitsHeaderKey       = models.CharField(max_length=255)
     fitsHeaderValue     = models.CharField(max_length=255)
-    fitsFileId            = models.ForeignKey(fitsFile, on_delete=models.CASCADE)
+    fitsFileId          = models.ForeignKey(fitsFile, on_delete=models.CASCADE)
