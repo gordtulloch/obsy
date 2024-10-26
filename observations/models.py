@@ -111,3 +111,26 @@ class scheduleFile(models.Model):
                                 editable=False)
     scheduleFileName        = models.FileField(max_length=MAX_FILE_SIZE,upload_to='schedule') 
     scheduleFileData        = models.CharField(max_length=MAX_FILE_SIZE)
+
+##################################################################################################
+## fitsFile - this model points to a physical fits file in a repository                         ##
+##################################################################################################
+class fitsFile(models.Model):
+    fitsFileId          = models.UUIDField( 
+                                primary_key=True,
+                                default=uuid.uuid4,
+                                editable=False)
+    fitsFileName        = models.CharField(max_length=255) 
+    fitsFileDate        = models.DateTimeField(default=datetime.now, blank=True)
+
+##################################################################################################
+## fitsHeader - this model records the header values from a physical fits file in a repository  ##
+##################################################################################################
+class fitsHeader(models.Model):
+    fitsHeaderId        = models.UUIDField( 
+                                primary_key=True,
+                                default=uuid.uuid4,
+                                editable=False)
+    fitsHeaderKey       = models.CharField(max_length=255)
+    fitsHeaderValue     = models.CharField(max_length=255)
+    fitsFileId            = models.ForeignKey(fitsFile, on_delete=models.CASCADE)

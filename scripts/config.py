@@ -3,32 +3,28 @@
 #############################################################################################################
 # Object to retrieve configuration
 import configparser
+import os
+
+import logging
+logger = logging.getLogger('config')
 
 class Config():
     def __init__(self):
-        config = configparser.ConfigParser()
-        file_path = "scripts.ini"
+        self.config = configparser.ConfigParser()
+        self.file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'scripts.ini')
         # Check if the file exists
-        if not os.path.exists(file_path):
+        if not os.path.exists(self.file_path):
             logger.info("Config file not found, creating with defaults.")
-            config['DEFAULT'] = {
-                'INDI_TELESCOPE_SERVER'	: 'localhost',
-    	    	'INDI_DOME_SERVER'	    : 'localhost',
-              	'INDI_TELESCOPE_PORT'   : 7624,
-                'INDI_DOME_PORT'        : 7624,
-             	'INDITELESCOPE'	: 'Telescope Simulator',
-                'INDIDOME'	    : 'RollOff Simulator',
-                'LATITUDE'      : '49.8954',
-                'LONGITUDE'     : '-97.1385',
-                'EKOSHOMEPATH'  : '/home/stellarmate/Pictures/schedules/',
-                'EKOSPROFILE'   : 'SPAO-PC',
-                'EKOSSCHEDULE'  : 'daily.esl',
+            self.config['DEFAULT'] = {
+                'REPOSTORE'     : 'File',   # File or GCS for Google Cloud Storage
+                'SOURCEPATH'	: '/home/gtulloch/Dropbox/Astronomy/00 Telescope Data/SPAO/NGC_6888/Light/ASI294MC/1x1/',
+                'REPOPATH'	    : '/home/gtulloch/REPOSITORY/',
+                'DBPATH'	    : '/home/gtulloch/obsy/db.sqlite3',
             }
-            with open('MCP.ini', 'w') as configfile:
-                config.write(configfile)
+            with open(self.file_path, 'w') as configfile:
+                self.config.write(configfile)
                 return      
-    def get(keyword):
-        with open('MCP.ini', 'w') as configfile:
-                config.write(configfile)
-                return config['DEFAULT'][keyword]
-
+    def get(self,keyword):
+                self.config = configparser.ConfigParser()
+                self.config.read(self.file_path)
+                return self.config['DEFAULT'][keyword]

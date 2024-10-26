@@ -1,176 +1,201 @@
 ############################################################################################################
-#
-# Name        : postProcess.py
-# Purpose     : Script to call after an image is taken to give it a standard name, add it to an index 
-#               database, and move it to a repository
+## P O S T   P R O C E S S                                                               ##
+############################################################################################################
+# Description : This script is used to process images taken by Ekos and store them in a repository.       
 # Author      : Gord Tulloch
 # Date        : January 25 2024
-# License     : GPL v3
-# Dependencies: Imagemagick and SIRIL needs to be install for live stacking
-#               Tested with EKOS, don't know if it'll work with other imaging tools 
-# Usage       : This script could be run after an image (single image) or after a sequence if live stacking  
-#               is also being run
 # TODO:
+#      - Add support for non-FITS images like JPG and TIFF Exif data
+#      - Add support for other databases like MySQL
 #      - Calibrate image prior to storing and stacking it (master dark/flat/bias)
-#
 ############################################################################################################ 
 import os
 from astropy.io import fits
-import logging
 import sqlite3
 import shutil
 import uuid
+from math import cos,sin
 from pathlib import Path
 from datetime import datetime
 from config import Config
 
-DEBUG=True
+DEBUG=False
+VERSION="0.1"
+
 # Set up logging
 import logging
-if not os.path.exists('postProcess.log'):
-	logging.basicConfig(filename='postProcess.log', encoding='utf-8', level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("postProcess")
+logFilename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'scripts.log')
+logger = logging.getLogger()
+fhandler = logging.FileHandler(filename=logFilename, mode='a')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fhandler.setFormatter(formatter)
+logger.addHandler(fhandler)
+logger.setLevel(logging.INFO)
+logger.info("Program Start - Obsy PostProcessing Program "+VERSION)
 
-# Retrieve config
-config=Config()
+class PostProcess(object):
+    def __init__(self):
+        logging.info("Initializing Post Processing object")
+        self.config=Config()
+        self.repoStore = self.config.get("REPOSTORE")
+        self.sourceFolder=self.config.get("SOURCEPATH")
+        self.fileRepoFolder=self.config.get("REPOPATH")
+        self.dbName = self.config.get("DBPATH")
+        self.con = sqlite3.connect(self.dbName)
+        self.cur = self.con.cursor()
 
-# Function definitions
-def submitFile(fileName, hdr):
-    if "DATE-OBS" in hdr:
-        uuidStr=uuid.uuid4()
-        sqlStmt="INSERT INTO fitsFile (unid, date, filename) VALUES ('{0}','{1}','{2}')".format(uuidStr,hdr["DATE-OBS"],fileName)
-
-        try:
-            cur.execute(sqlStmt)
-            con.commit()
-        except sqlite3.Error as er:
-            logging.error('SQLite error: %s' % (' '.join(er.args)))
-            logging.error("Exception class is: ", er.__class__)
-            logging.error('SQLite traceback: ')
-            exc_type, exc_value, exc_tb = sys.exc_info()
-            logging.error(traceback.format_exception(exc_type, exc_value, exc_tb))
-            
-        for card in hdr:
-            if type(hdr[card]) not in [bool,int,float]:
-                keywordValue=str(hdr[card]).replace('\'',' ')
-            else:
-                keywordValue = hdr[card]
-            sqlStmt="INSERT INTO fitsHeader (thisUNID, parentUNID, keyword, value) VALUES ('{0}','{1}','{2}','{3}')".format(uuid.uuid4(),uuidStr,card,keywordValue)
-
+    # Function definitions
+    def submitFileToDB(self,fileName,hdr):
+        con = sqlite3.connect(self.dbName)
+        cur = con.cursor()
+        if "DATE-OBS" in hdr:
+            uuidStr=uuid.uuid4()
+            sqlStmt="INSERT INTO fitsFile (fitsFileId, fitsFileName,fitsFileDate) VALUES ('{0}','{1}','{2}')".format(uuidStr,hdr["DATE-OBS"],fileName)
+            logger.info(f"Executing "+sqlStmt)
             try:
-                cur.execute(sqlStmt)
-                con.commit()
+                self.cur.execute(sqlStmt)
+                self.con.commit()
             except sqlite3.Error as er:
                 logging.error('SQLite error: %s' % (' '.join(er.args)))
                 logging.error("Exception class is: ", er.__class__)
-                logging.error('SQLite traceback: ')
-                exc_type, exc_value, exc_tb = sys.exc_info()
-                logging.error(traceback.format_exception(exc_type, exc_value, exc_tb))
-    else:
-        logging.error("Error: File not added to repo due to missing date is "+fileName)
-        return 0
-    
-    return 1
+                logging.error('SQLite traceback: ')           
 
-def createTables():
-    #if DEBUG:
-    #    cur.execute("DROP TABLE if exists fitsFile")
-    #    cur.execute("DROP TABLE if exists fitsHeader")
-    cur.execute("CREATE TABLE if not exists fitsFile(unid, date, filename)")
-    cur.execute("CREATE TABLE if not exists fitsHeader(thisUNID, parentUNID, keyword, value)")
-    return
-
-# Variable Declarations paths must have trailing /!
-sourceFolder="K:/Astronomy/00 Telescope Data/SPAO/"
-repoFolder="D:/Dropbox/Astronomy/00 Data Repository/"
-dbName = repoFolder+"obsy.db"
-
-# Set up Database
-con = sqlite3.connect(dbName)
-cur = con.cursor()
-createTables()
-
-# Set up logging
-logging.basicConfig(level=logging.DEBUG,filename='postProcess.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logging.info('Started')
-
-# Scan the pictures folder
-for root, dirs, files in os.walk(os.path.abspath(sourceFolder)):
-    for file in files:
-        file_name, file_extension = os.path.splitext(os.path.join(root, file))
-        # Ignore everything not a *fit* file
-        if "fit" not in file_extension:
-            logging.warning("Invalid FITS extension ("+file_extension+"). File not processed is "+str(os.path.join(root, file)))
-            continue
-
-        try:
-            hdul = fits.open(os.path.join(root, file))
-        except ValueError as e:
-            logging.warning("Invalid FITS file. File not processed is "+str(os.path.join(root, file)))
-            continue   
-        
-        hdr = hdul[0].header
-
-        if "FRAME" in hdr:
-            print(os.path.join(root, file))
-
-            # Create an os-friendly date
-            if not "DATE-OBS" in hdr.keys():
-                logging.info("Missing date element in header. File not processed is "+str(os.path.join(root, file)))
-                continue
-            try:
-                datestr=hdr["DATE-OBS"].replace("T", " ")
-                datestr=datestr[0:datestr.find('.')]
-                dateobj=datetime.strptime(datestr, '%Y-%m-%d %H:%M:%S')
-                fitsDate=dateobj.strftime("%Y%m%d%H%M%S")
-            except ValueError as e:
-                logging.info("Invalid date format in header. File not processed is "+str(os.path.join(root, file)))
-                if DEBUG:
-                    print("Invalid date format in header. File not processed is "+str(os.path.join(root, file)))
-                continue
-            # 
-            if not "FILTER" in hdr.keys():
-                filterName="OSC"
-            else:
-                filterName=hdr["FILTER"]
-
-            # Create a new standard name for the file based on what it is
-            if (hdr["FRAME"]=="Light"):
-                if ("OBJECT" in hdr):
-                    newName=newName="{0}-{1}-{2}-{3}s-{4}x{5}-t{6}.fits".format(hdr["OBJECT"].replace(" ", ""),filterName,fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+            for card in hdr:
+                if type(hdr[card]) not in [bool,int,float]:
+                    keywordValue=str(hdr[card]).replace('\'',' ')
                 else:
-                    logging.warning("Invalid object name in header. File not processed is "+str(os.path.join(root, file)))
-                    continue
-            elif hdr["FRAME"]=="Flat":
-                newName="{0}-{1}-{2}s-{3}-{4}x{5}-t{6}.fits".format(hdr["FRAME"],filterName,fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
-            elif hdr["FRAME"]=="Dark" or hdr["FRAME"]=="Bias":
-                newName="{0}-{1}-{2}s-{3}x{4}-t{5}.fits".format(hdr["FRAME"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
-            else:
-                logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
-            hdul.close()
-
-            # Create the folder structure (if needed)
-            fitsDate=dateobj.strftime("%Y%m%d")
-            if (hdr["FRAME"]=="Light"):
-                newPath=repoFolder+"Light/{0}/{1}/{2}/".format(hdr["OBJECT"].replace(" ", ""),fitsDate,filterName)
-            elif hdr["FRAME"]=="Dark":
-                newPath=repoFolder+"Calibrate/{0}/{1}/{2}x{3}/{4}/".format(hdr["FRAME"],hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],fitsDate)
-            elif hdr["FRAME"]=="Flat":
-                newPath=repoFolder+"Calibrate/{0}/{1}/{2}x{3}/{4}/".format(hdr["FRAME"],filterName,hdr["XBINNING"],hdr["YBINNING"],fitsDate)
-            elif hdr["FRAME"]=="Bias":
-                newPath=repoFolder+"Calibrate/{0}/{1}x{2}/{3}/".format(hdr["FRAME"],hdr["XBINNING"],hdr["YBINNING"],fitsDate)
-
-            if not os.path.isdir(newPath):
-                os.makedirs (newPath)
-
-            # If we can add the file to the database move it to the repo
-            if (submitFile(newPath+newName.replace(" ", ""),hdr)):
-                moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
-                logging.info(moveInfo)
-                shutil.move(os.path.join(root, file),newPath+newName)
-            else:
-                logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
+                    keywordValue = hdr[card]
+                sqlStmt="INSERT INTO fitsHeader (fitsHeaderId, fitsFileId, fitsHeaderKey, fitsHeaderValue) VALUES ('{0}','{1}','{2}','{3}')".format(uuid.uuid4(),uuidStr,card,keywordValue)
+                logger.info(f"Executing "+sqlStmt)
+                try:
+                    self.cur.execute(sqlStmt)
+                    self.con.commit()
+                except sqlite3.Error as er:
+                    logging.error('SQLite error: %s' % (' '.join(er.args)))
+                    logging.error("Exception class is: ", er.__class__)
         else:
-            logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
+            logging.error("Error: File not added to repo due to missing date is "+fileName)
+            return False
+        return True
 
-logging.info('Finished')
+    def processImage(self):
+        # Scan the pictures folder
+        logging.info("Processing images in "+self.sourceFolder)
+        for root, dirs, files in os.walk(os.path.abspath(self.sourceFolder)):
+            for file in files:
+                logging.info("Processing file "+os.path.join(root, file))
+                file_name, file_extension = os.path.splitext(os.path.join(root, file))
+
+                # Ignore everything not a *fit* file
+                if "fit" not in file_extension:
+                    logger.info("Ignoring file "+os.path.join(root, file)+" with extension -"+file_extension+"-")
+                    continue
+
+                try:
+                    hdul = fits.open(os.path.join(root, file), mode='update')
+                except ValueError as e:
+                    logging.warning("Invalid FITS file. File not processed is "+str(os.path.join(root, file)))
+                    continue   
+        
+                hdr = hdul[0].header
+                if "FRAME" in hdr:
+                    # Create an os-friendly date
+                    try:
+                        datestr=hdr["DATE-OBS"].replace("T", " ")
+                        datestr=datestr[0:datestr.find('.')]
+                        dateobj=datetime.strptime(datestr, '%Y-%m-%d %H:%M:%S')
+                        fitsDate=dateobj.strftime("%Y%m%d%H%M%S")
+                    except ValueError as e:
+                        logging.warning("Invalid date format in header. File not processed is "+str(os.path.join(root, file)))
+                        continue
+
+                    # Create a new standard name for the file based on what it is
+                    if (hdr["FRAME"]=="Light"):
+                        # Adjust the WCS for the image
+                        if "CD1_1" not in hdr:
+                            if "CDELT1" in hdr:
+                                fitsCDELT1=float(hdr["CDELT1"])
+                                fitsCDELT2=float(hdr["CDELT2"])
+                                fitsCROTA2=float(hdr["CROTA2"])
+                                fitsCD1_1 =  fitsCDELT1 * cos(fitsCROTA2)
+                                fitsCD1_2 = -fitsCDELT2 * sin(fitsCROTA2)
+                                fitsCD2_1 =  fitsCDELT1 * sin (fitsCROTA2)
+                                fitsCD2_2 = fitsCDELT2 * cos(fitsCROTA2)
+                                hdr.append(('CD1_1', str(fitsCD1_1), 'Adjusted via MCP'), end=True)
+                                hdr.append(('CD1_2', str(fitsCD1_2), 'Adjusted via MCP'), end=True)
+                                hdr.append(('CD2_1', str(fitsCD2_1), 'Adjusted via MCP'), end=True)
+                                hdr.append(('CD2_2', str(fitsCD2_2), 'Adjusted via MCP'), end=True)
+                                hdul.flush()  # changes are written back to original.fits
+                            else:
+                                logging.warning("No WCS information in header, file not updated is "+str(os.path.join(root, file)))
+
+                        # Assign a new name
+                        if ("OBJECT" in hdr):
+                            if ("FILTER" in hdr):
+                                newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["OBJECT"].replace(" ", "_"),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+                            else:
+                                newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["OBJECT"].replace(" ", "_"),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+                        else:
+                            logging.warning("Invalid object name in header. File not processed is "+str(os.path.join(root, file)))
+                            continue
+                    elif hdr["FRAME"]=="Flat":
+                        if ("FILTER" in hdr):
+                            newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+                        else:
+                            newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+                    elif hdr["FRAME"]=="Dark" or hdr["FRAME"]=="Bias":
+                        newName="{0}-{1}-{1}-{2}-{3}s-{4}x{5}-t{6}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+                    else:
+                        logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
+                    hdul.close()
+
+                    # Create the folder structure (if needed)
+                    fitsDate=dateobj.strftime("%Y%m%d")
+                    if (hdr["FRAME"]=="Light"):
+                        newPath=self.fileRepoFolder+"Light/{0}/{1}/{2}/{3}/".format(hdr["OBJECT"].replace(" ", ""),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),fitsDate)
+                    elif hdr["FRAME"]=="Dark":
+                        newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),hdr["EXPTIME"],fitsDate)
+                    elif hdr["FRAME"]=="Flat":
+                        if ("FILTER" in hdr):
+                            newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate)
+                        else:
+                            newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate)
+                    elif hdr["FRAME"]=="Bias":
+                        newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                            hdr["INSTRUME"].replace(" ", "_"),fitsDate)
+
+                    if not os.path.isdir(newPath):
+                        os.makedirs (newPath)
+
+                    # If we can add the file to the database move it to the repo
+                    if (self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)):
+                        moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
+                        logging.info(moveInfo)
+                        shutil.move(os.path.join(root, file),newPath+newName)
+                    else:
+                        logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
+                else:
+                    logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
+    
+    
+if __name__ == "__main__":
+    postProcess=PostProcess()
+    config=Config()
+    source=config.get("SOURCEPATH")
+    if (config.get("REPOSTORE")=="GCS"):
+        logging.info("Processing images with GCS from "+source)
+        logging.error("GCS not implemented yet")
+    elif (config.get("REPOSTORE")=="File"):
+        logging.info("Processing images with File Processing from "+source)
+        postProcess.processImage()
+    logging.info("Finished processing images")
+    exit(0)
