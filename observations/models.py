@@ -122,6 +122,9 @@ class fitsFile(models.Model):
                                 editable=False)
     fitsFileName        = models.CharField(max_length=255) 
     fitsFileDate        = models.DateTimeField(default=datetime.now, blank=True)
+    fitsFileCalibrated  = models.BooleanField(default=False)
+    fitsFileType        = models.CharField(max_length=255)
+    fitsFileStacked     = models.BooleanField(default=False)
 
 ##################################################################################################
 ## fitsHeader - this model records the header values from a physical fits file in a repository  ##
@@ -134,3 +137,4 @@ class fitsHeader(models.Model):
     fitsHeaderKey       = models.CharField(max_length=255)
     fitsHeaderValue     = models.CharField(max_length=255)
     fitsFileId          = models.ForeignKey(fitsFile, on_delete=models.CASCADE)
+    

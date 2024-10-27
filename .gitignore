@@ -14,6 +14,7 @@ __pycache__/
 
 # Private data
 obsy/private.py
+obsy/settings.py
 
 # Distribution / packaging
 .Python

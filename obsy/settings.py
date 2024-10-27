@@ -222,3 +222,7 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(hour=10, minute=0),
     },
 }
+
+# Settings for the postProcess module
+SOURCEPATH="/home/gtulloch/Dropbox/Astronomy"
+REPOPATH="/home/gtulloch/REPOSITORY/"
