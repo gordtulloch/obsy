@@ -16,13 +16,14 @@ from .models import fitsFile, fitsHeader
 from django.utils import timezone
 import pysiril
 
+logging=logging.getLogger('postProcess')
+
 # After images are obtained move them to a reporsitory and add them to the database
 class registerFitsFiles(object):
     def __init__(self):
-        self.logging = logging.getLogger('postProcess')
         self.sourceFolder=settings.SOURCEPATH
         self.fileRepoFolder=settings.REPOPATH
-        self.logging.info("Post Processing object initialized")
+        logging.info("Post Processing object initialized")
 
     # Function definitions
     def submitFileToDB(self,fileName,hdr):
@@ -40,28 +41,28 @@ class registerFitsFiles(object):
                 newheader=fitsHeader(fitsHeaderKey=card,fitsHeaderValue=keywordValue,fitsFileId=newfile)
                 newheader.save()
         else:
-            self.logging.error("Error: File not added to repo due to missing date is "+fileName)
+            logging.error("Error: File not added to repo due to missing date is "+fileName)
             return False
         return True
 
 
     def registerFitsImages(self):
         # Scan the pictures folder
-        self.logging.info("Processing images in "+self.sourceFolder)
+        logging.info("Processing images in "+self.sourceFolder)
         for root, dirs, files in os.walk(os.path.abspath(self.sourceFolder)):
             for file in files:
-                self.logging.info("Processing file "+os.path.join(root, file))
+                logging.info("Processing file "+os.path.join(root, file))
                 file_name, file_extension = os.path.splitext(os.path.join(root, file))
 
                 # Ignore everything not a *fit* file
                 if "fit" not in file_extension:
-                    self.logging.info("Ignoring file "+os.path.join(root, file)+" with extension -"+file_extension+"-")
+                    logging.info("Ignoring file "+os.path.join(root, file)+" with extension -"+file_extension+"-")
                     continue
 
                 try:
                     hdul = fits.open(os.path.join(root, file), mode='update')
                 except ValueError as e:
-                    self.logging.warning("Invalid FITS file. File not processed is "+str(os.path.join(root, file)))
+                    logging.warning("Invalid FITS file. File not processed is "+str(os.path.join(root, file)))
                     continue   
         
                 hdr = hdul[0].header
@@ -76,7 +77,7 @@ class registerFitsFiles(object):
                         dateobj=datetime.strptime(datestr, '%Y-%m-%d %H:%M:%S')
                         fitsDate=dateobj.strftime("%Y%m%d%H%M%S")
                     except ValueError as e:
-                        self.logging.warning("Invalid date format in header. File not processed is "+str(os.path.join(root, file)))
+                        logging.warning("Invalid date format in header. File not processed is "+str(os.path.join(root, file)))
                         continue
 
                     # Create a new standard name for the file based on what it is
@@ -97,7 +98,7 @@ class registerFitsFiles(object):
                                 hdr.append(('CD2_2', str(fitsCD2_2), 'Adjusted via MCP'), end=True)
                                 hdul.flush()  # changes are written back to original.fits
                             else:
-                                self.logging.warning("No WCS information in header, file not updated is "+str(os.path.join(root, file)))
+                                logging.warning("No WCS information in header, file not updated is "+str(os.path.join(root, file)))
 
                         # Assign a new name
                         if ("OBJECT" in hdr):
@@ -108,7 +109,7 @@ class registerFitsFiles(object):
                                 newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["OBJECT"].replace(" ", "_"),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
                         else:
-                            self.logging.warning("Invalid object name in header. File not processed is "+str(os.path.join(root, file)))
+                            logging.warning("Invalid object name in header. File not processed is "+str(os.path.join(root, file)))
                             continue
                     elif hdr["FRAME"]=="Flat":
                         if ("FILTER" in hdr):
@@ -121,7 +122,7 @@ class registerFitsFiles(object):
                         newName="{0}-{1}-{1}-{2}-{3}s-{4}x{5}-t{6}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
                     else:
-                        self.logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
+                        logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
                     hdul.close()
 
                     # Create the folder structure (if needed)
@@ -149,12 +150,12 @@ class registerFitsFiles(object):
                     # If we can add the file to the database move it to the repo
                     if (self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)):
                         moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
-                        self.logging.info(moveInfo)
+                        logging.info(moveInfo)
                         shutil.move(os.path.join(root, file),newPath+newName)
                     else:
-                        self.logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
+                        logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
                 else:
-                    self.logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
+                    logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
         return
     
     def calibrateImages(self):
@@ -162,7 +163,7 @@ class registerFitsFiles(object):
         light_frames = fitsFile.objects.filter(fitsFileType="Light", fitsFileCalibrated=False)
     
         # How many light_frames are there?
-        self.logging("calibrateImages found "+str(len(light_frames))+" light frames to calibrate")
+        logging("calibrateImages found "+str(len(light_frames))+" light frames to calibrate")
 
         for light_frame in light_frames:
             # Get the header information for the Light frame

@@ -24,15 +24,18 @@ def daily_observations_task():
     fits_files = fitsFile.objects.filter(fitsFileDate__gte=time_threshold)
     
     # Create a list of file names or any other relevant information
-    fits_files_list = [f"{fits_file.fitsFileName} - {fits_file.fitsFileDate}" for fits_file in fits_files]
+    fits_files_list += [f"{fits_file.fitsFileDate} - {fits_file.fitsFileName}" for fits_file in fits_files]
     
     # Format the list into a string
+    emailstr = "Fits files processed last night:\n"
+    # catenate the list of fits files into a string
     fits_files_str = "\n".join(fits_files_list)
+    emailstr += fits_files_str
     
     # Send the email
     send_mail(
         'Obsy: New FITS files processed last night',
-        fits_files_str,
+        emailstr,
         settings.SENDER_EMAIL,  # Replace with your "from" email address
         [settings.RECIPIENT_EMAIL],  # Pull recipient email from settings
         fail_silently=False,
