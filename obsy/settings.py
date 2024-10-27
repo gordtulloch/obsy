@@ -195,3 +195,30 @@ LOGGING = {
 
 # Log the server start title
 log_server_start_title()
+
+# Setup for email notifications
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'example@gmail.com'  # Replace with your Gmail address
+EMAIL_HOST_PASSWORD = 'password'  # Replace with your Gmail password or app-specific password
+SENDER_EMAIL = 'example@gmail.com'  # Replace with the actual sender email address
+RECIPIENT_EMAIL = 'example@gmail.com'  # Replace with the actual recipient email address
+
+# Celery/Redis Configuration Options
+from celery.schedules import crontab
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+CELERY_BEAT_SCHEDULE = {
+    'daily_observations_task-every-day-at-10am': {
+        'task': 'observations.tasks.daily_observations_task',
+        'schedule': crontab(hour=10, minute=0),
+    },
+}

@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.urls import path,include
 from . import views
-from .views import observation_detail_view, observation_all_list, observation_create,schedule, scheduleDetails, scheduleDetailsItem
+from .views import observation_detail_view, observation_all_list, observation_create,schedule, scheduleDetails, scheduleDetailsItem,daily_observations_task
 from targets.models import target
 
 urlpatterns = [
@@ -16,4 +16,5 @@ urlpatterns = [
     path("schedule/", views.schedule.as_view(), name="schedule"), 
     path("schedule/<uuid:pk>/", views.scheduleDetails.as_view(), name="schedule_details"), 
     path("schedule/target/<uuid:pk>/", views.scheduleDetailsItem.as_view(), name="schedule_details_item"), 
+    path('daily_observations_task/', daily_observations_task, name='daily_observations_task'),
 ]    

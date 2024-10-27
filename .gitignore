@@ -12,6 +12,8 @@ __pycache__/
 # Init files
 *.ini
 
+# Private data
+obsy/private.py
 
 # Distribution / packaging
 .Python

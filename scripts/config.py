@@ -17,7 +17,7 @@ class Config():
             logger.info("Config file not found, creating with defaults.")
             self.config['DEFAULT'] = {
                 'REPOSTORE'     : 'File',   # File or GCS for Google Cloud Storage
-                'SOURCEPATH'	: '/home/gtulloch/Dropbox/Astronomy/00 Telescope Data/SPAO/NGC_6888',
+                'SOURCEPATH'	: '/home/gtulloch/Dropbox/Astronomy/',
                 'REPOPATH'	    : '/home/gtulloch/REPOSITORY/',
                 'DBPATH'	    : '/home/gtulloch/obsy/db.sqlite3',
                 }

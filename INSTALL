@@ -24,6 +24,26 @@ Finally run the server
 
 python manage.py runserver
 
+# Asynchronous Tasks
+Obsy uses Celery and Celery Beat to schedule tasks. 
+
+sudo apt-get install redis-server
+sudo service redis-server enable
+sudo service redis-server start
+sudo service redis-server status
+
+sudo nano /etc/redis/redis.conf
+Look for the following and ensure it's not commented out:
+port 6379
+
+redis-cli ping
+
+pip install celery redis
+# Start the Celery worker
+celery -A obsy worker --loglevel=info
+
+# Start the Celery Beat scheduler
+celery -A obsy beat --loglevel=info
 
 
 

@@ -162,3 +162,40 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
 
     return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
 '''
+
+# observations/views.py
+from django.core.mail import send_mail
+from django.utils import timezone
+from django.shortcuts import render
+from .models import fitsFile
+
+# observations/views.py
+from django.core.mail import send_mail
+from django.utils import timezone
+from django.conf import settings
+from django.shortcuts import render
+from .models import fitsFile
+
+def daily_observations_task(request):
+    # Calculate the time 24 hours ago from now
+    time_threshold = timezone.now() - timezone.timedelta(hours=24)
+    
+    # Query the fitsFile objects with fitsFileDate less than 24 hours from now
+    fits_files = fitsFile.objects.filter(fitsFileDate__gte=time_threshold)
+    
+    # Create a list of file names or any other relevant information
+    fits_files_list = [f"{fits_file.fitsFileName} - {fits_file.fitsFileDate}" for fits_file in fits_files]
+    
+    # Format the list into a string
+    fits_files_str = "\n".join(fits_files_list)
+    
+    # Send the email
+    send_mail(
+        'Obsy: New FITS files processed last night',
+        fits_files_str,
+        settings.SENDER_EMAIL,  # Replace with your "from" email address
+        [settings.RECIPIENT_EMAIL],  # Pull recipient email from settings
+        fail_silently=False,
+    )
+    
+    return render(request, 'observations/email_sent.html')
