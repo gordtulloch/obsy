@@ -168,26 +168,26 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'obsy.log'),
             'formatter': 'verbose',
         },
         'console': {
-            'level': 'INFO',   
+            'level': 'WARNING',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-        },
-        'server_start': {
-            'level': 'INFO',
-            'class': 'obsy.custom_logging.ServerStartHandler',
             'formatter': 'simple',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file', 'console', 'server_start'],
+            'handlers': ['file', 'console'],
             'level': 'DEBUG',
+            'propagate': True,
+        },
+        'obsy': {
+            'handlers': ['file'],
+            'level': 'INFO',
             'propagate': True,
         },
     },
@@ -195,16 +195,6 @@ LOGGING = {
 
 # Log the server start title
 log_server_start_title()
-
-# Setup for email notifications
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'example@gmail.com'  # Replace with your Gmail address
-EMAIL_HOST_PASSWORD = 'password'  # Replace with your Gmail password or app-specific password
-SENDER_EMAIL = 'example@gmail.com'  # Replace with the actual sender email address
-RECIPIENT_EMAIL = 'example@gmail.com'  # Replace with the actual recipient email address
 
 # Celery/Redis Configuration Options
 from celery.schedules import crontab

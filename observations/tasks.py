@@ -5,16 +5,28 @@ from django.utils import timezone
 from django.conf import settings
 from observations.models import fitsFile
 from postProcess import registerFitsFiles #, calibrateImages, createThumbnails
+import logging
+
+
 
 @shared_task
 def daily_observations_task():
+    logger = logging.getLogger('observations.tasks')
+    logger.debug('This is a debug message')
+    logger.info('This is an info message')
+    logger.warning('This is a warning message')
+    logger.error('This is an error message')
+    logger.critical('This is a critical message')
     # Import any new FITS files from the last 24 hours
+    logger.info("Importing new FITS files from the last 24 hours")
     registerFitsFiles()
 
     # Calibrate any images that have not been calibrated
+    logger.info("Calibrating images")
     # calibrateImages()
 
     # Create thumbnail images and test stacks for the images
+    logger.info("Creating thumbnails and test stacks")
     # createThumbnails()
 
     # Calculate the time 24 hours ago from now
@@ -30,6 +42,7 @@ def daily_observations_task():
     fits_files_str = "\n".join(fits_files_list)
     
     # Send the email
+    logger.info("Sending email notification with "+str(len(fits_files_list))+" new FITS files")
     send_mail(
         'Obsy: New FITS files processed last night',
         fits_files_str,
