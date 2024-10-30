@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 import uuid
 
 class observatory(models.Model):
@@ -16,26 +17,16 @@ class observatory(models.Model):
     def __str__(self):
         return self.name
     
-class observer(models.Model):
-    observerId  = models.UUIDField( 
-                        primary_key=True,
-                        default=uuid.uuid4,
-                        editable=False)
-    firstname  =models.CharField(max_length=200)
-    middlename =models.CharField(max_length=200,blank=True)
-    lastname   =models.CharField(max_length=200)
-    tz         =models.CharField(max_length=200) 
-    observatoryId=models.ForeignKey('observatory', on_delete=models.CASCADE,null=True, blank=True)
-        
-    def __str__(self):
-        return self.observerId
+    def get_absolute_url(self):
+        return reverse("observatory_detail", args=[self.observatoryId])
     
+ 
 class telescope(models.Model):
     TELESCOPE_TYPES=(
         ("NE", "Newtonian"),
         ("SC", "Schmidt-Cassegrain"),
         ("CC", "Classical Cassegrain"),
-        ("RC", "Ritchey Cretien Cassegrain"),
+        ("RC", "Ritchey Cretien Cassegrain"), 
         ("MC", "Mak-Cassegrain"),
         ("RE","Refractor"),
         ("OT", "Other"),
@@ -54,6 +45,9 @@ class telescope(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse("telescope_detail", args=[self.telescopeId])
     
 class imager(models.Model):
     IMAGER_TYPES=(
@@ -74,5 +68,6 @@ class imager(models.Model):
    
     def __str__(self):
         return self.name
-
+    def get_absolute_url(self):
+        return reverse("imager_detail", args=[self.imagerId])
 
