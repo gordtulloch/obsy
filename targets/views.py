@@ -18,8 +18,8 @@ from astropy.coordinates import SkyCoord, get_constellation
 import ephem
 from datetime import datetime
 
-logger = logging.getLogger("targets.views")
-logger.level = logging.INFO
+# Get an instance of a logger
+logger = logging.getLogger('targets.views')
 
 ##################################################################################################
 ## targetDetailView - List target detail with DetailView template                               ## 
@@ -86,7 +86,7 @@ def target_query(request):
                         )
             else: 
                 results=[]
-            return render(request, 'targets/target_result.html',{'results': results})
+            return redirect('target_all_list')
         except Exception as e:
             error_message="Search Error occurred with search ("+search_term+")"
             logger.error(error_message)
@@ -117,8 +117,17 @@ from setup.models import observatory
 from targets.models import target
 import ephem
 from datetime import datetime, timedelta
+from django.utils import timezone
 
-
+def convert_to_current_timezone(dt):
+    # Ensure the datetime is aware (has timezone info)
+    if timezone.is_naive(dt):
+        dt = timezone.make_aware(dt)
+    
+    # Convert to the current timezone
+    current_timezone_dt = timezone.localtime(dt)
+    
+    return current_timezone_dt
 
 def target_altitude(request, target_id):
     logger.info(f"Calculating target altitude")
@@ -149,8 +158,10 @@ def target_altitude(request, target_id):
         target_ephem._dec = target_obj.targetDec2000
         target_ephem.compute(location)
         altitudes.append(target_ephem.alt * 180.0 / ephem.pi)  # Convert radians to degrees
-        times.append(current_time.isoformat())
+        times.append(convert_to_current_timezone(current_time).isoformat())
         current_time += delta
-   
+    logger.info(f"Altitude data: {altitudes}")
+    logger.info(f"Time data: {times}")
+    
     return JsonResponse({'times': times, 'altitudes': altitudes})
 

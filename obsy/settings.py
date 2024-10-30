@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Winnipeg'
 
 USE_I18N = True
 
@@ -155,44 +155,63 @@ from .custom_logging import ServerStartHandler, log_server_start_title
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
+        'standard': {
+            'format': '%(asctime)s %(levelname)s %(name)s %(message)s'
         },
     },
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'obsy.log'),
-            'formatter': 'verbose',
-        },
-        'console': {
-            'level': 'WARNING',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
+        'default': {
+            'level':'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': 'obsy.log',
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        },  
+        'request_handler': {
+                'level':'INFO',
+                'class':'logging.handlers.RotatingFileHandler',
+                'filename': 'obsy.log',
+                'maxBytes': 1024*1024*5, # 5 MB
+                'backupCount': 5,
+                'formatter':'standard',
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['file', 'console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'obsy': {
-            'handlers': ['file'],
+        '': {
+            'handlers': ['default'],
             'level': 'INFO',
-            'propagate': True,
+            'propagate': False
         },
-    },
+        'targets': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'observations': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'setup': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'accounts': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'django.request': {
+            'handlers': ['request_handler'],
+            'level': 'WARNING',
+            'propagate': False
+        },
+    }
 }
-
 # Log the server start title
 log_server_start_title()
 
@@ -214,5 +233,5 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Settings for the postProcess module
-SOURCEPATH="/home/gtulloch/Dropbox/Astronomy"
-REPOPATH="/home/gtulloch/REPOSITORY/"
+SOURCEPATH="/home/gtulloch/obsy/sample_data/Processing/source/"
+REPOPATH="/home/gtulloch/obsy/sample_data/Processing/repo/"
