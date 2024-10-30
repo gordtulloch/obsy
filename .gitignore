@@ -12,6 +12,9 @@ __pycache__/
 # Init files
 *.ini
 
+# Sample data for testing
+sample_data/Processing
+
 # Private data
 obsy/private.py
 obsy/settings.py

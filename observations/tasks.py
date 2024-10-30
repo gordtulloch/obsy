@@ -4,13 +4,14 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.conf import settings
 from observations.models import fitsFile
-from postProcess import registerFitsFiles #, calibrateImages, createThumbnails
+from postProcess import PostProcess
 
 @shared_task
 def daily_observations_task():
     # Import any new FITS files from the last 24 hours
-    registerFitsFiles()
-
+    postProcessObj=PostProcess()
+    postProcessObj.registerFitsFiles()
+    
     # Calibrate any images that have not been calibrated
     # calibrateImages()
 

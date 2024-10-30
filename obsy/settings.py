@@ -243,5 +243,5 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Settings for the postProcess module
-SOURCEPATH="/home/gtulloch/Dropbox/Astronomy"
-REPOPATH="/home/gtulloch/REPOSITORY/"
+SOURCEPATH="/home/gtulloch/obsy/sample_data/Processing/source/"
+REPOPATH="/home/gtulloch/obsy/sample_data/Processing/repo/"

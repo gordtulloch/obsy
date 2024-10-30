@@ -16,10 +16,10 @@ from .models import fitsFile, fitsHeader
 from django.utils import timezone
 import pysiril
 
-logging=logging.getLogger('postProcess')
+logging=logging.getLogger('observations.postProcess')
 
 # After images are obtained move them to a reporsitory and add them to the database
-class registerFitsFiles(object):
+class PostProcess(object):
     def __init__(self):
         self.sourceFolder=settings.SOURCEPATH
         self.fileRepoFolder=settings.REPOPATH
