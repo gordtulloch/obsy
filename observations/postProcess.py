@@ -10,12 +10,12 @@ from astropy.io import fits
 import shutil
 from math import cos,sin
 from datetime import datetime
-import logging
 from django.conf import settings
 from .models import fitsFile, fitsHeader
 from django.utils import timezone
 import pysiril
 
+import logging
 logging=logging.getLogger('observations.postProcess')
 
 # After images are obtained move them to a reporsitory and add them to the database

@@ -24,7 +24,7 @@ import ephem
 from datetime import datetime
 import numpy as np
 
-logger = logging.getLogger("obsy.observations.views")
+logger = logging.getLogger("observations.views")
 
 ##################################################################################################
 ## observationDetailView - List observation detail with DetailView template                     ## 
@@ -168,15 +168,18 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.shortcuts import render
 from .models import fitsFile
-
-# observations/views.py
-from django.core.mail import send_mail
-from django.utils import timezone
 from django.conf import settings
-from django.shortcuts import render
-from .models import fitsFile
+from observations.postProcess import PostProcess
+
+import logging
+logging=logging.getLogger('observations.views')
 
 def daily_observations_task(request):
+    logging.info("Running daily_observations")
+    # Run the post-processing task
+    postProcess = PostProcess()
+    postProcess.registerFitsImages()
+
     # Calculate the time 24 hours ago from now
     time_threshold = timezone.now() - timezone.timedelta(hours=24)
     
@@ -199,3 +202,25 @@ def daily_observations_task(request):
     )
     
     return render(request, 'observations/email_sent.html')
+
+class scheduleDetails(ListView):
+    model=scheduleDetail
+    context_object_name="scheduleDetail_list"
+    template_name="targets/schedule_detail_list.html"
+    login_url = "account_login"
+
+class list_fits_files(ListView):
+    model=fitsFile
+    context_object_name="fits_files_list"
+    template_name="observations/list_fits_files.html"
+    login_url = "account_login"
+
+def get_queryset(self):
+        # Calculate the date 30 days ago from now
+        thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
+        logger.info(f"Thirty days ago: {thirty_days_ago}")
+        # Filter the queryset to include only fitsFile objects with fitsFileDate within the last 30 days
+        return fitsFile.objects.filter(fitsFileDate__gte=thirty_days_ago)
+
+        # Sort the filtered fits files by fitsFileDate in descending order
+        return sorted(filtered_fits_files, key=lambda x: x.fitsFileDate, reverse=True)

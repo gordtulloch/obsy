@@ -1,0 +1,29 @@
+{% extends "_base.html" %}
+{% block title %}All observations List{% endblock title %}
+{% block content %}
+<div class="container">
+    <br><br>
+    <h2>List of FITS Files</h2>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>File Type</th>
+                <th>File Date</th>
+                <th>Calibrated</th>
+                <th>Stacked</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for fits_file in fits_files_list %}
+        <tr>
+            <td>{{ fits_file.fitsFileName }}</td>
+            <td>{{ fits_file.fitsFileType }}</td>
+            <td>{{ fits_file.fitsFileDate }}</td>
+            <td>{{ fits_file.fitsFileCalibrated }}</td>
+            <td>{{ fits_file.fitsFileStacked }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    {% endblock content %}

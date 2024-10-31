@@ -45,5 +45,10 @@ celery -A obsy worker --loglevel=info
 # Start the Celery Beat scheduler
 celery -A obsy beat --loglevel=info
 
+Private settings
+Some settings are used for testing but can't be added to the repository. These are stored in a file named obsy/private.ini. 
+This file is not included in the repository and must be created the first time the program is run. It will be created with default settings 
+so please edit this file appropriately.
+
 
 

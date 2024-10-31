@@ -119,13 +119,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'America/Winnipeg'
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -149,9 +145,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 # django-crispy-forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5" 
 CRISPY_TEMPLATE_PACK = "bootstrap5" 
-
-import os
-from .custom_logging import ServerStartHandler, log_server_start_title
 
 LOGGING = {
     'version': 1,
@@ -185,16 +178,27 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False
         },
+        'observations': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'observations.postProcess': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'observations.views': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': True
+        },
         'targets': {
             'handlers': ['default'],
             'level': 'INFO',
             'propagate': False
         },
-        'observations': {
-            'handlers': ['default'],
-            'level': 'INFO',
-            'propagate': False
-        },
+        
         'setup': {
             'handlers': ['default'],
             'level': 'INFO',
@@ -212,8 +216,20 @@ LOGGING = {
         },
     }
 }
-# Log the server start title
-log_server_start_title()
+
+# Read the private.ini file for settings that should not be in the public settings.py file
+from obsy.config import Config
+config = Config()
+
+# Setup for email notifications
+EMAIL_BACKEND           = config.get("EMAIL_BACKEND")
+EMAIL_HOST              = config.get("EMAIL_HOST")
+EMAIL_PORT              = config.get("EMAIL_PORT")
+EMAIL_USE_TLS           = config.get("EMAIL_USE_TLS")
+EMAIL_HOST_USER         = config.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD     = config.get("EMAIL_HOST_PASSWORD")
+SENDER_EMAIL            = config.get("SENDER_EMAIL")
+RECIPIENT_EMAIL         = config.get("RECIPIENT_EMAIL")
 
 # Celery/Redis Configuration Options
 from celery.schedules import crontab
@@ -233,5 +249,5 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Settings for the postProcess module
-SOURCEPATH="/home/gtulloch/obsy/sample_data/Processing/source/"
-REPOPATH="/home/gtulloch/obsy/sample_data/Processing/repo/"
+SOURCEPATH="/home/gtulloch/SpaoTS/"
+REPOPATH="/home/gtulloch/REPOSITORY/"
