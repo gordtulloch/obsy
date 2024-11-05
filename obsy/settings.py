@@ -249,5 +249,5 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Settings for the postProcess module
-SOURCEPATH="/home/gtulloch/SpaoTS/"
+SOURCEPATH="/home/gtulloch/REPOSITORY.Incoming/"
 REPOPATH="/home/gtulloch/REPOSITORY/"
