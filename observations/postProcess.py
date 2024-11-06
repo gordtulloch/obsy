@@ -14,7 +14,7 @@ from django.conf import settings
 from .models import fitsFile, fitsHeader, fitsSequence
 from django.utils import timezone
 import pysiril
-from datetime import datetime
+from datetime import datetime,timedelta
 import numpy as np
 import matplotlib.pyplot as plt
 import uuid
@@ -22,14 +22,20 @@ import uuid
 import logging
 logging=logging.getLogger('observations.postProcess')
 
-# After images are obtained move them to a reporsitory and add them to the database
+################################################################################################################
+## PostProcess - all the functions needed to import fits file data into the database while renaming files and ##
+## moving them to a repository, calibrate images, create thumbnails linked to test stacks, and send the user  ##
+## an email with a summary of the work done.                                                                  ##
+################################################################################################################
 class PostProcess(object):
     def __init__(self):
         self.sourceFolder=settings.SOURCEPATH
         self.fileRepoFolder=settings.REPOPATH
         logging.info("Post Processing object initialized")
 
-    # Function definitions
+    #################################################################################################################
+    ## submitFileToDB - this function submits a fits file to the database                                          ##
+    #################################################################################################################
     def submitFileToDB(self,fileName,hdr):
         if "DATE-OBS" in hdr:
             # Create new fitsFile record
@@ -49,7 +55,10 @@ class PostProcess(object):
             return False
         return True
 
-
+    #################################################################################################################
+    ## registerFitsImages - this function scans the images folder and registers all fits files in the database     ##
+    ## and also corrects any issues with the Fits header info (e.g. WCS)                                           ##
+    #################################################################################################################
     def registerFitsImages(self):
         # Scan the pictures folder
         logging.info("Processing images in "+self.sourceFolder)
