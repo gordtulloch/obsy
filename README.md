@@ -14,6 +14,7 @@ Initial release scope is as follows:
 * Support for rain detectors to automatically park the telescope and close the dome/roof of the observatory 
 * Support for weather stations to determine if the weather is suitable for imaging operations
 * Support for Smoke and Aurora forecasts to assist in determining whether imaging operations can proceed
+* Automated calibration, stacking, and processing of images and generation of thumbnails or data summaries
 
 Future releases will include:
 * Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
