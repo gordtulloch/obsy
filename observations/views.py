@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy,reverse
@@ -6,7 +7,7 @@ from .forms import ObservationUpdateForm, ObservationForm
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from .models import observation, scheduleMaster, scheduleDetail
+from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsHeader, fitsSequence
 from targets.models import target
 from setup.models import observatory,telescope,imager
 from observations.models import observation
@@ -200,7 +201,7 @@ def daily_observations_task(request):
         [settings.RECIPIENT_EMAIL],  # Pull recipient email from settings
         fail_silently=False,
     )
-    
+
     return render(request, 'observations/email_sent.html')
 
 class scheduleDetails(ListView):
@@ -209,18 +210,25 @@ class scheduleDetails(ListView):
     template_name="targets/schedule_detail_list.html"
     login_url = "account_login"
 
-class list_fits_files(ListView):
-    model=fitsFile
-    context_object_name="fits_files_list"
-    template_name="observations/list_fits_files.html"
-    login_url = "account_login"
+def list_fits_files(request):
+    time_filter = request.GET.get('time_filter', 'all')
+    now = timezone.now()
 
-def get_queryset(self):
-        # Calculate the date 30 days ago from now
-        thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
-        logger.info(f"Thirty days ago: {thirty_days_ago}")
-        # Filter the queryset to include only fitsFile objects with fitsFileDate within the last 30 days
-        return fitsFile.objects.filter(fitsFileDate__gte=thirty_days_ago)
+    if time_filter == '24_hours':
+        time_threshold = now - timedelta(hours=24)
+    elif time_filter == '7_days':
+        time_threshold = now - timedelta(days=7)
+    elif time_filter == '30_days':
+        time_threshold = now - timedelta(days=30)
+    else:
+        time_threshold = None
 
-        # Sort the filtered fits files by fitsFileDate in descending order
-        return sorted(filtered_fits_files, key=lambda x: x.fitsFileDate, reverse=True)
+    if time_threshold:
+        fits_files = fitsFile.objects.filter(fitsFileDate__gte=time_threshold)
+    else:
+        fits_files = fitsFile.objects.all()
+    # Parse the filename to exclude the path
+    for fits_file in fits_files:
+        fits_file.fitsFileName = fits_file.fitsFileName.split('/')[-1]
+    
+    return render(request, 'observations/list_fits_files.html', {'fits_files': fits_files, 'time_filter': time_filter})

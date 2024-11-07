@@ -1,5 +1,5 @@
 from django import forms
-from .models import target,importTarget 
+from .models import target
 import datetime
 
 class TargetUpdateForm(forms.ModelForm):
@@ -8,8 +8,3 @@ class TargetUpdateForm(forms.ModelForm):
         model = target 
         fields = '__all__'
 
-
-class TargetImportForm(forms.ModelForm):
-    class Meta:
-        model = importTarget
-        fields = ('document',)

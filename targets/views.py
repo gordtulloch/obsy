@@ -133,13 +133,13 @@ def target_altitude(request, target_id):
     logger.info(f"Calculating target altitude")
     # Get target and observatory details
     target_obj = target.objects.get(targetId=target_id)
-    logger.info(f"Calculating altitude for target {target_obj.targetName}")
+    logger.debug(f"Calculating altitude for target {target_obj.targetName}")
     observatory_obj = observatory.objects.first()  # Assuming a single observatory
-    logger.info(f"Calculating altitude at observatory {observatory_obj.name}")
+    logger.debug(f"Calculating altitude at observatory {observatory_obj.name}")
 
     # Calculate astronomical twilight and dawn
     location = ephem.Observer()
-    logger.info(f"Observatory details: {observatory_obj.latitude}, {observatory_obj.longitude}")
+    logger.debug(f"Observatory details: {observatory_obj.latitude}, {observatory_obj.longitude}")
     location.lat = float(observatory_obj.latitude)
     location.lon = float(observatory_obj.longitude)
     location.date = datetime.utcnow()
@@ -160,8 +160,8 @@ def target_altitude(request, target_id):
         altitudes.append(target_ephem.alt * 180.0 / ephem.pi)  # Convert radians to degrees
         times.append(convert_to_current_timezone(current_time).isoformat())
         current_time += delta
-    logger.info(f"Altitude data: {altitudes}")
-    logger.info(f"Time data: {times}")
+    logger.debug(f"Altitude data: {altitudes}")
+    logger.debug(f"Time data: {times}")
     
     return JsonResponse({'times': times, 'altitudes': altitudes})
 

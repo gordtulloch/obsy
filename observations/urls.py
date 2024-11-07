@@ -18,5 +18,5 @@ urlpatterns = [
     path("schedule/<uuid:pk>/", views.scheduleDetails.as_view(), name="schedule_details"), 
     path("schedule/target/<uuid:pk>/", views.scheduleDetailsItem.as_view(), name="schedule_details_item"), 
     path('daily_observations_task/', daily_observations_task, name='daily_observations_task'),
-    path('list_fits_files/', list_fits_files.as_view(), name='list_fits_files'),
+    path('fits-files/', list_fits_files, name='list_fits_files'),
 ]    

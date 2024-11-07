@@ -11,9 +11,8 @@ import shutil
 from math import cos,sin
 from datetime import datetime
 from django.conf import settings
-from .models import fitsFile, fitsHeader, fitsSequence
+from observations.models import fitsFile, fitsHeader, fitsSequence
 from django.utils import timezone
-import pysiril
 from datetime import datetime,timedelta
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +29,7 @@ logging=logging.getLogger('observations.postProcess')
 class PostProcess(object):
     def __init__(self):
         self.sourceFolder=settings.SOURCEPATH
-        self.fileRepoFolder=settings.REPOPATH
+        self.repoFolder=settings.REPOPATH
         logging.info("Post Processing object initialized")
 
     #################################################################################################################
@@ -141,20 +140,20 @@ class PostProcess(object):
                     # Create the folder structure (if needed)
                     fitsDate=dateobj.strftime("%Y%m%d")
                     if (hdr["FRAME"]=="Light"):
-                        newPath=self.fileRepoFolder+"Light/{0}/{1}/{2}/{3}/".format(hdr["OBJECT"].replace(" ", ""),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                        newPath=self.repoFolder+"Light/{0}/{1}/{2}/{3}/".format(hdr["OBJECT"].replace(" ", ""),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),fitsDate)
                     elif hdr["FRAME"]=="Dark":
-                        newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                        newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),hdr["EXPTIME"],fitsDate)
                     elif hdr["FRAME"]=="Flat":
                         if ("FILTER" in hdr):
-                            newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                            newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate)
                         else:
-                            newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                            newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate)
                     elif hdr["FRAME"]=="Bias":
-                        newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                        newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),fitsDate)
 
                     if not os.path.isdir(newPath):
@@ -193,7 +192,7 @@ class PostProcess(object):
         thumbnail_data = data[::10, ::10]
         
         # Save the thumbnail image as a JPG file
-        thumbnail_path = os.path.join(self.fileRepoFolder, f'thumbnail_{fits_file.fitsFileId}.jpg')
+        thumbnail_path = os.path.join(self.repoFolder, f'thumbnail_{fits_file.fitsFileId}.jpg')
         try:
             plt.imsave(thumbnail_path, thumbnail_data, cmap='gray')
             logging.info(f"Thumbnail image saved to: {thumbnail_path}")
@@ -342,7 +341,7 @@ class PostProcess(object):
         calibrated_data = (light_data - master_bias) / (master_flat - master_dark)
 
         # Save the calibrated light frame
-        calibrated_path = os.path.join(self.fileRepoFolder, f'calibrated_{light_frame.fitsFileName}')
+        calibrated_path = os.path.join(self.repoFolder, f'calibrated_{light_frame.fitsFileName}')
         try:
             hdu = fits.PrimaryHDU(calibrated_data)
             hdu.writeto(calibrated_path, overwrite=True)
@@ -408,7 +407,7 @@ class PostProcess(object):
         master_bias_data = np.median(bias_data, axis=0)
         
         # Save the master bias frame
-        master_bias_path = os.path.join(self.fileRepoFolder, f'master_bias_{targetSequenceNo}.fits')
+        master_bias_path = os.path.join(self.repoFolder, f'master_bias_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_bias_data)
             hdu.writeto(master_bias_path, overwrite=True)
@@ -462,7 +461,7 @@ class PostProcess(object):
         master_dark_data = np.median(dark_data, axis=0)
         
         # Save the master dark frame
-        master_dark_path = os.path.join(self.fileRepoFolder, f'master_dark_{targetSequenceNo}.fits')
+        master_dark_path = os.path.join(self.repoFolder, f'master_dark_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_dark_data)
             hdu.writeto(master_dark_path, overwrite=True)
@@ -516,7 +515,7 @@ class PostProcess(object):
         master_flat_data = np.median(flat_data, axis=0)
         
         # Save the master flat frame
-        master_flat_path = os.path.join(self.fileRepoFolder, f'master_flat_{targetSequenceNo}.fits')
+        master_flat_path = os.path.join(self.repoFolder, f'master_flat_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_flat_data)
             hdu.writeto(master_flat_path, overwrite=True)

@@ -4,6 +4,15 @@
 <div class="container">
     <br><br>
     <h2>List of FITS Files</h2>
+    <form method="get" action="{% url 'list_fits_files' %}">
+        <label for="time_filter">Filter by:</label>
+        <select name="time_filter" id="time_filter" onchange="this.form.submit()" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+            <option value="all" {% if time_filter == 'all' %}selected{% endif %}>All</option>
+            <option value="24_hours" {% if time_filter == '24_hours' %}selected{% endif %}>Last 24 Hours</option>
+            <option value="7_days" {% if time_filter == '7_days' %}selected{% endif %}>Last 7 Days</option>
+            <option value="30_days" {% if time_filter == '30_days' %}selected{% endif %}>Last 30 Days</option>
+        </select>
+    </form>
     <table class="table table-dark">
         <thead>
             <tr>
@@ -15,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for fits_file in fits_files_list %}
+        {% for fits_file in fits_files %}
         <tr>
             <td>{{ fits_file.fitsFileName }}</td>
             <td>{{ fits_file.fitsFileType }}</td>
