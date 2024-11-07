@@ -20,7 +20,6 @@ Future releases will include:
 * Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
 * Live stacking and update of remote sites with current imaging activities
 * Multiuser support with authentication, plus anonymous "public" access for web sites 
-* Automated image calibration and basic processing for science and astrophotography using Siril
 * Automated processing of photometry imaging
 * Automated processing of exoplanet imaging
 * Automated processing of spectroheliograph captures (Sol'ex)
