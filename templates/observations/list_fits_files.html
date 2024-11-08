@@ -34,7 +34,8 @@
         <tbody>
         {% for fits_file in fits_files %}
         <tr>
-            <td><A HREF="{{ fitsFile.get_absolute_url }}">{{ fits_file.fitsFileObject }}</A></td>
+            
+            <td><A HREF="{{ fits_file.get_absolute_url }}">{{ fits_file.display_name }}</A></td>
             <td>{{ fits_file.fitsFileType }}</td>
             <td>{{ fits_file.fitsFileDate }}</td>
             <td>{{ fits_file.fitsFileExpTime}}</td>
@@ -42,7 +43,7 @@
             <td>{{ fits_file.fitsFileYBinning }}</td>
             <td>{{ fits_file.fitsFileCCDTemp }}</td>
             <td>{{ fits_file.fitsFileTelescop }}</td>
-            <td>{{ fits_file.FileInstrument }}</td>
+            <td>{{ fits_file.fitsFileInstrument }}</td>
             <td>{{ fits_file.fitsFileGain  }}</td>
             <td>{{ fits_file.fitsFileOffset }}</td>
             <td>{{ fits_file.fitsFileCalibrated }}</td>

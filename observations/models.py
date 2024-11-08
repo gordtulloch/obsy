@@ -140,8 +140,14 @@ class fitsFile(models.Model):
 
     def __str__(self):
         return f"{self.fitsFileName}"
+    
     def get_absolute_url(self):
-        return reverse("fits_file_detail", args=[str(self.fitsFileId)]) 
+        return reverse("fits_file_detail", kwargs={'pk': self.pk})
+    
+    def display_name(self):
+        if self.fitsFileType in ["Flat", "Dark", "Bias"]:
+            return self.fitsFileType
+        return self.fitsFileObject
     
 ##################################################################################################
 ## fitsSequence - this model records a sequence of files and the calibration master files used  ##
@@ -158,4 +164,5 @@ class fitsSequence(models.Model):
 
     def __str__(self):
         return f"{self.fitsSequenceId}"
+    
 

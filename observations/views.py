@@ -1,30 +1,25 @@
-from urllib import request
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView
-from django.urls import reverse_lazy,reverse
+from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
+from django.core.mail import send_mail
+from django.utils import timezone
 from .forms import ObservationUpdateForm, ObservationForm
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-
 from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsSequence
-from targets.models import target
-from setup.models import observatory,telescope,imager
 from observations.models import observation
-import logging
+from observations.postProcess import PostProcess
 
-from datetime import datetime, timedelta
-from astropy.time import Time
-from astropy.coordinates import EarthLocation, AltAz
-import astroquery
-from astroquery.simbad import Simbad
-import pandas as pd
+import base64
+import io
+import matplotlib.pyplot as plt
+from datetime import timedelta
 from astropy import units as u
-from astropy.coordinates import SkyCoord, get_constellation
-import ephem
-from datetime import datetime
+from astropy.coordinates import get_constellation
+from astropy.io import fits
 import numpy as np
 
+import logging
 logger = logging.getLogger("observations.views")
 
 ##################################################################################################
@@ -164,17 +159,6 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
     return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
 '''
 
-# observations/views.py
-from django.core.mail import send_mail
-from django.utils import timezone
-from django.shortcuts import render
-from .models import fitsFile
-from django.conf import settings
-from observations.postProcess import PostProcess
-
-import logging
-logging=logging.getLogger('observations.views')
-
 def daily_observations_task(request):
     logging.info("Running daily_observations")
     # Run the post-processing task
@@ -232,3 +216,50 @@ def list_fits_files(request):
         fits_file.fitsFileName = fits_file.fitsFileName.split('/')[-1]
     
     return render(request, 'observations/list_fits_files.html', {'fits_files': fits_files, 'time_filter': time_filter})
+
+def fitsfile_detail(request, pk):
+    fitsfile = get_object_or_404(fitsFile, pk=pk)
+    
+    # Get next/previous files
+    all_files = list(fitsFile.objects.all().order_by('fitsFileName'))
+    current_index = all_files.index(fitsfile)
+    first = all_files[0]
+    last = all_files[-1]
+    prev_file = all_files[current_index - 1] if current_index > 0 else None
+    next_file = all_files[current_index + 1] if current_index < len(all_files)-1 else None
+    
+    # Load FITS data
+    hdul = fits.open(fitsfile.fitsFileName)
+    image_data = hdul[0].data
+    
+    # Apply asinh stretch
+    # Normalize data to 0-1 range first
+    vmin = np.percentile(image_data, 1)
+    vmax = np.percentile(image_data, 99)
+    norm_data = (image_data - vmin) / (vmax - vmin)
+    
+    # Apply asinh stretch
+    a = 0.1  # Adjustable parameter for stretch intensity
+    stretched_data = np.arcsinh(norm_data / a) / np.arcsinh(1 / a)
+    
+    # Convert to displayable image
+    plt.figure(figsize=(14,14))
+    plt.imshow(image_data, cmap='grey', origin='lower', vmin=vmin, vmax=vmax)
+    plt.axis('off')
+    
+    # Save plot to base64 string
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+    plt.close()
+    
+    context = {
+        'fitsfile': fitsfile,
+        'image_base64': image_base64,
+        'first': first,
+        'prev': prev_file,
+        'next': next_file, 
+        'last': last
+    }
+    return render(request, 'observations/fits_file_detail.html', context)
