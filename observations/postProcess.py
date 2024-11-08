@@ -11,8 +11,9 @@ import shutil
 from math import cos,sin
 from datetime import datetime
 from django.conf import settings
-from observations.models import fitsFile, fitsHeader, fitsSequence
+from observations.models import fitsFile,fitsSequence
 from django.utils import timezone
+from django.db import IntegrityError
 from datetime import datetime,timedelta
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,17 +39,12 @@ class PostProcess(object):
     def submitFileToDB(self,fileName,hdr):
         if "DATE-OBS" in hdr:
             # Create new fitsFile record
-            newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["FRAME"])
+            newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["FRAME"],
+                            fitsFileObject=hdr["OBJECT"],fitsFileExpTime=hdr["EXPTIME"],fitsFileXBinning=hdr["XBINNING"],
+                            fitsFileYBinning=hdr["YBINNING"],fitsFileCCDTemp=hdr["CCD-TEMP"],fitsFileTelescop=hdr["TELESCOP"],
+                            fitsFileInstrument=hdr["INSTRUME"],fitsFileGain=hdr["GAIN"],fitsFileOffset=hdr["OFFSET"],
+                            fitsFileSequence=None)         
             newfile.save()
-
-            # Add the header information to the database
-            for card in hdr:
-                if type(hdr[card]) not in [bool,int,float]:
-                    keywordValue=str(hdr[card]).replace('\'',' ')
-                else:
-                    keywordValue = hdr[card]
-                newheader=fitsHeader(fitsHeaderKey=card,fitsHeaderValue=keywordValue,fitsFileId=newfile)
-                newheader.save()
         else:
             logging.error("Error: File not added to repo due to missing date is "+fileName)
             return False
@@ -216,8 +212,12 @@ class PostProcess(object):
             if currentFitsFile.fitsFileObject != current_object:
                 current_object = currentFitsFile.fitsFileObject
                 # Create a new fitsSequence record
-                newFitsSequence=fitsSequence(fitsMasterBias=None,fitsMasterDark=None,fitsMasterFlat=None)
-                newFitsSequence.save()
+                try:
+                    newFitsSequence=fitsSequence(fitsObject=current_object,fitsMasterBias=None,fitsMasterDark=None,fitsMasterFlat=None)
+                    newFitsSequence.save()
+                except IntegrityError as e:
+                    # Handle the integrity error
+                    return HttpResponse(f"IntegrityError: {e}")                  
             
             # Assign the current sequence to the fits file
             currentFitsFile.fitsFileSequence=newFitsSequence
@@ -311,7 +311,8 @@ class PostProcess(object):
         if not fitsSequence:
             logging.info(f"No fitsSequence record found for light frame: {light_frame.fitsFileId}")
             # Create a new fitsSequence record
-            fitsSequence = fitsSequence(fitsMasterBias=None, fitsMasterDark=None, fitsMasterFlat=None)
+            
+            fitsSequence = fitsSequence(fitsObject=light_frame.fitsFileObject,fitsMasterBias="None", fitsMasterDark="None", fitsMasterFlat="None")
 
         # If the master bias, dark, and flat frames do not exist, create them
         if not fitsSequence.fitsMasterBias:
@@ -322,7 +323,11 @@ class PostProcess(object):
             masterFlatId = self.createMasterFlat(light_frame.fitsFileId)   
 
         # Save the fitsSequence record in the database
-        fitsSequence.save()
+        try:
+            fitsSequence.save()
+            logging.info(f"fitsSequence record saved: {fitsSequence.fitsSequenceId}")
+        except IntegrityError as e:
+            return HttpResponse(f"IntegrityError: {e}")
         
         # Load the master bias, dark, and flat frames
         master_bias = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterBias).first()

@@ -7,7 +7,7 @@ from .forms import ObservationUpdateForm, ObservationForm
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsHeader, fitsSequence
+from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsSequence
 from targets.models import target
 from setup.models import observatory,telescope,imager
 from observations.models import observation

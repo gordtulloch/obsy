@@ -16,9 +16,17 @@
     <table class="table table-dark">
         <thead>
             <tr>
-                <th>File Name</th>
+                <th>Target</th>
                 <th>File Type</th>
                 <th>File Date</th>
+                <th>Exp</th>
+                <th>BinX</th>
+                <th>BinY</th>
+                <th>Temp</th>
+                <th>Telescope</th>
+                <th>Imager</th>
+                <th>Gain</th>
+                <th>Offset</th>
                 <th>Calibrated</th>
                 <th>Stacked</th>
             </tr>
@@ -26,9 +34,17 @@
         <tbody>
         {% for fits_file in fits_files %}
         <tr>
-            <td>{{ fits_file.fitsFileName }}</td>
+            <td><A HREF="{{ fitsFile.get_absolute_url }}">{{ fits_file.fitsFileObject }}</A></td>
             <td>{{ fits_file.fitsFileType }}</td>
             <td>{{ fits_file.fitsFileDate }}</td>
+            <td>{{ fits_file.fitsFileExpTime}}</td>
+            <td>{{ fits_file.fitsFileXBinning }}</td>
+            <td>{{ fits_file.fitsFileYBinning }}</td>
+            <td>{{ fits_file.fitsFileCCDTemp }}</td>
+            <td>{{ fits_file.fitsFileTelescop }}</td>
+            <td>{{ fits_file.FileInstrument }}</td>
+            <td>{{ fits_file.fitsFileGain  }}</td>
+            <td>{{ fits_file.fitsFileOffset }}</td>
             <td>{{ fits_file.fitsFileCalibrated }}</td>
             <td>{{ fits_file.fitsFileStacked }}</td>
         </tr>

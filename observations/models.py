@@ -122,41 +122,26 @@ class fitsFile(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    fitsFileName        = models.CharField(max_length=255) 
-    fitsFileDate        = models.DateTimeField(default=datetime.now, blank=True)
+    fitsFileName        = models.CharField(max_length=255, default="None",null=True, blank=True) 
+    fitsFileDate        = models.DateTimeField(default=datetime.now)
     fitsFileCalibrated  = models.BooleanField(default=False)
-    fitsFileType        = models.CharField(max_length=255)
+    fitsFileType        = models.CharField(max_length=255, default="None",null=True, blank=True)
     fitsFileStacked     = models.BooleanField(default=False)
-    fitsFileObject      = models.CharField(max_length=255)
-    fitsFileExpTime     = models.CharField(max_length=255)
-    fitsFileXBinning    = models.CharField(max_length=255)
-    fitsFileYBinning    = models.CharField(max_length=255)
-    fitsFileCCDTemp     = models.CharField(max_length=255)
-    fitsFileTelescop    = models.CharField(max_length=255)
-    fitsFileInstrument  = models.CharField(max_length=255)
-    fitsFileGain        = models.CharField(max_length=255)
-    fitsFileOffset      = models.CharField(max_length=255)
-    fitsFileSequence    = models.CharField(max_length=255)
+    fitsFileObject      = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileExpTime     = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileXBinning    = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileYBinning    = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileCCDTemp     = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileTelescop    = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileInstrument  = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileGain        = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileOffset      = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileSequence    = models.CharField(max_length=255, default="None",null=True, blank=True)
 
     def __str__(self):
         return f"{self.fitsFileName}"
     def get_absolute_url(self):
         return reverse("fits_file_detail", args=[str(self.fitsFileId)]) 
-
-##################################################################################################
-## fitsHeader - this model records the header values from a physical fits file in a repository  ##
-##################################################################################################
-class fitsHeader(models.Model):
-    fitsHeaderId        = models.UUIDField( 
-                                primary_key=True,
-                                default=uuid.uuid4,
-                                editable=False)
-    fitsHeaderKey       = models.CharField(max_length=255)
-    fitsHeaderValue     = models.CharField(max_length=255)
-    fitsFileId          = models.ForeignKey(fitsFile, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.fitsHeaderId}"
     
 ##################################################################################################
 ## fitsSequence - this model records a sequence of files and the calibration master files used  ##
@@ -166,9 +151,10 @@ class fitsSequence(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    fitsMasterBias       = models.CharField(max_length=255)
-    fitsMasterDark       = models.CharField(max_length=255)
-    fitsMasterFlat       = models.CharField(max_length=255)
+    fitsObject           = models.CharField(max_length=255, default="None")
+    fitsMasterBias       = models.CharField(max_length=255, default="None")
+    fitsMasterDark       = models.CharField(max_length=255, default="None")
+    fitsMasterFlat       = models.CharField(max_length=255, default="None")
 
     def __str__(self):
         return f"{self.fitsSequenceId}"
