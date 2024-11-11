@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.utils import timezone
-from .forms import ObservationUpdateForm, ObservationForm
-from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsSequence
+from .forms import ObservationForm,SequenceFileForm
+from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsSequence,sequenceFile
 from observations.models import observation
 from observations.postProcess import PostProcess
 
@@ -18,6 +18,7 @@ from astropy import units as u
 from astropy.coordinates import get_constellation
 from astropy.io import fits
 import numpy as np
+import xml.etree.ElementTree as ET
 
 import logging
 logger = logging.getLogger("observations.views")
@@ -263,3 +264,48 @@ def fitsfile_detail(request, pk):
         'last': last
     }
     return render(request, 'observations/fits_file_detail.html', context)
+
+
+def sequence_file_list(request):
+    sequences = sequenceFile.objects.all()
+    return render(request, 'observations/sequence_file_list.html', {'sequences': sequences})
+
+def sequence_file_create(request):
+    if request.method == 'POST':
+        form = SequenceFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            xml_file = request.FILES['xml_file']
+            tree = ET.parse(xml_file)
+            root = tree.getroot()
+            sequence_data = ET.tostring(root, encoding='unicode')
+            sequence_instance = form.save(commit=False)
+            sequence_instance.sequenceData = sequence_data
+            sequence_instance.save()
+            return redirect('observations/sequence_file_list')
+    else:
+        form = SequenceFileForm()
+    return render(request, 'observations/sequence_file_form.html', {'form': form})
+
+def sequence_file_edit(request, pk):
+    sequence_instance = get_object_or_404(sequenceFile, pk=pk)
+    if request.method == 'POST':
+        form = SequenceFileForm(request.POST, request.FILES, instance=sequence_instance)
+        if form.is_valid():
+            if 'xml_file' in request.FILES:
+                xml_file = request.FILES['xml_file']
+                tree = ET.parse(xml_file)
+                root = tree.getroot()
+                sequence_data = ET.tostring(root, encoding='unicode')
+                sequence_instance.sequenceData = sequence_data
+            form.save()
+            return redirect('sequence_list')
+    else:
+        form = SequenceFileForm(instance=sequence_instance)
+    return render(request, 'sequences/sequence_form.html', {'form': form})
+
+def sequence_file_delete(request, pk):
+    sequence_instance = get_object_or_404(sequenceFile, pk=pk)
+    if request.method == 'POST':
+        sequence_instance.delete()
+        return redirect('observations/sequence_file_list')
+    return render(request, 'observations/sequence_file_confirm_delete.html', {'sequence': sequence_instance})
