@@ -21,8 +21,8 @@ urlpatterns = [
     path('daily_observations_task/', daily_observations_task, name='daily_observations_task'),
     path('fits-files/', list_fits_files, name='list_fits_files'),
     path('fitsfile/<uuid:pk>/', views.fitsfile_detail, name='fits_file_detail'),
-    path('sequences/', views.sequence_file_list, name='sequence_file_list'),
-    path('sequences/create/', views.sequence_file_create, name='sequence_file_create'),
-    path('sequences/edit/<uuid:pk>/', views.sequence_file_edit, name='sequence_file_edit'),
-    path('sequences/delete/<uuid:pk>/', views.sequence_file_delete, name='sequence_file_delete'),
+    path('sequenceFiles/', views.sequence_file_list, name='sequence_file_list'),
+    path('sequenceFiles/create/', views.sequence_file_create, name='sequence_file_create'),
+    path('sequenceFiles/edit/<uuid:pk>/', views.sequence_file_edit, name='sequence_file_edit'),
+    path('sequenceFiles/delete/<uuid:pk>/', views.sequence_file_delete, name='sequence_file_delete'),
 ]    
