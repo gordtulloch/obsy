@@ -5,9 +5,8 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.utils import timezone
-from .forms import ObservationForm,SequenceFileForm
-import xml.etree.ElementTree as ET
-from .models import observation, scheduleMaster, scheduleDetail,sequenceFile, fitsFile, fitsSequence
+from .forms import ObservationUpdateForm, ObservationForm
+from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsSequence
 from observations.models import observation
 from observations.postProcess import PostProcess
 
@@ -158,6 +157,7 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
                 schedule_master.observations.add(obs)
 
     return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
+'''
 
 def daily_observations_task(request):
     logging.info("Running daily_observations")

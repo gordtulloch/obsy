@@ -17,3 +17,4 @@ admin.site.register(scheduleMaster, scheduleMasterAdmin)
 admin.site.register(scheduleDetail, scheduleDetailAdmin)
 admin.site.register(observation, observationAdmin)
 admin.site.register(fitsFile, fitsFileAdmin)
+
