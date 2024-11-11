@@ -158,7 +158,6 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
                 schedule_master.observations.add(obs)
 
     return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
-'''
 
 def daily_observations_task(request):
     logging.info("Running daily_observations")
