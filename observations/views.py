@@ -1,29 +1,26 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView
-from django.urls import reverse_lazy,reverse
+from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
-from .forms import ObservationUpdateForm, ObservationForm
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-
-from .models import observation, scheduleMaster, scheduleDetail
-from targets.models import target
-from setup.models import observatory,telescope,imager
+from django.core.mail import send_mail
+from django.utils import timezone
+from .forms import ObservationForm,SequenceFileForm
+import xml.etree.ElementTree as ET
+from .models import observation, scheduleMaster, scheduleDetail,sequenceFile, fitsFile, fitsSequence
 from observations.models import observation
-import logging
+from observations.postProcess import PostProcess
 
-from datetime import datetime, timedelta
-from astropy.time import Time
-from astropy.coordinates import EarthLocation, AltAz
-import astroquery
-from astroquery.simbad import Simbad
-import pandas as pd
+import base64
+import io
+import matplotlib.pyplot as plt
+from datetime import timedelta
 from astropy import units as u
-from astropy.coordinates import SkyCoord, get_constellation
-import ephem
-from datetime import datetime
+from astropy.coordinates import get_constellation
+from astropy.io import fits
 import numpy as np
 
+import logging
 logger = logging.getLogger("observations.views")
 
 ##################################################################################################
@@ -49,7 +46,7 @@ class observation_all_list(ListView):
 ##################################################################################################
 class observation_update(UpdateView):
     model = observation
-    form_class = ObservationUpdateForm
+    form_class = ObservationForm
     template_name = "observations/observation_form.html"
     success_url = reverse_lazy('observation_all_list')
     
@@ -64,14 +61,14 @@ class observation_delete(DeleteView):
 ##################################################################################################
 ## Observation create     -  Use the class to edit observation records                          ##
 ################################################################################################## 
-def observation_create(request,target_uuid):    
+def observation_create(request, target_uuid):
     if request.method == 'POST':
-        form = ObservationForm(request.POST)
+        form = ObservationForm(request.POST, target_uuid=target_uuid)
         if form.is_valid():
             form.save()
-            return redirect('observation_all_list')  
+            return redirect('observation_all_list')
     else:
-        form = ObservationForm()
+        form = ObservationForm(target_uuid=target_uuid)
     return render(request, 'observations/observation_create.html', {'form': form})
 
 ##################################################################################################
@@ -100,7 +97,7 @@ class scheduleDetailsItem(UpdateView):
     context_object_name="scheduleDetailItem_list"
     template_name="targets/schedule_detail_edit.html"
     login_url = "account_login"
-'''
+
 ##################################################################################################
 ## buildSchedule function -  this function accepts parameters from the user and loads the       ##
 ##                           scheduleMaster and scheduleDetail tables with details from the     ##
@@ -163,17 +160,6 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
     return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
 '''
 
-# observations/views.py
-from django.core.mail import send_mail
-from django.utils import timezone
-from django.shortcuts import render
-from .models import fitsFile
-from django.conf import settings
-from observations.postProcess import PostProcess
-
-import logging
-logging=logging.getLogger('observations.views')
-
 def daily_observations_task(request):
     logging.info("Running daily_observations")
     # Run the post-processing task
@@ -200,7 +186,7 @@ def daily_observations_task(request):
         [settings.RECIPIENT_EMAIL],  # Pull recipient email from settings
         fail_silently=False,
     )
-    
+
     return render(request, 'observations/email_sent.html')
 
 class scheduleDetails(ListView):
@@ -209,18 +195,72 @@ class scheduleDetails(ListView):
     template_name="targets/schedule_detail_list.html"
     login_url = "account_login"
 
-class list_fits_files(ListView):
-    model=fitsFile
-    context_object_name="fits_files_list"
-    template_name="observations/list_fits_files.html"
-    login_url = "account_login"
+def list_fits_files(request):
+    time_filter = request.GET.get('time_filter', 'all')
+    now = timezone.now()
 
-def get_queryset(self):
-        # Calculate the date 30 days ago from now
-        thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
-        logger.info(f"Thirty days ago: {thirty_days_ago}")
-        # Filter the queryset to include only fitsFile objects with fitsFileDate within the last 30 days
-        return fitsFile.objects.filter(fitsFileDate__gte=thirty_days_ago)
+    if time_filter == '24_hours':
+        time_threshold = now - timedelta(hours=24)
+    elif time_filter == '7_days':
+        time_threshold = now - timedelta(days=7)
+    elif time_filter == '30_days':
+        time_threshold = now - timedelta(days=30)
+    else:
+        time_threshold = None
 
-        # Sort the filtered fits files by fitsFileDate in descending order
-        return sorted(filtered_fits_files, key=lambda x: x.fitsFileDate, reverse=True)
+    if time_threshold:
+        fits_files = fitsFile.objects.filter(fitsFileDate__gte=time_threshold)
+    else:
+        fits_files = fitsFile.objects.all()
+    # Parse the filename to exclude the path
+    for fits_file in fits_files:
+        fits_file.fitsFileName = fits_file.fitsFileName.split('/')[-1]
+    
+    return render(request, 'observations/list_fits_files.html', {'fits_files': fits_files, 'time_filter': time_filter})
+
+def fitsfile_detail(request, pk):
+    fitsfile = get_object_or_404(fitsFile, pk=pk)
+    
+    # Get next/previous files
+    all_files = list(fitsFile.objects.all().order_by('fitsFileName'))
+    current_index = all_files.index(fitsfile)
+    first = all_files[0]
+    last = all_files[-1]
+    prev_file = all_files[current_index - 1] if current_index > 0 else None
+    next_file = all_files[current_index + 1] if current_index < len(all_files)-1 else None
+    
+    # Load FITS data
+    hdul = fits.open(fitsfile.fitsFileName)
+    image_data = hdul[0].data
+    
+    # Apply asinh stretch
+    # Normalize data to 0-1 range first
+    vmin = np.percentile(image_data, 1)
+    vmax = np.percentile(image_data, 99)
+    norm_data = (image_data - vmin) / (vmax - vmin)
+    
+    # Apply asinh stretch
+    a = 0.1  # Adjustable parameter for stretch intensity
+    stretched_data = np.arcsinh(norm_data / a) / np.arcsinh(1 / a)
+    
+    # Convert to displayable image
+    plt.figure(figsize=(14,14))
+    plt.imshow(image_data, cmap='grey', origin='lower', vmin=vmin, vmax=vmax)
+    plt.axis('off')
+    
+    # Save plot to base64 string
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+    plt.close()
+    
+    context = {
+        'fitsfile': fitsfile,
+        'image_base64': image_base64,
+        'first': first,
+        'prev': prev_file,
+        'next': next_file, 
+        'last': last
+    }
+    return render(request, 'observations/fits_file_detail.html', context)

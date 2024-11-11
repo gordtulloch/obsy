@@ -2,8 +2,10 @@
 .hero-section {
     display: flex;
 
-    justify-content: center; /* Horizontally center items */
-    height: 100vh; /* Set the desired height for the hero section */
+    justify-content: center;
+    /* Horizontally center items */
+    height: 100vh;
+    /* Set the desired height for the hero section */
     width: 100vw;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/images/hero-image.jpg');
     background-size: cover;
@@ -20,5 +22,20 @@
 }
 
 body {
-    background-color: #96a7b9ce; /* Light gray background */
+    background-color: #96a7b9ce;
+    /* Light gray background */
+}
+
+.nav-controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: rgba(33, 37, 41, 0.9);
+}
+
+.fits-image {
+    max-height: calc(100vh - 100px);
+    width: auto;
 }

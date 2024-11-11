@@ -15,7 +15,7 @@ class observatory(models.Model):
     tz        =models.CharField(max_length=200)
     
     def __str__(self):
-        return self.name
+        return self.shortname
     
     def get_absolute_url(self):
         return reverse("observatory_detail", args=[self.observatoryId])
@@ -44,7 +44,7 @@ class telescope(models.Model):
     observatoryId =models.ForeignKey('observatory', on_delete=models.CASCADE,null=True, blank=True)
     
     def __str__(self):
-        return self.name
+        return self.shortname
     
     def get_absolute_url(self):
         return reverse("telescope_detail", args=[self.telescopeId])
@@ -67,7 +67,7 @@ class imager(models.Model):
     yPixelSize=models.DecimalField(max_digits = 6,decimal_places = 2)
    
     def __str__(self):
-        return self.name
+        return self.shortname
     def get_absolute_url(self):
         return reverse("imager_detail", args=[self.imagerId])
 

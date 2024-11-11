@@ -7,10 +7,27 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
 
 ##################################################################################################
+## SequenceFile - a EKOS sequence file                                                          ##
+##################################################################################################
+class sequenceFile(models.Model):
+    sequenceId        = models.UUIDField( 
+                        primary_key=True,
+                        default=uuid.uuid4,
+                        editable=False)
+    sequenceFileName  = models.CharField(max_length=255)
+    sequenceData      = models.CharField(max_length=4096)   
+    sequenceDuration  = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.sequenceFileName}"
+    def get_absolute_url(self):
+        return reverse("sequence_detail", args=[str(self.sequenceId)])
+
+##################################################################################################
 ## observation - a request and subsequent updates on the observations required of a target      ##
 ##################################################################################################    
 class observation(models.Model):
-    observationId        = models.UUIDField( 
+    observationId       = models.UUIDField( 
                         primary_key=True,
                         default=uuid.uuid4,
                         editable=False)
@@ -20,10 +37,12 @@ class observation(models.Model):
     targetPA        = models.DecimalField(default=0.0,max_digits=6, decimal_places=2,null=True, blank=True)
     targetInactive  = models.BooleanField(default=False)
     observeOnce     = models.BooleanField(default=False)
+    status            = models.CharField(max_length=255,null=True, default="Pending")
     # Additional data selected
     observatoryId     = models.ForeignKey(observatory, on_delete=models.CASCADE,null=True, blank=True)
     telescopeId       = models.ForeignKey(telescope, on_delete=models.CASCADE,null=True, blank=True)
     imagerId          = models.ForeignKey(imager, on_delete=models.CASCADE,null=True, blank=True)
+
     
     def __str__(self):
         return f"{self.targetId}"
@@ -89,30 +108,6 @@ class ScheduleManager(models.Manager):
         scheduleMaster.objects.all().delete()
 
 ##################################################################################################
-## sequenceFile - this model allows storage of XML EKOS Sequence Files                          ##
-##################################################################################################
-class sequenceFile(models.Model):
-    MAX_FILE_SIZE=4096
-    sequenceFileId        = models.UUIDField( 
-                                primary_key=True,
-                                default=uuid.uuid4,
-                                editable=False)
-    sequenceFileName      = models.FileField(max_length=MAX_FILE_SIZE,upload_to='sequence')
-    sequenceFileData      = models.CharField(max_length=MAX_FILE_SIZE)
-    
-##################################################################################################
-## scheduleFile - this model allows storage of XML EKOS Sequence Files                          ##
-##################################################################################################
-class scheduleFile(models.Model):
-    MAX_FILE_SIZE=4096
-    scheduleFileId          = models.UUIDField( 
-                                primary_key=True,
-                                default=uuid.uuid4,
-                                editable=False)
-    scheduleFileName        = models.FileField(max_length=MAX_FILE_SIZE,upload_to='schedule') 
-    scheduleFileData        = models.CharField(max_length=MAX_FILE_SIZE)
-
-##################################################################################################
 ## fitsFile - this model points to a physical fits file in a repository                         ##
 ##################################################################################################
 class fitsFile(models.Model):
@@ -120,41 +115,32 @@ class fitsFile(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    fitsFileName        = models.CharField(max_length=255) 
-    fitsFileDate        = models.DateTimeField(default=datetime.now, blank=True)
+    fitsFileName        = models.CharField(max_length=255, default="None",null=True, blank=True) 
+    fitsFileDate        = models.DateTimeField(default=datetime.now)
     fitsFileCalibrated  = models.BooleanField(default=False)
-    fitsFileType        = models.CharField(max_length=255)
+    fitsFileType        = models.CharField(max_length=255, default="None",null=True, blank=True)
     fitsFileStacked     = models.BooleanField(default=False)
-    fitsFileObject      = models.CharField(max_length=255)
-    fitsFileExpTime     = models.CharField(max_length=255)
-    fitsFileXBinning    = models.CharField(max_length=255)
-    fitsFileYBinning    = models.CharField(max_length=255)
-    fitsFileCCDTemp     = models.CharField(max_length=255)
-    fitsFileTelescop    = models.CharField(max_length=255)
-    fitsFileInstrument  = models.CharField(max_length=255)
-    fitsFileGain        = models.CharField(max_length=255)
-    fitsFileOffset      = models.CharField(max_length=255)
-    fitsFileSequence    = models.CharField(max_length=255)
+    fitsFileObject      = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileExpTime     = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileXBinning    = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileYBinning    = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileCCDTemp     = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileTelescop    = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileInstrument  = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileGain        = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileOffset      = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileSequence    = models.CharField(max_length=255, default="None",null=True, blank=True)
 
     def __str__(self):
         return f"{self.fitsFileName}"
+    
     def get_absolute_url(self):
-        return reverse("fits_file_detail", args=[str(self.fitsFileId)]) 
-
-##################################################################################################
-## fitsHeader - this model records the header values from a physical fits file in a repository  ##
-##################################################################################################
-class fitsHeader(models.Model):
-    fitsHeaderId        = models.UUIDField( 
-                                primary_key=True,
-                                default=uuid.uuid4,
-                                editable=False)
-    fitsHeaderKey       = models.CharField(max_length=255)
-    fitsHeaderValue     = models.CharField(max_length=255)
-    fitsFileId          = models.ForeignKey(fitsFile, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.fitsHeaderId}"
+        return reverse("fits_file_detail", kwargs={'pk': self.pk})
+    
+    def display_name(self):
+        if self.fitsFileType in ["Flat", "Dark", "Bias"]:
+            return self.fitsFileType
+        return self.fitsFileObject
     
 ##################################################################################################
 ## fitsSequence - this model records a sequence of files and the calibration master files used  ##
@@ -164,10 +150,12 @@ class fitsSequence(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    fitsMasterBias       = models.CharField(max_length=255)
-    fitsMasterDark       = models.CharField(max_length=255)
-    fitsMasterFlat       = models.CharField(max_length=255)
+    fitsObject           = models.CharField(max_length=255, default="None")
+    fitsMasterBias       = models.CharField(max_length=255, default="None")
+    fitsMasterDark       = models.CharField(max_length=255, default="None")
+    fitsMasterFlat       = models.CharField(max_length=255, default="None")
 
     def __str__(self):
         return f"{self.fitsSequenceId}"
+    
 

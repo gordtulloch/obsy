@@ -15,16 +15,16 @@ Initial release scope is as follows:
 * Support for weather stations to determine if the weather is suitable for imaging operations
 * Support for Smoke and Aurora forecasts to assist in determining whether imaging operations can proceed
 * Automated calibration, stacking, and processing of images and generation of thumbnails or data summaries
+* Integrated image viewer with FITS support
 
 Future releases will include:
 * Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
 * Live stacking and update of remote sites with current imaging activities
 * Multiuser support with authentication, plus anonymous "public" access for web sites 
-* Automated image calibration and basic processing for science and astrophotography using Siril
 * Automated processing of photometry imaging
 * Automated processing of exoplanet imaging
 * Automated processing of spectroheliograph captures (Sol'ex)
-* Integrated image viewer with FITS/XISF support
+
 
 ## Technology Architecture
 The two primary components of OBSY are:
@@ -36,7 +36,7 @@ OBSY will run on Linux/Unix environments, with all development occurring on the 
 * The Observatory (oMCP.py) script will manage the dome or roof, allsky camera integration for cloud detection, weather and rain detectors. This code will also park and unpark the scope based on the roof state so the roof can't move unless the scope is parked. 
 * The Telescope (tMCP.py) will integrate with KStars/EKOS via Dbus to operate the telescope, mount, cameras, focuser, filter wheel, etc. All workloads will be operate via EKOS Scheduler and Sequence XML files. Other post-processing will be done via local Python scripts invoked from within the EKOS Schedules and Sequences.
 
-Initially the SQL Database will be SQLite but will be easily migrated to MySQL or Postgres. All releases will be Docker enabled.
+Initially the SQL Database will be SQLite but will be easily migrated to MySQL or Postgres.
 
 ## Current Status
 Currently working on sub-projects as follows:
@@ -49,7 +49,6 @@ Currently working on sub-projects as follows:
 ## Other contributors
 I stand on the shoulders of:
 * **Aaron Morris** (decep on CN) - Aaron's indi-allsky has a lot of functions similar to those needed in oMCP.py so many thanks for allowing me to modify some of the code for my purposes https://github.com/aaronwmorris/indi-allsky
-* **Dušan Poizl** (nou on CN) - I took a fork of nou's tenmon repo from https://gitea.nouspiro.space/nou/tenmon to serve as a reference for the same code developed in Python for web deployment. While nou's code is C++/JS intended for desktop use the algorithms are going to be extremely handy!!
 
 ## Installation
 Full installation instructions will be provided when the initial release is created. Essentially the process will be to clone the repository via git and run a setup.sh script with a parameter (observatory, telescope, remote, master) to determine what the node should be configured as. Auto-discovery of nodes on the same network will hopefully be implemented on release.

@@ -11,9 +11,9 @@ import shutil
 from math import cos,sin
 from datetime import datetime
 from django.conf import settings
-from .models import fitsFile, fitsHeader, fitsSequence
+from observations.models import fitsFile,fitsSequence
 from django.utils import timezone
-import pysiril
+from django.db import IntegrityError
 from datetime import datetime,timedelta
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +30,7 @@ logging=logging.getLogger('observations.postProcess')
 class PostProcess(object):
     def __init__(self):
         self.sourceFolder=settings.SOURCEPATH
-        self.fileRepoFolder=settings.REPOPATH
+        self.repoFolder=settings.REPOPATH
         logging.info("Post Processing object initialized")
 
     #################################################################################################################
@@ -39,17 +39,12 @@ class PostProcess(object):
     def submitFileToDB(self,fileName,hdr):
         if "DATE-OBS" in hdr:
             # Create new fitsFile record
-            newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["FRAME"])
+            newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["FRAME"],
+                            fitsFileObject=hdr["OBJECT"],fitsFileExpTime=hdr["EXPTIME"],fitsFileXBinning=hdr["XBINNING"],
+                            fitsFileYBinning=hdr["YBINNING"],fitsFileCCDTemp=hdr["CCD-TEMP"],fitsFileTelescop=hdr["TELESCOP"],
+                            fitsFileInstrument=hdr["INSTRUME"],fitsFileGain=hdr["GAIN"],fitsFileOffset=hdr["OFFSET"],
+                            fitsFileSequence=None)         
             newfile.save()
-
-            # Add the header information to the database
-            for card in hdr:
-                if type(hdr[card]) not in [bool,int,float]:
-                    keywordValue=str(hdr[card]).replace('\'',' ')
-                else:
-                    keywordValue = hdr[card]
-                newheader=fitsHeader(fitsHeaderKey=card,fitsHeaderValue=keywordValue,fitsFileId=newfile)
-                newheader.save()
         else:
             logging.error("Error: File not added to repo due to missing date is "+fileName)
             return False
@@ -141,20 +136,20 @@ class PostProcess(object):
                     # Create the folder structure (if needed)
                     fitsDate=dateobj.strftime("%Y%m%d")
                     if (hdr["FRAME"]=="Light"):
-                        newPath=self.fileRepoFolder+"Light/{0}/{1}/{2}/{3}/".format(hdr["OBJECT"].replace(" ", ""),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                        newPath=self.repoFolder+"Light/{0}/{1}/{2}/{3}/".format(hdr["OBJECT"].replace(" ", ""),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),fitsDate)
                     elif hdr["FRAME"]=="Dark":
-                        newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                        newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),hdr["EXPTIME"],fitsDate)
                     elif hdr["FRAME"]=="Flat":
                         if ("FILTER" in hdr):
-                            newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                            newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate)
                         else:
-                            newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                            newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate)
                     elif hdr["FRAME"]=="Bias":
-                        newPath=self.fileRepoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                        newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                             hdr["INSTRUME"].replace(" ", "_"),fitsDate)
 
                     if not os.path.isdir(newPath):
@@ -193,7 +188,7 @@ class PostProcess(object):
         thumbnail_data = data[::10, ::10]
         
         # Save the thumbnail image as a JPG file
-        thumbnail_path = os.path.join(self.fileRepoFolder, f'thumbnail_{fits_file.fitsFileId}.jpg')
+        thumbnail_path = os.path.join(self.repoFolder, f'thumbnail_{fits_file.fitsFileId}.jpg')
         try:
             plt.imsave(thumbnail_path, thumbnail_data, cmap='gray')
             logging.info(f"Thumbnail image saved to: {thumbnail_path}")
@@ -217,8 +212,12 @@ class PostProcess(object):
             if currentFitsFile.fitsFileObject != current_object:
                 current_object = currentFitsFile.fitsFileObject
                 # Create a new fitsSequence record
-                newFitsSequence=fitsSequence(fitsMasterBias=None,fitsMasterDark=None,fitsMasterFlat=None)
-                newFitsSequence.save()
+                try:
+                    newFitsSequence=fitsSequence(fitsObject=current_object,fitsMasterBias=None,fitsMasterDark=None,fitsMasterFlat=None)
+                    newFitsSequence.save()
+                except IntegrityError as e:
+                    # Handle the integrity error
+                    return HttpResponse(f"IntegrityError: {e}")                  
             
             # Assign the current sequence to the fits file
             currentFitsFile.fitsFileSequence=newFitsSequence
@@ -312,7 +311,8 @@ class PostProcess(object):
         if not fitsSequence:
             logging.info(f"No fitsSequence record found for light frame: {light_frame.fitsFileId}")
             # Create a new fitsSequence record
-            fitsSequence = fitsSequence(fitsMasterBias=None, fitsMasterDark=None, fitsMasterFlat=None)
+            
+            fitsSequence = fitsSequence(fitsObject=light_frame.fitsFileObject,fitsMasterBias="None", fitsMasterDark="None", fitsMasterFlat="None")
 
         # If the master bias, dark, and flat frames do not exist, create them
         if not fitsSequence.fitsMasterBias:
@@ -323,7 +323,11 @@ class PostProcess(object):
             masterFlatId = self.createMasterFlat(light_frame.fitsFileId)   
 
         # Save the fitsSequence record in the database
-        fitsSequence.save()
+        try:
+            fitsSequence.save()
+            logging.info(f"fitsSequence record saved: {fitsSequence.fitsSequenceId}")
+        except IntegrityError as e:
+            return HttpResponse(f"IntegrityError: {e}")
         
         # Load the master bias, dark, and flat frames
         master_bias = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterBias).first()
@@ -342,7 +346,7 @@ class PostProcess(object):
         calibrated_data = (light_data - master_bias) / (master_flat - master_dark)
 
         # Save the calibrated light frame
-        calibrated_path = os.path.join(self.fileRepoFolder, f'calibrated_{light_frame.fitsFileName}')
+        calibrated_path = os.path.join(self.repoFolder, f'calibrated_{light_frame.fitsFileName}')
         try:
             hdu = fits.PrimaryHDU(calibrated_data)
             hdu.writeto(calibrated_path, overwrite=True)
@@ -408,7 +412,7 @@ class PostProcess(object):
         master_bias_data = np.median(bias_data, axis=0)
         
         # Save the master bias frame
-        master_bias_path = os.path.join(self.fileRepoFolder, f'master_bias_{targetSequenceNo}.fits')
+        master_bias_path = os.path.join(self.repoFolder, f'master_bias_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_bias_data)
             hdu.writeto(master_bias_path, overwrite=True)
@@ -462,7 +466,7 @@ class PostProcess(object):
         master_dark_data = np.median(dark_data, axis=0)
         
         # Save the master dark frame
-        master_dark_path = os.path.join(self.fileRepoFolder, f'master_dark_{targetSequenceNo}.fits')
+        master_dark_path = os.path.join(self.repoFolder, f'master_dark_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_dark_data)
             hdu.writeto(master_dark_path, overwrite=True)
@@ -516,7 +520,7 @@ class PostProcess(object):
         master_flat_data = np.median(flat_data, axis=0)
         
         # Save the master flat frame
-        master_flat_path = os.path.join(self.fileRepoFolder, f'master_flat_{targetSequenceNo}.fits')
+        master_flat_path = os.path.join(self.repoFolder, f'master_flat_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_flat_data)
             hdu.writeto(master_flat_path, overwrite=True)
