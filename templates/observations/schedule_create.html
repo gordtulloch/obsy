@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Create Schedule{% endblock title %}
+{% block content %}
+<br>
+<div class="container">
+    <h2>Create Schedule</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+{% endblock content %}

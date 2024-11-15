@@ -1,4 +1,5 @@
 {% extends "_base.html" %}
+{% load crispy_forms_tags %}
 {% block title %}All observations List{% endblock title %}
 {% block content %}
 
@@ -7,8 +8,8 @@
   <h1>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Sequence</h1>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">Save</button>
   </form>
 </div>
 {% endblock content %}

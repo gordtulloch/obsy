@@ -12,7 +12,8 @@ class ObservationForm(forms.ModelForm):
 
     class Meta:
         model = observation
-        fields = ['targetId','observationDate', 'targetPA','targetInactive','observeOnce','observatoryId','telescopeId','imagerId','sequenceId' ]  # Include other fields as necessary
+        fields = ['targetId','observationDate', 'targetPA','targetInactive','observeOnce','observatoryId',
+                  'telescopeId','imagerId','sequenceFileId' ]
 
 
     def __init__(self, *args, **kwargs):
@@ -61,6 +62,19 @@ class ObservationForm(forms.ModelForm):
         }
 
 ################################################################################################################################
+##  ScheduleMasterForm - form for adding a schedule                                                                           ##
+################################################################################################################################
+class ScheduleMasterForm(forms.ModelForm):
+    class Meta:
+        model = scheduleMaster
+        fields = ['scheduleDate','scheduleDays','observatoryId']
+        labels = {
+            'scheduleDate' : 'Schedule Date YYYY-MM-DD',
+            'scheduleDays': 'Number of days to schedule',
+            'observatoryId': 'Observatory to schedule',
+        }
+        
+################################################################################################################################
 ##  ScheduleQueryForm - form for querying the schedule                                                                        ##  
 ################################################################################################################################
 class ScheduleQueryForm(forms.ModelForm):
@@ -80,11 +94,14 @@ class ScheduleEditForm(forms.ModelForm):
         fields = '__all__'
 
 ################################################################################################################################
-## SequenceForm - form for adding a sequence                                                                                  ##
-###############################################################################################################################
+## SequenceFileForm - form for adding a sequence                                                                              ##
+################################################################################################################################
 class SequenceFileForm(forms.ModelForm):
     sequenceFileName = forms.FileField(required=True)
     
     class Meta:
         model = sequenceFile
         fields = ['sequenceFileName','sequenceDuration']
+        labels = {'sequenceFileName' : 'Filename of the EKOS Sequence File',
+                  'sequenceDuration': 'Total expected duration for the Sequence (in seconds)', 
+                 }

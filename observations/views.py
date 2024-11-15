@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView,CreateView
 from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.utils import timezone
-from .forms import ObservationForm,SequenceFileForm
-from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsSequence,sequenceFile
+from .forms import ObservationForm,SequenceFileForm,ScheduleMasterForm
+from .models import observation, scheduleMaster,fitsFile,sequenceFile
+from setup.models import observatory,telescope,imager
 from observations.models import observation
 from observations.postProcess import PostProcess
 
@@ -19,6 +20,7 @@ from astropy.coordinates import get_constellation
 from astropy.io import fits
 import numpy as np
 import xml.etree.ElementTree as ET
+import ephem
 
 import logging
 logger = logging.getLogger("observations.views")
@@ -40,6 +42,9 @@ class observation_all_list(ListView):
     context_object_name="observation_list"
     template_name="observations/observation_all_list.html"
     login_url = "account_login"
+
+def get_queryset(self):
+        return observation.objects.select_related('sequenceFileId').all()
 
 ##################################################################################################
 ## Observation Update     -  Use the UpdateView class to edit observation records               ##
@@ -72,31 +77,39 @@ def observation_create(request, target_uuid):
     return render(request, 'observations/observation_create.html', {'form': form})
 
 ##################################################################################################
+## ScheduleCreateView -  Use the CreateView class to create a schedule of targets               ##
+##################################################################################################
+class ScheduleCreateView(CreateView):
+    model = scheduleMaster
+    form_class = ScheduleMasterForm
+    template_name = 'observations/schedule_create.html'
+    success_url = reverse_lazy('schedule_list')
+
+##################################################################################################
 ## Schedule -  this function will allow the user to create and edit a schedule of targets       ##
 ##################################################################################################
-class schedule(ListView):
+class scheduleMasterList(ListView):
     model=scheduleMaster
     context_object_name="scheduleMaster_list"
-    template_name="targets/schedule.html"
+    template_name="observations/schedule_list.html"
     login_url = "account_login"
 
 ##################################################################################################
-## Schedule Details -  this function displays a schedule of targets                             ##
+## Schedule Master Update -  this function allows the user to update a schedule                 ##
 ##################################################################################################
-class scheduleDetails(ListView):
-    model=scheduleDetail
-    context_object_name="scheduleDetail_list"
-    template_name="targets/schedule_detail_list.html"
-    login_url = "account_login"
-    
+class ScheduleUpdateView(UpdateView):
+    model = scheduleMaster
+    form_class = ScheduleMasterForm
+    template_name = 'observations/schedule_edit.html'
+    success_url = '/observations/schedule/'
+
 ##################################################################################################
-## Schedule Details Items -  this function displays individual target details                   ##
+## Schedule Delete -  this function allows the user to delete a schedule                        ##
 ##################################################################################################
-class scheduleDetailsItem(UpdateView):
-    model=scheduleDetail
-    context_object_name="scheduleDetailItem_list"
-    template_name="targets/schedule_detail_edit.html"
-    login_url = "account_login"
+class ScheduleDeleteView(DeleteView):
+    model = scheduleMaster
+    template_name = 'observations/schedule_confirm_delete.html'
+    success_url = reverse_lazy('schedule_list')
 
 ##################################################################################################
 ## buildSchedule function -  this function accepts parameters from the user and loads the       ##
@@ -107,59 +120,68 @@ class scheduleDetailsItem(UpdateView):
 ##                           night the targets that are after the end of twilight drop off the  ##
 ##                           end of the schedule to be scheduled another night.                 ##
 ##################################################################################################
-def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_id,imager_id):
-    # Validate inputs
-    try:
-        start_date = datetime.strptime(start_date, '%Y-%m-%d')
-    except ValueError:
-        return JsonResponse({'error': 'Invalid start_date format. Use YYYY-MM-DD.'}, status=400)
+import ephem
+from datetime import datetime, timedelta
 
-    try:
-        observatory_obj = observatory.objects.get(id=observatory_id)
-    except observatory.DoesNotExist:
-        return JsonResponse({'error': 'Invalid observatoryId.'}, status=400)
+class ScheduleRegenView(DetailView):
+    def __init__(self, start_date, days_to_schedule, observatory_id, telescope_id, imager_id):
+        try:
+            self.startDate = datetime.strptime(start_date, '%Y-%m-%d')
+        except ValueError:
+            logger.error("Invalid start_date")
+        self.daysToSchedule = days_to_schedule
+        try:
+            self.observatoryObj = observatory.objects.get(id=observatory_id)
+        except observatory.DoesNotExist:
+            logger.error("Invalid observatory_id")
+        # Load operations.currentConfig where observatory=observatory_id
+        try:
+            currentConfig = currentConfig.objects.get().filter(observatoryId=observatory_id)
+        except currentConfig.DoesNotExist:
+            logger.error("No currentConfig found")
+            return
+        # Load the telescope and imager objects from the currentConfig
+        self.telescopeList = []
+        self.imagerList = []
+        for config in currentConfig:
+            self.telescopeList.append(config.telescopeId)
+            self.imagerList.append(config.imagerId)
  
-    # Calculate astronomical twilight and dawn using ephem
-    location = ephem.Observer()
-    location.lat = str(observatory_obj.latitude)
-    location.lon = str(observatory_obj.longitude)
-    times = []
-    for day in range(days_to_schedule):
-        date = start_date + timedelta(days=day)
-        location.date = date
-        twilight_evening = location.next_setting(ephem.Sun(), use_center=True)
-        twilight_morning = location.next_rising(ephem.Sun(), use_center=True)
-        times.append((twilight_evening.datetime(), twilight_morning.datetime()))
+    def regenSchedule(self):
+        # Calculate astronomical twilight and dawn using ephem
+        location = ephem.Observer()
+        location.lat = str(self.observatoryObj.latitude)
+        location.lon = str(self.observatoryObj.longitude)
+        times = []
+        
+        for day in range(self.daysToSchedule):
+            date = self.startDate + timedelta(days=day)
+            location.date = date
+            twilight_evening = location.next_setting(ephem.Sun(), use_center=True)
+            twilight_morning = location.next_rising(ephem.Sun(), use_center=True)
+            times.append((twilight_evening.datetime(), twilight_morning.datetime()))
 
-    # Create a new scheduleMaster record
-    schedule_master = scheduleMaster.objects.create(
-        userId=request.user,
-        schedule_date=start_date,
-        schedule_days=days_to_schedule,
-        observatory=observatory_obj,
-        telescope=telescope.objects.get(id=telescope_id),
-        imager=imager.objects.get(id=imager_id)
-    )
+        # Query the database and add observations to scheduleDetail records
+        for twilight_evening, twilight_morning in times:
+            observations = observation.objects.filter(
+                observatory=self.observatoryId,
+                telescope=telescope_id,
+                imager=imager_id,
+                observation_date__range=(twilight_evening, twilight_morning)
+            )
+            for obs in observations:
+                obs_time = Time(obs.observation_date)
+                obs_altaz = AltAz(obstime=obs_time, location=EarthLocation(lat=observatory_obj.latitude, lon=observatory_obj.longitude))
+                obs_altitude = obs.target.transform_to(obs_altaz).alt
 
-    # Query the database and add observations to the scheduleMaster
-    for twilight_evening, twilight_morning in times:
-        observations = observation.objects.filter(
-            observatory=observatory_id,
-            telescope=telescope_id,
-            imager=imager_id,
-            observation_date__range=(twilight_evening, twilight_morning)
-        )
-        for obs in observations:
-            obs_time = Time(obs.observation_date)
-            obs_altaz = AltAz(obstime=obs_time, location=EarthLocation(lat=observatory_obj.latitude, lon=observatory_obj.longitude))
-            obs_altitude = obs.target.transform_to(obs_altaz).alt
+                if obs_altitude > 15 * u.deg:
+                    schedule_master.observations.add(obs)
 
-            if obs_altitude > 15 * u.deg:
-                schedule_master.observations.add(obs)
+        return
 
-    return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
-
-
+##################################################################################################
+## daily_observations_task -  this function will run the daily_observations task                ##
+##################################################################################################
 def daily_observations_task(request):
     logging.info("Running daily_observations")
     # Run the post-processing task
@@ -189,12 +211,9 @@ def daily_observations_task(request):
 
     return render(request, 'observations/email_sent.html')
 
-class scheduleDetails(ListView):
-    model=scheduleDetail
-    context_object_name="scheduleDetail_list"
-    template_name="targets/schedule_detail_list.html"
-    login_url = "account_login"
-
+##################################################################################################
+# list_fits_files -  List all FITS files in the database                                        ##
+##################################################################################################
 def list_fits_files(request):
     time_filter = request.GET.get('time_filter', 'all')
     now = timezone.now()
@@ -218,6 +237,9 @@ def list_fits_files(request):
     
     return render(request, 'observations/list_fits_files.html', {'fits_files': fits_files, 'time_filter': time_filter})
 
+##################################################################################################
+## fitsfile_detail -  Display a detailed view of a FITS file                                    ##
+##################################################################################################
 def fitsfile_detail(request, pk):
     fitsfile = get_object_or_404(fitsFile, pk=pk)
     
@@ -265,11 +287,16 @@ def fitsfile_detail(request, pk):
     }
     return render(request, 'observations/fits_file_detail.html', context)
 
-
+##################################################################################################
+## Sequence File List -  List all sequence files                                                ##
+##################################################################################################
 def sequence_file_list(request):
     sequences = sequenceFile.objects.all()
     return render(request, 'observations/sequence_file_list.html', {'sequences': sequences})
 
+##################################################################################################
+## Sequence File Create -  Create a new sequence file                                           ##
+##################################################################################################
 def sequence_file_create(request):
     if request.method == 'POST':
         form = SequenceFileForm(request.POST, request.FILES)
@@ -286,6 +313,9 @@ def sequence_file_create(request):
         form = SequenceFileForm()
     return render(request, 'observations/sequence_file_form.html', {'form': form})
 
+##################################################################################################
+## Sequence File Edit -  Edit an existing sequence file                                         ##
+##################################################################################################
 def sequence_file_edit(request, pk):
     sequence_instance = get_object_or_404(sequenceFile, pk=pk)
     if request.method == 'POST':
@@ -301,8 +331,11 @@ def sequence_file_edit(request, pk):
             return redirect('sequence_list')
     else:
         form = SequenceFileForm(instance=sequence_instance)
-    return render(request, 'sequences/sequence_form.html', {'form': form})
+    return render(request, 'observations/sequence_file_form.html', {'form': form})
 
+##################################################################################################
+## Sequence File Delete -  Delete an existing sequence file                                     ##
+##################################################################################################
 def sequence_file_delete(request, pk):
     sequence_instance = get_object_or_404(sequenceFile, pk=pk)
     if request.method == 'POST':
