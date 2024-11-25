@@ -361,7 +361,7 @@ def taskPostProcessing(request):
     # logger.info(f"Calibrated files: {calibrated}")
     
     # Query for fitsFile details
-    registered_files = fitsFile.objects.filter(fitsFileId__in=registered).order_by('fitsFileType')
+    registered_files = fitsFile.objects.filter(fitsFileId__in=registered).order_by('fitsFileDate')
     # calibrated_files = fitsFile.objects.filter(fitsFileId__in=calibrated)
 
     # Query for fitsSequence details
