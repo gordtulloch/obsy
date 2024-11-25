@@ -23,6 +23,7 @@ urlpatterns = [
     path('fitsfile/<uuid:pk>/', views.fitsfile_detail, name='fits_file_detail'),
     path('sequenceFiles/', views.sequence_file_list, name='sequence_file_list'),
     path('sequenceFiles/create/', views.sequence_file_create, name='sequence_file_create'),
-    path('sequenceFiles/edit/<uuid:pk>/', views.sequence_file_edit, name='sequence_file_edit'),
-    path('sequenceFiles/delete/<uuid:pk>/', views.sequence_file_delete, name='sequence_file_delete'),
+    path('sequenceFiles/edit/<uuid:uuid>/', views.sequence_file_edit, name='sequence_file_edit'),
+    path('sequenceFiles/delete/<uuid:uuid>/', views.sequence_file_delete, name='sequence_file_delete'),
+    path('runPostProcess/', views.taskPostProcessing, name='taskPostProcessing'),
 ]    

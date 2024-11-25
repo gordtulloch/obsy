@@ -42,8 +42,8 @@ class observation(models.Model):
     observatoryId     = models.ForeignKey(observatory, on_delete=models.CASCADE,null=True, blank=True)
     telescopeId       = models.ForeignKey(telescope, on_delete=models.CASCADE,null=True, blank=True)
     imagerId          = models.ForeignKey(imager, on_delete=models.CASCADE,null=True, blank=True)
+    sequenceFileId    = models.ForeignKey(sequenceFile, on_delete=models.CASCADE,null=True, blank=True)
 
-    
     def __str__(self):
         return f"{self.targetId}"
     def get_absolute_url(self):

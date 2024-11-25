@@ -1,15 +1,15 @@
 {% extends "_base.html" %}
-{% block title %}All observations List{% endblock title %}
+{% block title %}Delete Sequence File{% endblock title %}
 {% block content %}
 
 <div class="container">
     <br><br>
   <h1>Delete Sequence</h1>
-  <p>Are you sure you want to delete "{{ sequence.sequenceName }}"?</p>
+  <p>Are you sure you want to delete "{{ sequenceFile.sequenceFileName }}"?</p>
   <form method="post">
     {% csrf_token %}
     <button type="submit">Confirm</button>
-    <a href="{% url 'sequence_list' %}">Cancel</a>
+    <a href="{% url 'sequence_file_list' %}">Cancel</a>
   </form>
 </div>
 {% endblock content %}

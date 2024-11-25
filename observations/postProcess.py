@@ -5,15 +5,16 @@
 # calibrate images, create thumbnails linked to test stacks, and send the user an email with a summary of 
 # the work done.
 #
-import os
-from astropy.io import fits
-import shutil
-from math import cos,sin
-from datetime import datetime
 from django.conf import settings
 from observations.models import fitsFile,fitsSequence
 from django.utils import timezone
 from django.db import IntegrityError
+from django.http import HttpResponse
+
+import os
+from astropy.io import fits
+import shutil
+from math import cos,sin
 from datetime import datetime,timedelta
 import numpy as np
 import matplotlib.pyplot as plt

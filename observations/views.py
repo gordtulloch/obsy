@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.utils import timezone
+from django.http import HttpResponse
 from .forms import ObservationForm,SequenceFileForm
 from .models import observation, scheduleMaster, scheduleDetail, fitsFile, fitsSequence,sequenceFile
 from observations.models import observation
@@ -159,7 +160,9 @@ def buildSchedule(request,start_date ,days_to_schedule,observatory_id,telescope_
 
     return JsonResponse({'scheduleMasterId': str(schedule_master.scheduleMasterId)})
 
-
+##################################################################################################
+## daily_observations_task -  this function will run the postProcess task and send an email     ##
+##################################################################################################
 def daily_observations_task(request):
     logging.info("Running daily_observations")
     # Run the post-processing task
@@ -189,12 +192,18 @@ def daily_observations_task(request):
 
     return render(request, 'observations/email_sent.html')
 
+##################################################################################################
+## Schedule Details -  this function displays a schedule of targets                             ##
+##################################################################################################
 class scheduleDetails(ListView):
     model=scheduleDetail
     context_object_name="scheduleDetail_list"
     template_name="targets/schedule_detail_list.html"
     login_url = "account_login"
 
+##################################################################################################
+## list_fits_files -  this function lists all FITS files in the database                        ##
+##################################################################################################
 def list_fits_files(request):
     time_filter = request.GET.get('time_filter', 'all')
     now = timezone.now()
@@ -218,6 +227,9 @@ def list_fits_files(request):
     
     return render(request, 'observations/list_fits_files.html', {'fits_files': fits_files, 'time_filter': time_filter})
 
+##################################################################################################
+## fitsfile_detail -  this function displays the details of a FITS file                         ##
+##################################################################################################
 def fitsfile_detail(request, pk):
     fitsfile = get_object_or_404(fitsFile, pk=pk)
     
@@ -265,47 +277,72 @@ def fitsfile_detail(request, pk):
     }
     return render(request, 'observations/fits_file_detail.html', context)
 
-
+##################################################################################################
+## sequence_file_list -  this function lists all sequence files in the database                 ##
+##################################################################################################
 def sequence_file_list(request):
     sequences = sequenceFile.objects.all()
     return render(request, 'observations/sequence_file_list.html', {'sequences': sequences})
 
+##################################################################################################
+## sequence_file_create -  this function creates a new sequence file in the database            ##
+##################################################################################################
 def sequence_file_create(request):
     if request.method == 'POST':
         form = SequenceFileForm(request.POST, request.FILES)
         if form.is_valid():
-            xml_file = request.FILES['xml_file']
-            tree = ET.parse(xml_file)
-            root = tree.getroot()
-            sequence_data = ET.tostring(root, encoding='unicode')
-            sequence_instance = form.save(commit=False)
-            sequence_instance.sequenceData = sequence_data
-            sequence_instance.save()
-            return redirect('observations/sequence_file_list')
+            xml_file = request.FILES.get('sequenceFileName')
+            if not xml_file:
+                return HttpResponse("No file uploaded", status=400)
+            else:
+                tree = ET.parse(xml_file)
+                root = tree.getroot()
+                sequence_data = ET.tostring(root, encoding='unicode')
+                sequence_instance = form.save(commit=False)
+                sequence_instance.sequenceData = sequence_data
+                sequence_instance.save()
+                return redirect(reverse_lazy('sequence_file_list')) 
     else:
         form = SequenceFileForm()
     return render(request, 'observations/sequence_file_form.html', {'form': form})
 
-def sequence_file_edit(request, pk):
-    sequence_instance = get_object_or_404(sequenceFile, pk=pk)
+##################################################################################################
+## sequence_file_edit -  this function edits a sequence file in the database                    ##
+##################################################################################################
+def sequence_file_edit(request, uuid):
+    sequence_instance = get_object_or_404(sequenceFile, sequenceId=uuid)
     if request.method == 'POST':
         form = SequenceFileForm(request.POST, request.FILES, instance=sequence_instance)
         if form.is_valid():
             if 'xml_file' in request.FILES:
-                xml_file = request.FILES['xml_file']
+                xml_file = request.FILES.get('xml_file')
                 tree = ET.parse(xml_file)
                 root = tree.getroot()
                 sequence_data = ET.tostring(root, encoding='unicode')
                 sequence_instance.sequenceData = sequence_data
             form.save()
-            return redirect('sequence_list')
+            return redirect(reverse_lazy('sequence_file_list')) 
     else:
         form = SequenceFileForm(instance=sequence_instance)
-    return render(request, 'sequences/sequence_form.html', {'form': form})
+    return render(request, 'observations/sequence_file_form.html', {'form': form})
 
-def sequence_file_delete(request, pk):
-    sequence_instance = get_object_or_404(sequenceFile, pk=pk)
+##################################################################################################
+## sequence_file_delete -  this function deletes a sequence file in the database                ##
+##################################################################################################
+def sequence_file_delete(request, uuid):
+    sequenceFile_instance = get_object_or_404(sequenceFile, sequenceId=uuid)
     if request.method == 'POST':
-        sequence_instance.delete()
-        return redirect('observations/sequence_file_list')
-    return render(request, 'observations/sequence_file_confirm_delete.html', {'sequence': sequence_instance})
+        sequenceFile_instance.delete()
+        return redirect(reverse_lazy('sequence_file_list')) 
+    return render(request, 'observations/sequence_file_confirm_delete.html', {'sequence': sequenceFile_instance})
+
+##################################################################################################
+## taskPostProcessing -  this function is executed periodically or on demand to process all     ##
+#                        unprocessed FITS files                                                 ##
+##################################################################################################
+def taskPostProcessing(request):
+    postProcess = PostProcess()
+    
+    postProcess.createLightSequences()
+    postProcess.createCalibrationSequences()
+    postProcess.calibrateAllFitsImages()

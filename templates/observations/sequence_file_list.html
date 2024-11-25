@@ -5,13 +5,13 @@
 <div class="container">
     <br><br>
   <h2>Sequences</h2>
-  <a href="{% url 'sequence_create' %}"><button type="button" class="btn btn-primary btn-sm">Add New</button></a>
+  <a href="{% url 'sequence_file_create' %}"><button type="button" class="btn btn-primary btn-sm">Add New</button></a>
   <table class="table table-dark">
     {% for sequence in sequences %}
         {% if forloop.first %}
             <tr><th>Name</th><th>Contents</th><th>Duration</th><th></th></tr>
             {% endif %}    
-        <tr><td><a href="{% url 'sequence_edit' sequence.pk %}">{{ sequence.sequenceFileName }}</a></td>
+        <tr><td><a href="{% url 'sequence_file_edit' sequence.sequenceId %}">{{ sequence.sequenceFileName }}</a></td>
             <td>{{ sequence.sequenceData }}</td>
             <td>{{ sequence.sequenceDuration }}</td>
             <td>
