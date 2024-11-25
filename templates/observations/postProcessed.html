@@ -3,38 +3,30 @@
 {% block content %}
 <div class="container">
     <br><br>
-    <h1>Post Processing Summary</h1>
-
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>Post Processing Summary</title>
-</head>
-<body>
-    <h1>Post Processing Summary</h1>
+    <h2>Post Processing Summary</h2>
     
-    <h2>Registered FITS Files ({{ registered_count }})</h2>
+    <h3>Registered FITS Files ({{ registered_count }})</h3>
     <ul>
         {% for file in registered_files %}
-            <li>{{ file.fitsObject }} - {{ file.fitsFileDate }}</li>
+            <li>{{ file.fitsFileObject }} - {{ file.fitsFileDate }} - {{ file.fitsFileType }}</li>
         {% endfor %}
     </ul>
     
-    <h2>Light Sequences Created ({{ light_seq_count }})</h2>
+    <h3>Light Sequences Created ({{ light_seq_count }})</h3>
     <ul>
         {% for sequence in light_sequences %}
-            <li>{{ sequence.fitsSequenceId }} - {{ fitsSequenceObjectName }}</li>
+            <li>{{ sequence.fitsSequenceId }} - {{ sequence.fitsSequenceObjectName }}</li>
         {% endfor %}
     </ul>
     
-    <h2>Calibration Sequences Created ({{ cal_seq_count }})</h2>
+    <h3>Calibration Sequences Created ({{ cal_seq_count }})</h3>
     <ul>
         {% for sequence in cal_sequences %}
             <li>{{ sequence.fitsSequenceId }} - {{ sequence.fitsSequenceName }}</li>
         {% endfor %}
     </ul>
     
-    <h2>Calibrated FITS Files ({{ calibrated_count }})</h2>
+    <h3>Calibrated FITS Files ({{ calibrated_count }})</h3>
     <ul>
         {% for file in calibrated_files %}
             <li>{{ file.fitsFileId }} - {{ file.fitsFileName }} - {{ file.fitsFileDate }}</li>

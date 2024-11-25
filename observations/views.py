@@ -361,12 +361,12 @@ def taskPostProcessing(request):
     # logger.info(f"Calibrated files: {calibrated}")
     
     # Query for fitsFile details
-    registered_files = fitsFile.objects.filter(fitsFileId__in=registered)
+    registered_files = fitsFile.objects.filter(fitsFileId__in=registered).order_by('fitsFileType')
     # calibrated_files = fitsFile.objects.filter(fitsFileId__in=calibrated)
 
     # Query for fitsSequence details
-    light_sequences = fitsSequence.objects.filter(fitsSequenceId__in=lightSeqCreated)
-    cal_sequences = fitsSequence.objects.filter(fitsSequenceId__in=calSeqCreated)
+    light_sequences = fitsSequence.objects.filter(fitsSequenceId__in=lightSeqCreated).order_by('fitsSequenceDate')
+    cal_sequences = fitsSequence.objects.filter(fitsSequenceId__in=calSeqCreated).order_by('fitsSequenceDate')
     
     # Create a summary of all tasks performed
     summary = {
