@@ -5,8 +5,10 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.utils import timezone
+from django.http import HttpResponse
+
 from .forms import ObservationForm,SequenceFileForm,ScheduleMasterForm
-from .models import observation, scheduleMaster,fitsFile,sequenceFile
+from .models import observation, scheduleMaster,fitsFile,scheduleDetail,sequenceFile,fitsSequence
 from setup.models import observatory,telescope,imager
 from observations.models import observation
 from observations.postProcess import PostProcess
@@ -342,3 +344,40 @@ def sequence_file_delete(request, pk):
         sequence_instance.delete()
         return redirect('observations/sequence_file_list')
     return render(request, 'observations/sequence_file_confirm_delete.html', {'sequence': sequence_instance})
+
+##################################################################################################
+## taskPostProcessing -  this function will run the post-processing task                         ##
+##################################################################################################
+def taskPostProcessing(request):
+    postProcess=    PostProcess()
+    registered=     postProcess.registerFitsImages()
+    lightSeqCreated=postProcess.createLightSequences()
+    calSeqCreated=  postProcess.createCalibrationSequences()
+    # calibrated=     postProcess.calibrateAllFitsImages()
+    
+    logger.info(f"Registered files: {registered}")
+    logger.info(f"Light sequences created: {lightSeqCreated}")
+    logger.info(f"Calibration sequences created: {calSeqCreated}")
+    # logger.info(f"Calibrated files: {calibrated}")
+    
+    # Query for fitsFile details
+    registered_files = fitsFile.objects.filter(fitsFileId__in=registered)
+    # calibrated_files = fitsFile.objects.filter(fitsFileId__in=calibrated)
+
+    # Query for fitsSequence details
+    light_sequences = fitsSequence.objects.filter(fitsSequenceId__in=lightSeqCreated)
+    cal_sequences = fitsSequence.objects.filter(fitsSequenceId__in=calSeqCreated)
+    
+    # Create a summary of all tasks performed
+    summary = {
+        'registered_files': registered_files,
+        'light_sequences': light_sequences,
+        'cal_sequences': cal_sequences,
+        # 'calibrated_files': calibrated_files,
+        'registered_count': len(registered),
+        'light_seq_count': len(lightSeqCreated),
+        'cal_seq_count': len(calSeqCreated),
+        # 'calibrated_count': len(calibrated)
+    }
+ 
+    return render(request, 'observations/postProcessed.html', summary)

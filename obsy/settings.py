@@ -136,8 +136,7 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 MEDIA_URL = "/media/" 
 MEDIA_ROOT = BASE_DIR / "media" 
@@ -178,20 +177,11 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False
         },
+
         'observations': {
             'handlers': ['default'],
             'level': 'INFO',
-            'propagate': True
-        },
-        'observations.postProcess': {
-            'handlers': ['default'],
-            'level': 'INFO',
-            'propagate': True
-        },
-        'observations.views': {
-            'handlers': ['default'],
-            'level': 'INFO',
-            'propagate': True
+            'propagate': False
         },
         'targets': {
             'handlers': ['default'],

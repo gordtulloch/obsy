@@ -135,7 +135,7 @@ class fitsFile(models.Model):
     fitsFileInstrument  = models.CharField(max_length=255, default="None",null=True, blank=True)
     fitsFileGain        = models.CharField(max_length=255, default="None",null=True, blank=True)
     fitsFileOffset      = models.CharField(max_length=255, default="None",null=True, blank=True)
-    fitsFileSequence    = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileSequence    = models.UUIDField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.fitsFileName}"
@@ -156,10 +156,12 @@ class fitsSequence(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    fitsObject           = models.CharField(max_length=255, default="None")
-    fitsMasterBias       = models.CharField(max_length=255, default="None")
-    fitsMasterDark       = models.CharField(max_length=255, default="None")
-    fitsMasterFlat       = models.CharField(max_length=255, default="None")
+    fitsSequenceObjectName = models.CharField(max_length=255, null=True, blank=True)
+    fitsSequenceDate      = models.DateTimeField(default=datetime.now)
+    fitsMasterBias       = models.CharField(max_length=255, null=True, blank=True)
+    fitsMasterDark       = models.CharField(max_length=255, null=True, blank=True)
+    fitsMasterFlat       = models.UUIDField(max_length=255, null=True, blank=True)
+    fitsSequenceThumbnailPath = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.fitsSequenceId}"
