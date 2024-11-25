@@ -43,7 +43,13 @@ class observation(models.Model):
     telescopeId       = models.ForeignKey(telescope, on_delete=models.CASCADE,null=True, blank=True)
     imagerId          = models.ForeignKey(imager, on_delete=models.CASCADE,null=True, blank=True)
     sequenceFileId    = models.ForeignKey(sequenceFile, on_delete=models.CASCADE,null=True, blank=True)
-
+    # Additional data from the schedule
+    scheduleMasterId  = models.ForeignKey('scheduleMaster', on_delete=models.CASCADE,null=True, blank=True) 
+    scheduledDateTime = models.DateTimeField(null=True, blank=True)
+    actualDateTime    = models.DateTimeField(null=True, blank=True)
+    actualDuration    = models.IntegerField(default=0)
+    fitsFileSequence  = models.ForeignKey('fitsSequence', on_delete=models.CASCADE,null=True, blank=True)
+    
     def __str__(self):
         return f"{self.targetId}"
     def get_absolute_url(self):
@@ -89,20 +95,20 @@ class scheduleMaster(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    userId              = models.CharField(max_length=255)
-    schedule_date       = models.DateField(default=datetime.now, blank=True)
-    schedule_days       = models.IntegerField(default=1,validators=[MaxValueValidator(365),MinValueValidator(1)])
+    scheduleDate       = models.DateField(default=datetime.now, blank=True)
+    scheduleDays       = models.IntegerField(default=1,validators=[MaxValueValidator(365),MinValueValidator(1)])
     observatoryId       = models.ForeignKey(observatory, on_delete=models.CASCADE)
-    telescopeId         = models.ForeignKey(telescope, on_delete=models.CASCADE)
-    imagerId            = models.ForeignKey(imager, on_delete=models.CASCADE)
+    telescopeId         = models.ForeignKey(telescope, on_delete=models.CASCADE,null=True, blank=True)
+    imagerId            = models.ForeignKey(imager, on_delete=models.CASCADE,null=True, blank=True)
+    sequenceFileId      = models.ForeignKey(sequenceFile, on_delete=models.CASCADE,null=True, blank=True)
     observations        = models.ManyToManyField(scheduleDetail)
 
-    def __str__(self):
-        return f"Schedule {self.scheduleMasterId} by {self.userId}"
-   
     def get_absolute_url(self):
-        return reverse("schedule_details", args=[str(self.scheduleMasterId)])
+        return reverse("scheduleMasterList", args=[str(self.scheduleMasterId)])
 
+##################################################################################################
+## ScheduleManager - this manager class is used to delete all scheduleMaster records            ##
+##################################################################################################
 class ScheduleManager(models.Manager):
     def delete_everything(self):
         scheduleMaster.objects.all().delete()
@@ -129,7 +135,7 @@ class fitsFile(models.Model):
     fitsFileInstrument  = models.CharField(max_length=255, default="None",null=True, blank=True)
     fitsFileGain        = models.CharField(max_length=255, default="None",null=True, blank=True)
     fitsFileOffset      = models.CharField(max_length=255, default="None",null=True, blank=True)
-    fitsFileSequence    = models.CharField(max_length=255, default="None",null=True, blank=True)
+    fitsFileSequence    = models.UUIDField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.fitsFileName}"
@@ -150,10 +156,12 @@ class fitsSequence(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    fitsObject           = models.CharField(max_length=255, default="None")
-    fitsMasterBias       = models.CharField(max_length=255, default="None")
-    fitsMasterDark       = models.CharField(max_length=255, default="None")
-    fitsMasterFlat       = models.CharField(max_length=255, default="None")
+    fitsSequenceObjectName = models.CharField(max_length=255, null=True, blank=True)
+    fitsSequenceDate      = models.DateTimeField(default=datetime.now)
+    fitsMasterBias       = models.CharField(max_length=255, null=True, blank=True)
+    fitsMasterDark       = models.CharField(max_length=255, null=True, blank=True)
+    fitsMasterFlat       = models.UUIDField(max_length=255, null=True, blank=True)
+    fitsSequenceThumbnailPath = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.fitsSequenceId}"

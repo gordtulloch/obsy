@@ -5,7 +5,7 @@ class observationAdmin(admin.ModelAdmin):
     list_display = ("targetId","observationDate")
 
 class scheduleMasterAdmin(admin.ModelAdmin):
-    list_display = ("userId","schedule_date")
+    list_display = ("scheduleDate","observatoryId")
     
 class scheduleDetailAdmin(admin.ModelAdmin):
     list_display = ("scheduleDetailId","targetId")

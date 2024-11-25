@@ -8,7 +8,7 @@
     <table class="table table-dark">
         {% for observation in observation_list %}
             {% if forloop.first %}
-                <tr><th>Target</th><th>Rotation</th><th>Inactive</th><th>Observe Once</th><th>Observatory</th><th>Telescope</th><th>Imager</th><th>Sequence</th></tr>
+                <tr><th>Target</th><th>Rotation</th><th>Do Not Schedule</th><th>Schedule Once</th><th>Observatory</th><th>Telescope</th><th>Imager</th><th>Sequence</th><th>Duration (secs)</th></tr>
                 {% endif %}    
             <tr><td><A HREF="{{ observation.get_absolute_url }}">{{ observation.targetId }}</A></td>
                 <td>{{ observation.targetPA }}</td>
@@ -17,8 +17,8 @@
                 <td>{{ observation.observatoryId}}</td>
                 <td>{{ observation.telescopeId}}</td>
                 <td>{{ observation.imagerId }}</td>
-                <td>{{ observation.sequenceFileId }}</td>
-
+                <td>{{ observation.sequenceFileId.sequenceFileName }}</td>
+                <td>{{ observation.sequenceFileId.sequenceDuration }}</td>
             </tr>
         {% empty %}
             <p><i>No results found.</i></p>
