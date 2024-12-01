@@ -25,27 +25,17 @@ Finally run the server
 python manage.py runserver
 
 # Asynchronous Tasks
-Obsy uses Celery and Celery Beat to schedule tasks. 
+Obsy uses Celery to schedule tasks, and RabbitMQ.for message passing. 
 
-sudo apt-get install redis-server
-sudo service redis-server enable
-sudo service redis-server start
-sudo service redis-server status
-
-sudo nano /etc/redis/redis.conf
-Look for the following and ensure it's not commented out:
-port 6379
-
-redis-cli ping
-
-pip install celery redis
+sudo apt-get install rabbitmq-server
+pip install celery
 # Start the Celery worker
 celery -A obsy worker --loglevel=info
 
-# Start the Celery Beat scheduler
+# Start the Celery Beat scheduler - do we need this?
 celery -A obsy beat --loglevel=info
 
-Private settings
+# Private settings
 Some settings are used for testing but can't be added to the repository. These are stored in a file named obsy/private.ini. 
 This file is not included in the repository and must be created the first time the program is run. It will be created with default settings 
 so please edit this file appropriately.

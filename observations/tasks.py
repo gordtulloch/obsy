@@ -4,11 +4,15 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.conf import settings
 from observations.models import fitsFile
-from postProcess import PostProcess
+from .postProcess import PostProcess
+
+import logging
+logger = logging.getLogger(__name__)
+
+
 
 @shared_task
 def daily_observations_task():
-    logger = logging.getLogger('observations.tasks')
     logger.debug('This is a debug message')
     logger.info('This is an info message')
     logger.warning('This is a warning message')

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 # GLobal Version Number
 VERSION = '1.0.0'
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     # Third-party
     "crispy_forms", # new
     "crispy_bootstrap5", # new
+    'celery',    
     # Local
     "pages.apps.PagesConfig",
     "accounts.apps.AccountsConfig",
@@ -145,6 +148,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5" 
 CRISPY_TEMPLATE_PACK = "bootstrap5" 
 
+###########################################################################################
+## Logging Configuration                                                                 ##
+###########################################################################################
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -207,10 +213,16 @@ LOGGING = {
     }
 }
 
+###########################################################################################
+## Configuration should be migrated to the config object                                 ##
+###########################################################################################
 # Read the private.ini file for settings that should not be in the public settings.py file
 from obsy.config import Config
 config = Config()
 
+###########################################################################################
+## Notifications                                                                         ##
+###########################################################################################
 # Setup for email notifications
 EMAIL_BACKEND           = config.get("EMAIL_BACKEND")
 EMAIL_HOST              = config.get("EMAIL_HOST")
@@ -221,23 +233,24 @@ EMAIL_HOST_PASSWORD     = config.get("EMAIL_HOST_PASSWORD")
 SENDER_EMAIL            = config.get("SENDER_EMAIL")
 RECIPIENT_EMAIL         = config.get("RECIPIENT_EMAIL")
 
-# Celery/Redis Configuration Options
+###########################################################################################
+## Task Scheduling and Integration                                                       ##
+###########################################################################################
+# Celery Configuration Options
 from celery.schedules import crontab
-
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-
-CELERY_BEAT_SCHEDULE = {
-    'daily_observations_task-every-day-at-10am': {
-        'task': 'observations.tasks.daily_observations_task',
-        'schedule': crontab(hour=10, minute=0),
-    },
-}
+BROKER_URL = os.environ.get('RABBITMQ_URL', 'amqp://guest:guest@localhost:5672/')
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_RESULT_BACKEND = 'rabbitmq://localhost:5672/'
 
 # Settings for the postProcess module
 SOURCEPATH="/home/gtulloch/obsy/sample_data/Processing/input"
 REPOPATH="/home/gtulloch/obsy/sample_data/Processing/repo/"
+
+# Task Schedule
+# Run the daily_observations_task every day at 10:00
+from celery.schedules import crontab
+from observations.tasks import daily_observations_task
+
+run_every_day = crontab(day='*',hour='10')
+result = daily_observations_task.apply_async(task_id='add_task', interval=run_every_day)
+logger.info("Daily Observations Task scheduled to run every day at 10:00")

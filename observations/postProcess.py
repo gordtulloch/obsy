@@ -15,6 +15,10 @@ from datetime import datetime,timedelta
 import numpy as np
 import matplotlib.pyplot as plt
 import uuid
+import os
+from math import cos,sin 
+from astropy.io import fits
+import shutil
 
 import logging
 logging=logging.getLogger('observations')
