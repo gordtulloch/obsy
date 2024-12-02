@@ -19,6 +19,7 @@ import os
 from math import cos,sin 
 from astropy.io import fits
 import shutil
+import pika
 
 import logging
 logging=logging.getLogger('observations')
@@ -33,6 +34,22 @@ class PostProcess(object):
         self.sourceFolder=settings.SOURCEPATH
         self.repoFolder=settings.REPOPATH
         logging.info("Post Processing object initialized")
+
+    #################################################################################################################
+    ## send_to_rabbitmq - this function sends a message to the RabbitMQ server                                     ##
+    #################################################################################################################
+    def send_to_rabbitmq(self, message, queue='fits_files'):
+        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        channel = connection.channel()
+        channel.queue_declare(queue=queue, durable=True)
+        channel.basic_publish(
+            exchange='',
+            routing_key=queue,
+            body=message,
+            properties=pika.BasicProperties(
+                delivery_mode=2,  # make message persistent
+            ))
+        connection.close()
 
     #################################################################################################################
     ## submitFileToDB - this function submits a fits file to the database                                          ##
@@ -61,115 +78,142 @@ class PostProcess(object):
         return True
 
     #################################################################################################################
-    ## registerFitsImages - this function scans the images folder and registers all fits files in the database     ##
+    ## registerFitsImage - this functioncalls a function to registers each fits files in the database              ##
     ## and also corrects any issues with the Fits header info (e.g. WCS)                                           ##
+    #################################################################################################################
+    def registerFitsImage(self,root,file):
+        moveFiles=True
+
+        file_name, file_extension = os.path.splitext(os.path.join(root,file))
+
+        # Ignore everything not a *fit* file
+        if "fit" not in file_extension:
+            logging.info("Ignoring file "+os.path.join(root, file)+" with extension -"+file_extension+"-")
+            return False
+
+        try:
+            hdul = fits.open(os.path.join(root, file), mode='update')
+        except ValueError as e:
+            logging.warning("Invalid FITS file. File not processed is "+str(os.path.join(root, file)))
+            return False
+
+        hdr = hdul[0].header
+        if "FRAME" in hdr:
+            # Create an os-friendly date
+            try:
+                if "DATE-OBS" not in hdr:
+                    logging.warning("No DATE-OBS card in header. File not processed is "+str(os.path.join(root, file)))
+                    return False
+                datestr=hdr["DATE-OBS"].replace("T", " ")
+                datestr=datestr[0:datestr.find('.')]
+                dateobj=datetime.strptime(datestr, '%Y-%m-%d %H:%M:%S')
+                fitsDate=dateobj.strftime("%Y%m%d%H%M%S")
+            except ValueError as e:
+                logging.warning("Invalid date format in header. File not processed is "+str(os.path.join(root, file)))
+                return False
+
+            # Create a new standard name for the file based on what it is
+            if (hdr["FRAME"]=="Light"):
+                # Adjust the WCS for the image
+                if "CD1_1" not in hdr:
+                    if "CDELT1" in hdr:
+                        fitsCDELT1=float(hdr["CDELT1"])
+                        fitsCDELT2=float(hdr["CDELT2"])
+                        fitsCROTA2=float(hdr["CROTA2"])
+                        fitsCD1_1 =  fitsCDELT1 * cos(fitsCROTA2)
+                        fitsCD1_2 = -fitsCDELT2 * sin(fitsCROTA2)
+                        fitsCD2_1 =  fitsCDELT1 * sin (fitsCROTA2)
+                        fitsCD2_2 = fitsCDELT2 * cos(fitsCROTA2)
+                        hdr.append(('CD1_1', str(fitsCD1_1), 'Adjusted via MCP'), end=True)
+                        hdr.append(('CD1_2', str(fitsCD1_2), 'Adjusted via MCP'), end=True)
+                        hdr.append(('CD2_1', str(fitsCD2_1), 'Adjusted via MCP'), end=True)
+                        hdr.append(('CD2_2', str(fitsCD2_2), 'Adjusted via MCP'), end=True)
+                        hdul.flush()  # changes are written back to original.fits
+                    else:
+                        logging.warning("No WCS information in header, file not updated is "+str(os.path.join(root, file)))
+
+                # Assign a new name
+                if ("OBJECT" in hdr):
+                    if ("FILTER" in hdr):
+                        newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["OBJECT"].replace(" ", "_"),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+                    else:
+                        newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["OBJECT"].replace(" ", "_"),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+                else:
+                    logging.warning("Invalid object name in header. File not processed is "+str(os.path.join(root, file)))
+                    return False
+            elif hdr["FRAME"]=="Flat":
+                if ("FILTER" in hdr):
+                    newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+                else:
+                    newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+            elif hdr["FRAME"]=="Dark" or hdr["FRAME"]=="Bias":
+                newName="{0}-{1}-{1}-{2}-{3}s-{4}x{5}-t{6}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+            else:
+                logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
+            hdul.close()
+
+            # Create the folder structure (if needed)
+            fitsDate=dateobj.strftime("%Y%m%d")
+            if (hdr["FRAME"]=="Light"):
+                newPath=self.repoFolder+"Light/{0}/{1}/{2}/{3}/".format(hdr["OBJECT"].replace(" ", ""),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),fitsDate)
+            elif hdr["FRAME"]=="Dark":
+                newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),hdr["EXPTIME"],fitsDate)
+            elif hdr["FRAME"]=="Flat":
+                if ("FILTER" in hdr):
+                    newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate)
+                else:
+                    newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate)
+            elif hdr["FRAME"]=="Bias":
+                newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                                    hdr["INSTRUME"].replace(" ", "_"),fitsDate)
+
+            if not os.path.isdir(newPath):
+                os.makedirs (newPath)
+
+            # If we can add the file to the database move it to the repo
+            newFitsFileId=self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)
+
+            # Add the file to the list of registered files
+            if (newFitsFileId != None):
+                if moveFiles:
+                    moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
+                    logging.info(moveInfo)
+                    shutil.move(os.path.join(root, file),newPath+newName)
+                    message = os.path.join(root, file)
+                    self.send_to_rabbitmq(message)
+                    logging.info("Queued file " + message + " in RabbitMQ")
+            else:
+                logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
+        else:
+            logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
+
+        return newFitsFileId
+
+    #################################################################################################################
+    ## registerFitsImages - this function scans the images folder and registers all fits files in the database     ##
     #################################################################################################################
     def registerFitsImages(self):
         moveFiles=True
         registeredFiles=[]
+        newFitsFileId=None
+        sendFilesToRabbitMQ=False
         
         # Scan the pictures folder
         logging.info("Processing images in "+self.sourceFolder)
         for root, dirs, files in os.walk(os.path.abspath(self.sourceFolder)):
             for file in files:
                 logging.info("Processing file "+os.path.join(root, file))
-                file_name, file_extension = os.path.splitext(os.path.join(root, file))
 
-                # Ignore everything not a *fit* file
-                if "fit" not in file_extension:
-                    logging.info("Ignoring file "+os.path.join(root, file)+" with extension -"+file_extension+"-")
-                    continue
-
-                try:
-                    hdul = fits.open(os.path.join(root, file), mode='update')
-                except ValueError as e:
-                    logging.warning("Invalid FITS file. File not processed is "+str(os.path.join(root, file)))
-                    continue   
-        
-                hdr = hdul[0].header
-                if "FRAME" in hdr:
-                    # Create an os-friendly date
-                    try:
-                        if "DATE-OBS" not in hdr:
-                            logging.warning("No DATE-OBS card in header. File not processed is "+str(os.path.join(root, file)))
-                            continue
-                        datestr=hdr["DATE-OBS"].replace("T", " ")
-                        datestr=datestr[0:datestr.find('.')]
-                        dateobj=datetime.strptime(datestr, '%Y-%m-%d %H:%M:%S')
-                        fitsDate=dateobj.strftime("%Y%m%d%H%M%S")
-                    except ValueError as e:
-                        logging.warning("Invalid date format in header. File not processed is "+str(os.path.join(root, file)))
-                        continue
-
-                    # Create a new standard name for the file based on what it is
-                    if (hdr["FRAME"]=="Light"):
-                        # Adjust the WCS for the image
-                        if "CD1_1" not in hdr:
-                            if "CDELT1" in hdr:
-                                fitsCDELT1=float(hdr["CDELT1"])
-                                fitsCDELT2=float(hdr["CDELT2"])
-                                fitsCROTA2=float(hdr["CROTA2"])
-                                fitsCD1_1 =  fitsCDELT1 * cos(fitsCROTA2)
-                                fitsCD1_2 = -fitsCDELT2 * sin(fitsCROTA2)
-                                fitsCD2_1 =  fitsCDELT1 * sin (fitsCROTA2)
-                                fitsCD2_2 = fitsCDELT2 * cos(fitsCROTA2)
-                                hdr.append(('CD1_1', str(fitsCD1_1), 'Adjusted via MCP'), end=True)
-                                hdr.append(('CD1_2', str(fitsCD1_2), 'Adjusted via MCP'), end=True)
-                                hdr.append(('CD2_1', str(fitsCD2_1), 'Adjusted via MCP'), end=True)
-                                hdr.append(('CD2_2', str(fitsCD2_2), 'Adjusted via MCP'), end=True)
-                                hdul.flush()  # changes are written back to original.fits
-                            else:
-                                logging.warning("No WCS information in header, file not updated is "+str(os.path.join(root, file)))
-
-                        # Assign a new name
-                        if ("OBJECT" in hdr):
-                            if ("FILTER" in hdr):
-                                newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["OBJECT"].replace(" ", "_"),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
-                            else:
-                                newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["OBJECT"].replace(" ", "_"),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
-                        else:
-                            logging.warning("Invalid object name in header. File not processed is "+str(os.path.join(root, file)))
-                            continue
-                    elif hdr["FRAME"]=="Flat":
-                        if ("FILTER" in hdr):
-                            newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
-                        else:
-                            newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
-                    elif hdr["FRAME"]=="Dark" or hdr["FRAME"]=="Bias":
-                        newName="{0}-{1}-{1}-{2}-{3}s-{4}x{5}-t{6}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
-                    else:
-                        logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
-                    hdul.close()
-
-                    # Create the folder structure (if needed)
-                    fitsDate=dateobj.strftime("%Y%m%d")
-                    if (hdr["FRAME"]=="Light"):
-                        newPath=self.repoFolder+"Light/{0}/{1}/{2}/{3}/".format(hdr["OBJECT"].replace(" ", ""),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),fitsDate)
-                    elif hdr["FRAME"]=="Dark":
-                        newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),hdr["EXPTIME"],fitsDate)
-                    elif hdr["FRAME"]=="Flat":
-                        if ("FILTER" in hdr):
-                            newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate)
-                        else:
-                            newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate)
-                    elif hdr["FRAME"]=="Bias":
-                        newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
-                                            hdr["INSTRUME"].replace(" ", "_"),fitsDate)
-
-                    if not os.path.isdir(newPath):
-                        os.makedirs (newPath)
-
-                    # If we can add the file to the database move it to the repo
-                    newFitsFileId=self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)
+                if (newFitsFileId := self.registerFitsImage(root,file)):
                     # Add the file to the list of registered files
                     registeredFiles.append(newFitsFileId)
                     if (newFitsFileId != None):
@@ -177,6 +221,10 @@ class PostProcess(object):
                             moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
                             logging.info(moveInfo)
                             shutil.move(os.path.join(root, file),newPath+newName)
+                        if sendFilesToRabbitMQ:
+                            message = os.path.join(root, file)
+                            self.send_to_rabbitmq(message)
+                            logging.info("Queued file " + message + " in RabbitMQ")
                     else:
                         logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
                 else:

@@ -25,7 +25,9 @@ Finally run the server
 python manage.py runserver
 
 # Asynchronous Tasks
-Obsy uses Celery to schedule tasks, and RabbitMQ.for message passing. 
+Obsy uses Celery and Beat to schedule tasks, and RabbitMQ.for message passing. 
+
+Celery is a distributed task queue library that allows you to execute time-consuming or resource-intensive tasks asynchronously. It allows you to scale processing in a distributed system by adding more worker processes to existing workers or by adding workers to more servers. Celery beat is a scheduler; It kicks off tasks at regular intervals, that are then executed by available worker nodes in the cluster. Celery requires a message broker to operate, in this case RabbitMQ.
 
 sudo apt-get install rabbitmq-server
 pip install celery

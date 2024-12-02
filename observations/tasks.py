@@ -49,3 +49,17 @@ def daily_observations_task():
         [settings.RECIPIENT_EMAIL],  # Pull recipient email from settings
         fail_silently=False,
     )
+
+############################################################################################################
+## Process a FITS file recieved from another server or application                                        ##
+############################################################################################################  
+@shared_task
+def process_fits_file(file_path):
+    from .postProcess import PostProcess
+    postProcessObj=PostProcess()
+    logger.info(f"Processing FITS file: {file_path}")
+    # Seperate the file name from the path
+    file = file_path.split('/')[-1]
+    root = file_path.replace(file,'')
+    # Register the FITS image
+    postProcessObj.registerFitsImage(root,file)
