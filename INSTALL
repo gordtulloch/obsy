@@ -32,7 +32,7 @@ pip install celery
 # Start the Celery worker
 celery -A obsy worker --loglevel=info
 
-# Start the Celery Beat scheduler - do we need this?
+# Start the Celery Beat scheduler
 celery -A obsy beat --loglevel=info
 
 # Private settings
@@ -40,5 +40,25 @@ Some settings are used for testing but can't be added to the repository. These a
 This file is not included in the repository and must be created the first time the program is run. It will be created with default settings 
 so please edit this file appropriately.
 
+Yes, Celery provides a monitoring tool called Flower, which is a real-time web-based monitoring tool for Celery. Flower provides a dashboard to monitor task progress, inspect task and worker status, and manage Celery tasks.
 
+To install Flower, use the following command:
+```bash
+pip install flower
+```
+
+To start Flower, run the following command:
+```bash
+celery -A obsy flower
+```
+
+This will start the Flower web server, and you can access the Flower dashboard by navigating to `http://localhost:5555` in your web browser.
+
+Flower provides a comprehensive interface to monitor and manage your Celery tasks and workers, including the ability to:
+- View task progress and history
+- Monitor worker status and performance
+- Inspect scheduled tasks
+- Manage task queues
+
+This should help you manage your Celery and beat processes more effectively.
 

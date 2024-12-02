@@ -9,8 +9,6 @@ from .postProcess import PostProcess
 import logging
 logger = logging.getLogger(__name__)
 
-
-
 @shared_task
 def daily_observations_task():
     logger.debug('This is a debug message')
