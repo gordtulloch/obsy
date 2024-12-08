@@ -16,7 +16,7 @@ Release scope for the free version are as follows:
 * Automated calibration, stacking, and processing of images and generation of thumbnails or data summaries
 * Integrated image viewer with FITS support
 
-Future commercial (obsy-pro)releases will include:
+Future commercial (obsy-pro) releases will include:
 * Support for multiple workload types, all from the same code base
 * Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
 * Automated image transfer to master via RabbitMQ
