@@ -63,5 +63,3 @@ The setup script will start up the Django/Unicorn environment, set up the enviro
 
 https://localhost:8888
 
-The installation program will optionally scan your local network for other obsy nodes at the same port specified and will configure itself to interact with them. Other nodes can also be specified in the user interface. Master and remote nodes will be available in a later release.
-
