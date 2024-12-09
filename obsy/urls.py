@@ -12,6 +12,5 @@ urlpatterns = [
     path("targets/", include("targets.urls")),
     path("observations/", include("observations.urls")),
     path("setup/", include("setup.urls")),
-    path("operations/", include("operations.urls")),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
 
