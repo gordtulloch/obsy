@@ -22,7 +22,13 @@ class Config():
                 'EMAIL_HOST_USER '    :   'email@gmail.com',  
                 'EMAIL_HOST_PASSWORD' :   'secret',  
                 'SENDER_EMAIL '       :   'email@gmail.com',  
-                'RECIPIENT_EMAIL'     :   'email@gmail.com',  
+                'RECIPIENT_EMAIL'     :   'email@gmail.com', 
+                'LATITUDE'            :    49.9,
+                'LONGITUDE'           :   -97.1,
+                'PPSOURCEPATH'        :   '/home/stellarmate/Projects/obsy/sample_data/Processing/input',
+                'PPREPOPATH'          :   '/home/stellarmate/Projects/obsy/sample_data/Processing/repo',
+                'TWILIO_SID'          :   'secret',
+                'TWILIO_TOKEN'        :   'secret',
             }
             with open(self.file_path, 'w') as configfile:
                 self.config.write(configfile)

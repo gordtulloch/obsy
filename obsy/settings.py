@@ -18,7 +18,7 @@ SECRET_KEY = 'django-insecure-m=ct8%jslv^q*-%o5y-zw7k_=5kc#h9_#khyq#a34y%85la9zv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['spao-master.local','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     "crispy_forms", 
     "crispy_bootstrap5", 
     'celery',    
+    'django_celery_results',
+    'django_celery_beat',
     # Local
     "pages.apps.PagesConfig",
     "accounts.apps.AccountsConfig",
@@ -194,7 +196,30 @@ LOGGING = {
 }
 
 ###########################################################################################
-## Configuration should be migrated to the config object                                 ##
+## Task Scheduling and Integration                                                       ##
+###########################################################################################
+# Celery Configuration Options
+# Celery settings
+CELERY_BROKER_URL = 'pyamqp://guest@localhost//'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']  # Ignore other content
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
+
+from celery.schedules import solar
+
+CELERY_BEAT_SCHEDULE = {
+    # Executes at local sunrise
+    'daily-observations-task': {
+        'task': 'observations.tasks.daily_observations_task',
+        'schedule': solar('sunrise', config.get("LATITUDE"), config.get("LONGITUDE")),
+    },
+}
+
+###########################################################################################
+## End user Configuration should be migrated to the config object                        ##
 ###########################################################################################
 # Read the private.ini file for settings that should not be in the public settings.py file
 from obsy.config import Config
@@ -212,25 +237,15 @@ EMAIL_HOST_USER         = config.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD     = config.get("EMAIL_HOST_PASSWORD")
 SENDER_EMAIL            = config.get("SENDER_EMAIL")
 RECIPIENT_EMAIL         = config.get("RECIPIENT_EMAIL")
+# Set up for Bluesky notifications
 
-###########################################################################################
-## Task Scheduling and Integration                                                       ##
-###########################################################################################
-# Celery Configuration Options
-from celery.schedules import crontab
-BROKER_URL = os.environ.get('RABBITMQ_URL', 'amqp://guest:guest@localhost:5672/')
-CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_RESULT_BACKEND = 'rpc://'
-CELERY_BEAT_SCHEDULE = {
-    'daily-observations-task': {
-        'task': 'observations.tasks.daily_observations_task',
-        'schedule': crontab(hour=10, minute=0),
-    },
-}
+# Set up for Twlio notifications
+TWILIO_SID              = config.get("TWILIO_SID")
+TWILIO_TOKEN            = config.get("TWILIO_TOKEN")
 
 ###########################################################################################
 ## Application Settings                                                                  ##
 ###########################################################################################
 # Settings for the postProcess module
-SOURCEPATH="/home/gtulloch/obsy/sample_data/Processing/input"
-REPOPATH="/home/gtulloch/obsy/sample_data/Processing/repo/"
+SOURCEPATH=config.get("PPSOURCEPATH")
+REPOPATH=config.get("PPREPOPATH")
