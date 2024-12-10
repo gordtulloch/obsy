@@ -29,6 +29,8 @@ class Config():
                 'PPREPOPATH'          :   '/home/stellarmate/Projects/obsy/sample_data/Processing/repo',
                 'TWILIO_SID'          :   'secret',
                 'TWILIO_TOKEN'        :   'secret',
+                'BS_HANDLER'          :   'secret',
+                'BS_PASSWORD'         :   'secret',
             }
             with open(self.file_path, 'w') as configfile:
                 self.config.write(configfile)

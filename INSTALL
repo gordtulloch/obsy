@@ -1,5 +1,7 @@
 OBSY Personal Observatory Management System
 Installation Guide 0.01 (Pre-release)
+Pre-requisites:
+sudo apt-get install python3-setuptools python3 python3-venv
 
 To install Obsy first clone the repository from github:
 

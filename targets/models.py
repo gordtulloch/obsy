@@ -1,10 +1,12 @@
 import uuid
 from django.db import models
+from django.conf import settings
 from django.urls import reverse
 from setup.models import observatory, telescope, imager
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
 import csv
+import os
 
 ##################################################################################################
 ## target - an object for which we may wish to create an observation                           ##
@@ -31,7 +33,7 @@ class target(models.Model):
     targetDec2000   = models.CharField(max_length=200)
     targetConst     = models.CharField(max_length=200)
     targetMag       = models.CharField(max_length=200)
-
+    targetDefaultThumbnail = models.CharField(max_length=255, blank=True, null=True)  # Field for the thumbnail URL
     def __str__(self):
         return f"{self.targetName}"
     def get_absolute_url(self):

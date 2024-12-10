@@ -111,7 +111,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# Media files
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -120,11 +129,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.CustomUser"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "static"
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-MEDIA_URL = "/media/" 
-MEDIA_ROOT = BASE_DIR / "media" 
 
 # django-crispy-forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5" 
@@ -196,6 +200,13 @@ LOGGING = {
 }
 
 ###########################################################################################
+## End user Configuration should be migrated to the config object                        ##
+###########################################################################################
+# Read the private.ini file for settings that should not be in the public settings.py file
+from obsy.config import Config
+config = Config()
+
+###########################################################################################
 ## Task Scheduling and Integration                                                       ##
 ###########################################################################################
 # Celery Configuration Options
@@ -214,16 +225,10 @@ CELERY_BEAT_SCHEDULE = {
     # Executes at local sunrise
     'daily-observations-task': {
         'task': 'observations.tasks.daily_observations_task',
-        'schedule': solar('sunrise', config.get("LATITUDE"), config.get("LONGITUDE")),
+        'schedule': solar('sunrise', float(config.get("LATITUDE")), float(config.get("LONGITUDE"))),
     },
 }
 
-###########################################################################################
-## End user Configuration should be migrated to the config object                        ##
-###########################################################################################
-# Read the private.ini file for settings that should not be in the public settings.py file
-from obsy.config import Config
-config = Config()
 
 ###########################################################################################
 ## Notifications                                                                         ##
