@@ -54,6 +54,11 @@ class imager(models.Model):
         ("CMOS", "CMOS"),
         ("CCD", "CCD"),
         )
+    IMAGER_COLORS=(
+        ("RGB", "RGB"),
+        ("Mono", "Mono"),
+        )
+    
     imagerId  = models.UUIDField( 
                         primary_key=True,
                         default=uuid.uuid4,
@@ -61,6 +66,7 @@ class imager(models.Model):
     name      =models.CharField(max_length=200)
     shortname =models.CharField(max_length=200)
     imagerType=models.CharField(max_length=4,choices=IMAGER_TYPES, default='CMOS')
+    imagerColor=models.CharField(max_length=4,choices=IMAGER_COLORS, default='RGB')
     xDim=models.DecimalField(max_digits = 5,decimal_places = 0)
     yDim=models.DecimalField(max_digits = 5,decimal_places = 0)
     xPixelSize=models.DecimalField(max_digits = 6,decimal_places = 2)
@@ -71,3 +77,14 @@ class imager(models.Model):
     def get_absolute_url(self):
         return reverse("imager_detail", args=[self.imagerId])
 
+class currentConfig(models.Model):
+    currentConfigId  = models.UUIDField( 
+                        primary_key=True,
+                        default=uuid.uuid4,
+                        editable=False)
+    observatoryId = models.ForeignKey(observatory, on_delete=models.CASCADE)
+    telescopeId = models.ForeignKey(telescope, on_delete=models.CASCADE)
+    imagerId = models.ForeignKey(imager, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Config: {self.observatoryId.name}, {self.telescopeId.name}, {self.imagerId.name}"

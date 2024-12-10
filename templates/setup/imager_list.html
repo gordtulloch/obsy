@@ -5,13 +5,14 @@
 <div class="container">
     <br><br>
     <h2>Imager List</h2>
-    <table class="table table-striped">
+    <table class="table table-dark">
         {% for imager in imager_list %}
             {% if forloop.first %}
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Type</th>
+                        <th>Color</th>
                         <th>Pixels</th>
                         <th>Pixel Size</th>
                     </tr>
@@ -21,6 +22,7 @@
             <tr>
                 <td><a href="{{ imager.get_absolute_url }}">{{ imager.name }}</a></td>
                 <td>{{ imager.imagerType }}</td>
+                <td>{{ imager.imagerColor }}</td>
                 <td>{{ imager.xDim }} x {{ imager.yDim }}</td>
                 <td>{{ imager.xPixelSize }} x {{ imager.yPixelSize }}</td>
             </tr>

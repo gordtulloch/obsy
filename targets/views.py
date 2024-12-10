@@ -91,6 +91,7 @@ def target_query(request):
                         targetDec2000 = row["DEC"],
                         targetConst = get_constellation(c),
                         targetMag = row["FLUX_V"],
+                        targetDefaultThumbnail = 'images/thumbnails/'+row["MAIN_ID"].replace(' ','')+'.jpg'
                         )
                     logger.info("Target added to database")
                     
@@ -137,6 +138,11 @@ def target_query(request):
                             logger.info("Converting image to PIL")
                             image = Image.fromarray(image_data)
                             logger.info("Converted image to PIL")
+
+                            # Resize the image to 50x50
+                            logger.info("Resizing image")
+                            image = image.resize((150, 150))
+
                             # Save as JPG
                             logger.info("Saving image as JPG")
                             image.save(jpg_filename)
