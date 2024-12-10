@@ -8,3 +8,5 @@ class TargetUpdateForm(forms.ModelForm):
         model = target 
         fields = '__all__'
 
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

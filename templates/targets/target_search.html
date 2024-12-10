@@ -4,6 +4,7 @@
 {% block content %}
 <div class="container">
     <br><br>
+    <h2>Search for Targets</h2>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

@@ -1,26 +1,23 @@
 # targets/views.py
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
-from django.shortcuts import render, HttpResponseRedirect, redirect
+from django.shortcuts import render, redirect
 from django.conf import settings
 from .models import target,simbadType
-from .forms import TargetUpdateForm
-from django.urls import reverse_lazy,reverse
-from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse
+from .forms import TargetUpdateForm,UploadFileForm
+from django.urls import reverse_lazy
+from django.http import JsonResponse
+from setup.models import observatory
+from targets.models import target
 
 import logging
 import uuid
 from astroquery.simbad import Simbad
-import pandas as pd
-import numpy as np
-from astropy.io import fits
-from astropy import units as u
 from astropy.coordinates import SkyCoord, get_constellation
+from astropy import units as u
 import ephem
-from datetime import datetime
-import requests
-import os
-from PIL import Image
+from datetime import datetime, timedelta
+import xml.etree.ElementTree as ET
+from django.utils import timezone
 
 # Get an instance of a logger
 logger = logging.getLogger('targets.views')
@@ -66,104 +63,45 @@ def target_query(request):
         error_message=""
         search_term = request.POST.get('search_term')
         try:
+            search_term = search_term.strip()
             logger.info("Searching for "+search_term)
             Simbad.add_votable_fields('flux(B)', 'flux(V)', 'flux(R)', 'flux(I)','otype(main)')
             results_simbad = Simbad.query_object(search_term, wildcard=True)
-            if (results_simbad is not None):
-                logger.info("Search results found")
-                df=results_simbad.to_pandas()
-                results=df.to_dict('records')
-                # Add results to the targets database
-                logger.info("Adding "+str(len(df))+" targets to database")
-                for index, row in df.iterrows():
-                    logger.info("Adding target "+row["MAIN_ID"])
-                    # Figure out the constellation
-                    coords=row["RA"]+" "+row["DEC"]
-                    c = SkyCoord(coords, unit=(u.hourangle, u.deg), frame='icrs')
-                    
-                    # Add the target record
-                    target.objects.create(
-                        targetId = uuid.uuid4(),     
-                        targetName = row["MAIN_ID"].replace(' ',''),
-                        targetType  =row["OTYPE_main"],
-                        targetClass=assignTargetClass(row["OTYPE_main"]),
-                        targetRA2000 = row["RA"],
-                        targetDec2000 = row["DEC"],
-                        targetConst = get_constellation(c),
-                        targetMag = row["FLUX_V"],
-                        targetDefaultThumbnail = 'images/thumbnails/'+row["MAIN_ID"].replace(' ','')+'.jpg'
-                        )
-                    logger.info("Target added to database")
-                    
-                    # Add a default thumbnail from SDSS/SS for the target
-                    width = 15 # Width of the image in arcmin
-                    height = 15  # Height of the image in arcmin
-                    
-                    # Construct the URL for the STSCI Digitized Sky Survey (DSS) image
-                    logger.info("Constructing URL for image")
-                    url = 'https://archive.stsci.edu/cgi-bin/dss_search?r='+row["RA"]+'&d='+row["DEC"]+'&w='+str(width)+'&h='+str(height)+'&opt=GST'
-                    logger.info("Requesting image "+url)
-
-                    # Create an appropriate filename for the image
-                    relative_path = os.path.join('static','images', 'thumbnails', row["MAIN_ID"].replace(' ',''))
-                    jpg_filename = os.path.join(settings.BASE_DIR, relative_path)+'.jpg'
-                    fits_filename = os.path.join(settings.BASE_DIR, relative_path)+'.fits'
-                    logger.info("Will save image "+fits_filename+" as "+jpg_filename)
-
-                    # Make the request to fetch the image
-                    try:
-                        response = requests.get(url)
-                    except Exception as e:
-                        logger.error("Failed to retrieve image "+fits_filename+"with error "+str(e))
-                    logger.info("Response code "+str(response.status_code))
-
-                    # Check if the request was successful
-                    if response.status_code == 200:
-                        with open(fits_filename, 'wb') as f:
-                            f.write(response.content)
-                            logger.info("Image saved as "+fits_filename)
-                        # Open the FITS file and save as jpg
-                        with fits.open(fits_filename) as hdul:
-                            logger.info("Opened FITS file "+fits_filename)
-                            # Get the image data from the primary HDU
-                            image_data = hdul[0].data
-                            logger.info("Got image data from FITS file")
-
-                            # Normalize the image data to the range 0-255
-                            logger.info("Normalizing image data")
-                            image_data = image_data - np.min(image_data)
-                            image_data = (image_data / np.max(image_data) * 255).astype(np.uint8)
-
-                            # Convert to a PIL image
-                            logger.info("Converting image to PIL")
-                            image = Image.fromarray(image_data)
-                            logger.info("Converted image to PIL")
-
-                            # Resize the image to 50x50
-                            logger.info("Resizing image")
-                            image = image.resize((150, 150))
-
-                            # Save as JPG
-                            logger.info("Saving image as JPG")
-                            image.save(jpg_filename)
-
-                            # Add the thumbnail to the target record
-                            logger.info("Adding thumbnail to target record")
-                            target_obj = target.objects.get(targetName=row["MAIN_ID"].replace(' ',''))
-                            target_obj.targetThumbnail = os.path.join(relative_path)+'.jpg'
-
-                        # Remove the temporary FITS file
-                        logger.info("Removing FITS file "+fits_filename)
-                        os.remove(fits_filename)
-                    else:
-                        logger.error("Failed to retrieve image "+fits_filename)
-            else: 
-                results=[]
-            return redirect('target_all_list')
         except Exception as e:
-            error_message="Search Error occurred with search ("+search_term+") error: "+str(e)
-            logger.error(error_message)
+            logger.error("Error searching for "+search_term)
+            error_message="Error searching for "+search_term
+            results_simbad=None
+            
+        if (results_simbad is not None):
+            logger.info("Search results found")
+            df=results_simbad.to_pandas()
+            results=df.to_dict('records')
+            # Add results to the targets database
+            logger.info("Adding "+str(len(df))+" targets to database")
+            for index, row in df.iterrows():
+                logger.info("Adding target "+row["MAIN_ID"])
+                # Figure out the constellation
+                coords=row["RA"]+" "+row["DEC"]
+                c = SkyCoord(coords, unit=(u.hourangle, u.deg), frame='icrs')
+                
+                # Add the target record
+                target.objects.create(
+                    targetId = uuid.uuid4(),     
+                    targetName = row["MAIN_ID"].replace(' ',''),
+                    targetType  =row["OTYPE_main"],
+                    targetClass=assignTargetClass(row["OTYPE_main"]),
+                    targetRA2000 = ra_to_decimal_hours(row["RA"]),
+                    targetDec2000 = dec_to_decimal_degrees(row["DEC"]),
+                    targetConst = get_constellation(c),
+                    targetMag = row["FLUX_V"],
+                    targetDefaultThumbnail = 'images/thumbnails/'+row["MAIN_ID"].replace(' ','')+'.jpg'
+                    )
+                logger.info("Target added to database")
+        else: 
+            results=[]
             return render(request, 'targets/target_search.html',{'error': error_message})
+        return redirect('target_all_list')
+        
     else:
         return render(request, 'targets/target_search.html',{'error': error_message})
     
@@ -225,14 +163,6 @@ class target_delete(DeleteView):
     template_name = "targets/target_confirm_delete.html"
     success_url = reverse_lazy('target_all_list')
 
-from django.shortcuts import render
-from django.http import JsonResponse
-from setup.models import observatory
-from targets.models import target
-import ephem
-from datetime import datetime, timedelta
-from django.utils import timezone
-
 def convert_to_current_timezone(dt):
     # Ensure the datetime is aware (has timezone info)
     if timezone.is_naive(dt):
@@ -278,4 +208,44 @@ def target_altitude(request, target_id):
     logger.debug(f"Time data: {times}")
     
     return JsonResponse({'times': times, 'altitudes': altitudes})
+
+def parse_xml(file):
+    tree = ET.parse(file)
+    root = tree.getroot()
+    targets = []
+    for target in root.findall('target'):
+        target_data = {
+            'targetName': target.find('name').text,
+            'targetType': target.find('type').text,
+            'targetClass': target.find('class').text,
+            'targetRA2000': target.find('ra2000').text,
+            'targetDec2000': target.find('dec2000').text,
+            'targetConst': target.find('constellation').text,
+            'targetMag': target.find('magnitude').text,
+            'targetDefaultThumbnail': target.find('thumbnail').text,
+        }
+        targets.append(target_data)
+    return targets
+
+def upload_targets_view(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = request.FILES['file']
+            targets = parse_xml(file)
+            for target_data in targets:
+                target.objects.create(
+                    targetName=target_data['targetName'],
+                    targetType=target_data['targetType'],
+                    targetClass=target_data['targetClass'],
+                    targetRA2000=target_data['targetRA2000'],
+                    targetDec2000=target_data['targetDec2000'],
+                    targetConst=target_data['targetConst'],
+                    targetMag=target_data['targetMag'],
+                    targetDefaultThumbnail=target_data['targetDefaultThumbnail'],
+                )
+            return redirect('target_all_list')
+    else:
+        form = UploadFileForm()
+    return render(request, 'targets/upload_targets.html', {'form': form})
 
