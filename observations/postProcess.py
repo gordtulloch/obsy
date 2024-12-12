@@ -15,6 +15,7 @@ from datetime import datetime,timedelta
 import numpy as np
 import matplotlib.pyplot as plt
 import uuid
+import os
 
 import logging
 logging=logging.getLogger('observations')
