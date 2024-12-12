@@ -5,9 +5,8 @@ OBSY is an Open Source observatory management system intended for amateur astron
 NOTE THIS SOFTWARE IS IN ACTIVE DEVELOPMENT AND NO RELEASE CANDIDATE IS AVAILABLE YET.
 
 ## Features:
-Initial release scope is as follows:
-* Multinode support for seperate telescope and observatory computers
-* Support for multiple workload types, all from the same code base
+Release scope for the free version are as follows:
+* Support for operation of remote INDI devices
 * Support for automated science and astrophotography imaging using KStars/EKOS on Linux
 * Automatic collection of data into data repositories including FITS file metadata
 * Automated cloud detection from any allsky camera that can produce a current image on disk
@@ -17,14 +16,15 @@ Initial release scope is as follows:
 * Automated calibration, stacking, and processing of images and generation of thumbnails or data summaries
 * Integrated image viewer with FITS support
 
-Future releases will include:
+Future commercial (obsy-pro) releases will include:
+* Support for multiple workload types, all from the same code base
 * Master nodes for data repository, remote nodes for web sites, telescope nodes and observatory nodes. 
-* Live stacking and update of remote sites with current imaging activities
+* Automated image transfer to master via RabbitMQ
+* Live stacking and update of remote sites with current imaging activities using MQTT
 * Multiuser support with authentication, plus anonymous "public" access for web sites 
 * Automated processing of photometry imaging
 * Automated processing of exoplanet imaging
 * Automated processing of spectroheliograph captures (Sol'ex)
-
 
 ## Technology Architecture
 The two primary components of OBSY are:
@@ -40,7 +40,7 @@ Initially the SQL Database will be SQLite but will be easily migrated to MySQL o
 
 ## Current Status
 Currently working on sub-projects as follows:
-* OBSY - Building user interface, handling for target searching and selection, setup configuration tables (STARTED) Next will be data repository creation and management functions using initially Dropbox (because I already have an account, the functions will allow AWS etc later) Also building oMCP.py and tMCP.py scripts and testing in my backyard micro-observatory. 
+* OBSY - Building user interface, handling for target searching and selection, setup configuration tables complete. Working on automated calibration as well as scheduling and building oMCP.py and tMCP.py scripts. Testing in my backyard micro-observatory. 
 * [EKOSProcessingScripts](https://github.com/gordtulloch/EKOSProcessingScripts) Scripts to use with EKOS to integrate with OBSY. For example a post-processing script that calibrates images, stores the FITS data files in a repository, and loads summary and image information into the OBSY database. (COMPLETE)
 * [Photometry-Pipeline](https://github.com/gordtulloch/Photometry-Pipeline) Python script for processing of images via differential photometry (STARTED)
 * [MLCloudDetect](https://github.com/gordtulloch/mlCloudDetect) Machine Learning based cloud detection for allsky cameras (COMPLETE)
@@ -62,6 +62,4 @@ Installation will most likely look like the following:
 The setup script will start up the Django/Unicorn environment, set up the environment for MCP, and schedule MCP execution. Once installed the user can access the obsy user interface at:
 
 https://localhost:8888
-
-The installation program will optionally scan your local network for other obsy nodes at the same port specified and will configure itself to interact with them. Other nodes can also be specified in the user interface. Master and remote nodes will be available in a later release.
 

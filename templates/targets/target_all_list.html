@@ -1,16 +1,20 @@
 {% extends "_base.html" %}
+{% load static %}
 {% block title %}All Targets List{% endblock title %}
+
 {% block content %}
 
 <div class="container">
     <br><br>
     <H2>All Targets List</H2>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='/targets/create/'">Add New Target</button>
     <table class="table table-dark">
         {% for target in target_list %}
             {% if forloop.first %}
-                <tr><th>Catalog</th><th>RA (2000)</th><th>Dec (2000)</th><th>Constellation</th><th>Mag</th><th>Type</th><th>Class</th></tr>
+                <tr><th>Thumbnail</th><th>Catalog</th><th>RA (2000)</th><th>Dec (2000)</th><th>Constellation</th><th>Mag</th><th>Type</th><th>Class</th></tr>
                 {% endif %}    
-            <tr><td><A HREF="{{ target.get_absolute_url }}">{{ target.targetName }}</A></td>
+            <tr><td><img src="{% static target.targetDefaultThumbnail %}" alt="Thumbnail for {{ target.targetName }}" /></td>
+                <td><A HREF="{{ target.get_absolute_url }}">{{ target.targetName }}</A></td>
                 <td>{{ target.targetRA2000 }}</td>
                 <td>{{ target.targetDec2000 }}</td>
                 <td>{{ target.targetConst }}</td>

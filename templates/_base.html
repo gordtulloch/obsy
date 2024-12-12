@@ -40,8 +40,8 @@
                         <i class="fas fa-bullseye"></i> Targets
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownTargets">
-                        <a class="dropdown-item" href="/targets/create/">New Target</a>
-                        <a class="dropdown-item" href="/targets/all_list/">List Targets</a>
+                        <a class="dropdown-item" href="/targets/all_list/">Targets</a>
+                        <a class="dropdown-item" href="/targets/upload">Import KStars</a>
 
                     </div>
                 </li>
@@ -78,10 +78,7 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-calendar"></i> Operations</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownSetup">
-                            <a class="dropdown-item" href="/operations/currentConfig_list/" >Current Config</a>
-                            <a class="dropdown-item" href="/operations/power110_panel/" >110v Power Panel</a>
-                            <a class="dropdown-item" href="/operations/power12_panel/" >12v Power Panel</a>
-                            <a class="dropdown-item" href="/operations/logViewer/">View Log</a>
+                            <a class="dropdown-item" href="/setup/currentConfig_list/" >Current Config</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSetup" role="button"
@@ -89,11 +86,9 @@
                         <i class="fas fa-cog"></i> Setup</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownSetup">
                             <a class="dropdown-item" href="/setup/observatory_list" >Observatories</a>
-                            <a class="dropdown-item" href="/setup/observatory/create/" >New Observatory</a>
                             <a class="dropdown-item" href="/setup/telescope_list" >Telescopes</a>
-                            <a class="dropdown-item" href="/setup/telescope/create">New Telescope</a>
                             <a class="dropdown-item" href="/setup/imager_list" >Imagers</a>
-                            <a class="dropdown-item" href="/setup/imager/create">New Imager</a>
+
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>

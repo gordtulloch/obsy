@@ -5,6 +5,7 @@
 <div class="container">
     <br><br>
     <h2>Observatory List</h2>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='observatory/create/'">Add New Observatory</button>
     <table class="table table-dark">
         {% for observatory in observatory_list %}
             {% if forloop.first %}

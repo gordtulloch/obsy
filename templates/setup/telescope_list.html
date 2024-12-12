@@ -5,7 +5,8 @@
 <div class="container">
     <br><br>
     <h2>Telescope List</h2>
-    <table class="table table-striped">
+    <button type="button" class="btn btn-primary" onclick="window.location.href='telescope/create/'">Add New Telescope</button>
+    <table class="table table-dark">
         {% for telescope in telescope_list %}
             {% if forloop.first %}
                 <thead>
