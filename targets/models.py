@@ -109,26 +109,24 @@ class target(models.Model):
                 logger.info("Saving image as JPG")
                 image.save(jpg_filename)
 
-                # Add the thumbnail to the target record
-                logger.info("Adding thumbnail to target record")
-                target_obj = target.objects.get(targetName=row["MAIN_ID"].replace(' ',''))
-                target_obj.targetThumbnail = os.path.join(relative_path)+'.jpg'
-
             # Remove the temporary FITS file
             logger.info("Removing FITS file "+fits_filename)
             os.remove(fits_filename)
         else:
             logger.error("Failed to retrieve image "+fits_filename)
-        super().save(*args, **kwargs)
 
-    # On delete, remove the thumbnail file
+
+    ##############################################################################################
+    # On delete, remove the thumbnail file                                                      ##       
     def delete(self, *args, **kwargs):
-        relative_path = os.path.join('static','images', 'thumbnails', self.targetName)  
+        relative_path = os.path.join('static','images', 'thumbnails', self.targetName)
+        jpg_filename = os.path.join(settings.BASE_DIR, relative_path)+'.jpg'
+        logger.error("Deleting thumbnail file "+jpg_filename)
         if self.targetDefaultThumbnail:
             try:
-                os.remove(relative_path)
+                os.remove(jpg_filename)
             except:
-                logger.error("Failed to remove thumbnail file "+relative_path)
+                logger.error("Failed to remove thumbnail file "+jpg_filename)
         super().delete(*args, **kwargs)
 
 ##################################################################################################
