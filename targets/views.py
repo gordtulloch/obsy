@@ -1,6 +1,6 @@
 # targets/views.py
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from .models import target,simbadType
 from .forms import TargetUpdateForm,UploadFileForm
@@ -9,15 +9,21 @@ from django.http import JsonResponse
 from setup.models import observatory
 from targets.models import target
 
+import plotly.graph_objs as go
+import plotly.io as pio
+import pandas as pd
+from datetime import datetime
 import logging
 import uuid
 from astroquery.simbad import Simbad
 from astropy.coordinates import SkyCoord, get_constellation
 from astropy import units as u
-import ephem
 from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
 from django.utils import timezone
+import ephem
+import math
+import pytz
 
 # Get an instance of a logger
 logger = logging.getLogger('targets.views')
@@ -25,12 +31,78 @@ logger = logging.getLogger('targets.views')
 ##################################################################################################
 ## targetDetailView - List target detail with DetailView template                               ## 
 ##################################################################################################
-class target_detail_view(DetailView):
-    model = target
-    context_object_name = "target"
-    template_name = "targets/target_detail.html"
-    login_url = "account_login"
-     
+def target_detail_view(request, pk):
+    targetObj = get_object_or_404(target, targetId=pk) 
+    
+    local_tz = pytz.timezone(settings.TIME_ZONE)
+    # Define the location (replace with actual location)
+    logger.debug("Latitude: "+str(settings.LATITUDE)+" Longitude: "+str(settings.LONGITUDE)+" Elevation: "+str(settings.ELEVATION))
+    observer = ephem.Observer()
+    observer.lat = settings.LATITUDE  # Default latitude
+    observer.lon = settings.LONGITUDE  # Default longitude
+    observer.elevation = float(settings.ELEVATION)  # Default elevation
+    observer.date = datetime.now(pytz.UTC)  # Current date and time in UTC
+    # Set the horizon to 18 degrees below the horizon for astronomical twilight
+    observer.horizon = '-18'
+    logger.debug("Observer: "+str(observer)) 
+
+    # Calculate sunrise and sunset times
+    observer.horizon = '-18'
+    dawn_start = observer.previous_rising(ephem.Sun(), use_center=True).datetime()
+    dusk_end = observer.previous_setting(ephem.Sun(), use_center=True).datetime()
+    logger.info("Daylight starts at "+str(dawn_start.replace(tzinfo=pytz.UTC).astimezone(local_tz)) \
+                +" ends at "+str(dusk_end.replace(tzinfo=pytz.UTC).astimezone(local_tz)))
+    
+    # Convert RA and Dec to decimal degrees
+    ra_hrs,ra_min,ra_sec = targetObj.targetRA2000.split(' ')
+    ra_decimal = (float(ra_hrs) + float(ra_min)/60 + float(ra_sec)/3600) * 15
+    dec_deg,dec_min,dec_sec = targetObj.targetDec2000.split(' ')
+    dec_decimal = float(dec_deg) + float(dec_min)/60 + float(dec_sec)/3600  
+    logger.debug("RA: "+str(ra_decimal)+" Dec: "+str(dec_decimal))
+
+    # Calculate altitude over time for the target
+    logger.info("Calculating altitude over time for target starting at "+str(dusk_end))
+    # Create a list of 100 times between dusk_start and dawn_end
+    nowTime=datetime.now(pytz.UTC)
+    times = pd.date_range(start=nowTime-timedelta(hours=12),end=nowTime+timedelta(hours=12), periods=24)
+    logger.debug("Times in UTC: "+str(times))
+
+    altitudes = []
+    for time in times:
+        observer.date = time
+        currTarget = ephem.FixedBody()
+        currTarget._ra = math.radians(ra_decimal)
+        currTarget._dec = math.radians(dec_decimal)
+        currTarget.compute(observer)
+        altitudes.append(math.degrees(currTarget.alt))
+
+    # Re-Express times in local time
+    times = [time.replace(tzinfo=pytz.UTC).astimezone(local_tz) for time in times]
+    logger.debug("Times in "+settings.TIME_ZONE+" :"+str(times))
+    df = pd.DataFrame({'local_time': times, 'altitude': altitudes})
+    logger.debug("Dataframe: "+str(df))
+
+    # Create the plot
+    fig = go.Figure()
+
+    # Plot the altitude over local time
+    fig.add_trace(go.Scatter(x=df['local_time'], y=df['altitude'], mode='lines', name='Altitude', line=dict(color='white')))
+
+    # Set the layout
+    fig.update_layout(
+        plot_bgcolor='black',
+        paper_bgcolor='black',
+        font=dict(color='white'),
+        xaxis=dict(title='Local Time', color='white'),
+        yaxis=dict(title='Altitude (degrees)', color='white'),
+        title=dict(text='Altitude Over Time', x=0.5, xanchor='center', font=dict(color='white'))
+    )
+
+    # Convert the plot to JSON
+    graph_json = pio.to_json(fig)
+
+    return render(request, 'targets/target_detail.html', {'target': targetObj, 'graph_json': graph_json})
+
 ##################################################################################################
 ## targetAllList - List all targets                                                             ## 
 ##################################################################################################
@@ -90,8 +162,8 @@ def target_query(request):
                     targetName = row["MAIN_ID"].replace(' ',''),
                     targetType  =row["OTYPE_main"],
                     targetClass=assignTargetClass(row["OTYPE_main"]),
-                    targetRA2000 = ra_to_decimal_hours(row["RA"]),
-                    targetDec2000 = dec_to_decimal_degrees(row["DEC"]),
+                    targetRA2000 = row["RA"],
+                    targetDec2000 = row["DEC"],
                     targetConst = get_constellation(c),
                     targetMag = row["FLUX_V"],
                     targetDefaultThumbnail = 'images/thumbnails/'+row["MAIN_ID"].replace(' ','')+'.jpg'
@@ -104,47 +176,6 @@ def target_query(request):
         
     else:
         return render(request, 'targets/target_search.html',{'error': error_message})
-    
-def ra_to_decimal_hours(ra):
-    """
-    Convert RA from HH MM SS.SS format to decimal hours.
-    
-    Args:
-        ra (str): RA in HH MM SS.SS format.
-        
-    Returns:
-        float: RA in decimal hours.
-    """
-    parts = ra.split()
-    hours = float(parts[0])
-    minutes = float(parts[1])
-    seconds = float(parts[2])
-    
-    decimal_hours = hours + (minutes / 60) + (seconds / 3600)
-    return str(decimal_hours)
-
-def dec_to_decimal_degrees(dec):
-    """
-    Convert DEC from DD MM SS.SS format to decimal degrees.
-    
-    Args:
-        dec (str): DEC in DD MM SS.SS format.
-        
-    Returns:
-        float: DEC in decimal degrees.
-    """
-    parts = dec.split()
-    degrees = float(parts[0])
-    minutes = float(parts[1])
-    seconds = float(parts[2])
-    
-    # Handle negative degrees
-    if degrees < 0:
-        decimal_degrees = degrees - (minutes / 60) - (seconds / 3600)
-    else:
-        decimal_degrees = degrees + (minutes / 60) + (seconds / 3600)
-    
-    return str(decimal_degrees)
 
 ##################################################################################################
 ## Target Update     -  Use the UpdateView class to edit target records                         ##
@@ -162,52 +193,6 @@ class target_delete(DeleteView):
     model = target
     template_name = "targets/target_confirm_delete.html"
     success_url = reverse_lazy('target_all_list')
-
-def convert_to_current_timezone(dt):
-    # Ensure the datetime is aware (has timezone info)
-    if timezone.is_naive(dt):
-        dt = timezone.make_aware(dt)
-    
-    # Convert to the current timezone
-    current_timezone_dt = timezone.localtime(dt)
-    
-    return current_timezone_dt
-
-def target_altitude(request, target_id):
-    logger.info(f"Calculating target altitude")
-    # Get target and observatory details
-    target_obj = target.objects.get(targetId=target_id)
-    logger.debug(f"Calculating altitude for target {target_obj.targetName}")
-    observatory_obj = observatory.objects.first()  # Assuming a single observatory
-    logger.debug(f"Calculating altitude at observatory {observatory_obj.name}")
-
-    # Calculate astronomical twilight and dawn
-    location = ephem.Observer()
-    logger.debug(f"Observatory details: {observatory_obj.latitude}, {observatory_obj.longitude}")
-    location.lat = float(observatory_obj.latitude)
-    location.lon = float(observatory_obj.longitude)
-    location.date = datetime.utcnow()
-    twilight_evening = location.next_setting(ephem.Sun(), use_center=True)
-    twilight_morning = location.next_rising(ephem.Sun(), use_center=True)
-
-    # Calculate altitude data
-    altitudes = []
-    times = []
-    delta = timedelta(minutes=10)
-    current_time = twilight_evening.datetime()
-    while current_time <= twilight_morning.datetime():
-        location.date = current_time
-        target_ephem = ephem.FixedBody()
-        target_ephem._ra = target_obj.targetRA2000
-        target_ephem._dec = target_obj.targetDec2000
-        target_ephem.compute(location)
-        altitudes.append(target_ephem.alt * 180.0 / ephem.pi)  # Convert radians to degrees
-        times.append(convert_to_current_timezone(current_time).isoformat())
-        current_time += delta
-    logger.debug(f"Altitude data: {altitudes}")
-    logger.debug(f"Time data: {times}")
-    
-    return JsonResponse({'times': times, 'altitudes': altitudes})
 
 def parse_xml(file):
     tree = ET.parse(file)

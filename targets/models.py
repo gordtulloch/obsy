@@ -36,11 +36,11 @@ class target(models.Model):
     targetName      = models.CharField(max_length=255)
     targetClass     = models.CharField(max_length=2,choices=TARGET_CLASSES)
     targetType      = models.CharField(max_length=255)
-    targetRA2000    = models.FloatField(default=0.0)
-    targetDec2000   = models.FloatField(default=0.0)
+    targetRA2000    = models.CharField(max_length=255)
+    targetDec2000   = models.CharField(max_length=255)
     targetConst     = models.CharField(max_length=200)
     targetMag       = models.CharField(max_length=200)
-    targetDefaultThumbnail = models.CharField(max_length=255, blank=True, null=True)  # Field for the thumbnail URL
+    targetDefaultThumbnail = models.CharField(max_length=255, blank=True, null=True)
     def __str__(self):
         return f"{self.targetName}"
     
@@ -64,7 +64,7 @@ class target(models.Model):
         
         # Construct the URL for the STSCI Digitized Sky Survey (DSS) image
         logger.info("Constructing URL for image")
-        url = 'https://archive.stsci.edu/cgi-bin/dss_search?r='+self.targetRA2000+'&d='+self.targetDec2000+'&w='+str(width)+'&h='+str(height)+'&opt=GST'
+        url = 'https://archive.stsci.edu/cgi-bin/dss_search?r='+self.targetRA2000+'&d='+self.targetDec2000+'&w='+str(width)+'&h='+str(height)+'&e=J2000'
         logger.info("Requesting image "+url)
 
         # Create an appropriate filename for the image
@@ -101,7 +101,7 @@ class target(models.Model):
                 image = Image.fromarray(image_data)
                 logger.info("Converted image to PIL")
 
-                # Resize the image to 50x50
+                # Resize the image to 150x150
                 logger.info("Resizing image")
                 image = image.resize((150, 150))
 
@@ -126,7 +126,7 @@ class target(models.Model):
             try:
                 os.remove(jpg_filename)
             except:
-                logger.error("Failed to remove thumbnail file "+jpg_filename)
+                logger.info("Failed to remove thumbnail file "+jpg_filename)
         super().delete(*args, **kwargs)
 
 ##################################################################################################

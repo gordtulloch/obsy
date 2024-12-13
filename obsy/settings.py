@@ -254,3 +254,7 @@ TWILIO_TOKEN            = config.get("TWILIO_TOKEN")
 # Settings for the postProcess module
 SOURCEPATH=config.get("PPSOURCEPATH")
 REPOPATH=config.get("PPREPOPATH")
+
+LATITUDE=config.get("LATITUDE")
+LONGITUDE=config.get("LONGITUDE")
+ELEVATION=config.get("ELEVATION")

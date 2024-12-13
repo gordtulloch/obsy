@@ -25,6 +25,7 @@ class Config():
                 'RECIPIENT_EMAIL'     :   'email@gmail.com', 
                 'LATITUDE'            :    49.9,
                 'LONGITUDE'           :   -97.1,
+                'ELEVATION'           :   232,
                 'PPSOURCEPATH'        :   '/home/stellarmate/Projects/obsy/sample_data/Processing/input',
                 'PPREPOPATH'          :   '/home/stellarmate/Projects/obsy/sample_data/Processing/repo',
                 'TWILIO_SID'          :   'secret',

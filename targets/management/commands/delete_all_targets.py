@@ -6,5 +6,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Delete all Target records
-        target.objects.all().delete()
+        for targetObj in target.objects.all():
+            targetObj.delete()
         self.stdout.write(self.style.SUCCESS('Successfully deleted all Target records'))
