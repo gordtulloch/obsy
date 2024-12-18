@@ -5,7 +5,7 @@
 <div class="container">
     <br><br>
     <h1>Confirm Delete</h1>
-    <p>Are you sure you want to delete the target "{{ target.targetName }}"?</p>
+    <p>Are you sure you want to delete the Target "{{ Target.targetName }}"?</p>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

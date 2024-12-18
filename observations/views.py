@@ -174,7 +174,7 @@ class ScheduleRegenView(DetailView):
             for obs in observations:
                 obs_time = Time(obs.observation_date)
                 obs_altaz = AltAz(obstime=obs_time, location=EarthLocation(lat=observatory_obj.latitude, lon=observatory_obj.longitude))
-                obs_altitude = obs.target.transform_to(obs_altaz).alt
+                obs_altitude = obs.Target.transform_to(obs_altaz).alt
 
                 if obs_altitude > 15 * u.deg:
                     schedule_master.observations.add(obs)

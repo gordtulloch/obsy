@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='target',
+            model_name='Target',
             name='targetDefaultThumbnail',
             field=models.CharField(blank=True, max_length=255, null=True),
         ),

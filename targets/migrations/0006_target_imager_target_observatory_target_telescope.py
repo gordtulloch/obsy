@@ -13,19 +13,19 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='target',
+            model_name='Target',
             name='imager',
             field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='setup.imager'),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='target',
+            model_name='Target',
             name='observatory',
             field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='setup.observatory'),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='target',
+            model_name='Target',
             name='telescope',
             field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='setup.telescope'),
             preserve_default=False,

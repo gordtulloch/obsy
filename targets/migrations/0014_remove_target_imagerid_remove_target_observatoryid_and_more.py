@@ -11,31 +11,31 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name='target',
+            model_name='Target',
             name='imagerId',
         ),
         migrations.RemoveField(
-            model_name='target',
+            model_name='Target',
             name='observatoryId',
         ),
         migrations.RemoveField(
-            model_name='target',
+            model_name='Target',
             name='observeOnce',
         ),
         migrations.RemoveField(
-            model_name='target',
+            model_name='Target',
             name='targetInactive',
         ),
         migrations.RemoveField(
-            model_name='target',
+            model_name='Target',
             name='targetPA',
         ),
         migrations.RemoveField(
-            model_name='target',
+            model_name='Target',
             name='telescopeId',
         ),
         migrations.RemoveField(
-            model_name='target',
+            model_name='Target',
             name='userId',
         ),
     ]

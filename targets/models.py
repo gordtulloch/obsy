@@ -16,9 +16,9 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 ##################################################################################################
-## target - an object for which we may wish to create an observation                           ##
+## Target - an object for which we may wish to create an observation                           ##
 ################################################################################################## 
-class target(models.Model):
+class Target(models.Model):
     TARGET_CLASSES=(
     ("VS", "Variable Star"),
     ("EX", "Exoplanet"),
@@ -34,7 +34,7 @@ class target(models.Model):
                         default=uuid.uuid4,
                         editable=False)
     targetName      = models.CharField(max_length=255)
-    targetClass     = models.CharField(max_length=2,choices=TARGET_CLASSES)
+    targetClass     = models.CharField(max_length=2,choices=TARGET_CLASSES,default="DS")
     targetType      = models.CharField(max_length=255)
     targetRA2000    = models.CharField(max_length=255)
     targetDec2000   = models.CharField(max_length=255)
@@ -58,59 +58,59 @@ class target(models.Model):
             except:
                 logger.error("Failed to remove thumbnail file "+relative_path+'.jpg')
 
-        # Add a default thumbnail from SDSS/SS for the target
+        # Add a default thumbnail from SDSS/SS for the Target
         width = 15 # Width of the image in arcmin
         height = 15  # Height of the image in arcmin
         
         # Construct the URL for the STSCI Digitized Sky Survey (DSS) image
-        logger.info("Constructing URL for image")
+        logger.debug("Constructing URL for image")
         url = 'https://archive.stsci.edu/cgi-bin/dss_search?r='+self.targetRA2000+'&d='+self.targetDec2000+'&w='+str(width)+'&h='+str(height)+'&e=J2000'
-        logger.info("Requesting image "+url)
+        logger.debug("Requesting image "+url)
 
         # Create an appropriate filename for the image
         jpg_filename = os.path.join(settings.BASE_DIR, relative_path)+'.jpg'
         fits_filename = os.path.join(settings.BASE_DIR, relative_path)+'.fits'
-        logger.info("Will save image "+fits_filename+" as "+jpg_filename)
+        logger.debug("Will save image "+fits_filename+" as "+jpg_filename)
 
         # Make the request to fetch the image
         try:
             response = requests.get(url)
         except Exception as e:
             logger.error("Failed to retrieve image "+fits_filename+"with error "+str(e))
-        logger.info("Response code "+str(response.status_code))
+        logger.debug("Response code "+str(response.status_code))
 
         # Check if the request was successful
         if response.status_code == 200:
             with open(fits_filename, 'wb') as f:
                 f.write(response.content)
-                logger.info("Image saved as "+fits_filename)
+                logger.debug("Image saved as "+fits_filename)
             # Open the FITS file and save as jpg
             with fits.open(fits_filename) as hdul:
-                logger.info("Opened FITS file "+fits_filename)
+                logger.debug("Opened FITS file "+fits_filename)
                 # Get the image data from the primary HDU
                 image_data = hdul[0].data
-                logger.info("Got image data from FITS file")
+                logger.debug("Got image data from FITS file")
 
                 # Normalize the image data to the range 0-255
-                logger.info("Normalizing image data")
+                logger.debug("Normalizing image data")
                 image_data = image_data - np.min(image_data)
                 image_data = (image_data / np.max(image_data) * 255).astype(np.uint8)
 
                 # Convert to a PIL image
-                logger.info("Converting image to PIL")
+                logger.debug("Converting image to PIL")
                 image = Image.fromarray(image_data)
-                logger.info("Converted image to PIL")
+                logger.debug("Converted image to PIL")
 
                 # Resize the image to 150x150
-                logger.info("Resizing image")
+                logger.debug("Resizing image")
                 image = image.resize((150, 150))
 
                 # Save as JPG
-                logger.info("Saving image as JPG")
+                logger.debug("Saving image as JPG")
                 image.save(jpg_filename)
 
             # Remove the temporary FITS file
-            logger.info("Removing FITS file "+fits_filename)
+            logger.debug("Removing FITS file "+fits_filename)
             os.remove(fits_filename)
         else:
             logger.error("Failed to retrieve image "+fits_filename)
@@ -121,12 +121,12 @@ class target(models.Model):
     def delete(self, *args, **kwargs):
         relative_path = os.path.join('static','images', 'thumbnails', self.targetName)
         jpg_filename = os.path.join(settings.BASE_DIR, relative_path)+'.jpg'
-        logger.error("Deleting thumbnail file "+jpg_filename)
+        logger.debug("Deleting thumbnail file "+jpg_filename)
         if self.targetDefaultThumbnail:
             try:
                 os.remove(jpg_filename)
             except:
-                logger.info("Failed to remove thumbnail file "+jpg_filename)
+                logger.warning("Failed to remove thumbnail file "+jpg_filename)
         super().delete(*args, **kwargs)
 
 ##################################################################################################

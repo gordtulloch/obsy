@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('observeOnce', models.BooleanField(default=True)),
                 ('imagerId', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='setup.imager')),
                 ('observatoryId', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='setup.observatory')),
-                ('targetId', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='targets.target')),
+                ('targetId', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='targets.Target')),
                 ('telescopeId', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='setup.telescope')),
             ],
         ),

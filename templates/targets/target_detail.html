@@ -1,11 +1,11 @@
 {% extends "_base.html" %}
-{% block title %}{{ target.targetName }}{% endblock title %}
+{% block title %}{{ Target.targetName }}{% endblock title %}
 {% block content %}
 {% csrf_token %}
-<div class="target-detail"> 
+<div class="Target-detail"> 
     <div class="container">
     <br><br>
-    <H2>{{ target.targetName }}</H2>
+    <H2>{{ Target.targetName }}</H2>
     <table class="table table-dark">
         <tr>
         <td width="33%"><div id="aladin-lite-div" style="width:400px;height:400px;"></div>
@@ -13,7 +13,7 @@
             <script type="text/javascript">
             let aladin;
             A.init.then(() => {
-                aladin = A.aladin('#aladin-lite-div', {survey: "P/DSS2/color", fov:0.25, target: "{{ target.targetName }}"});
+                aladin = A.aladin('#aladin-lite-div', {survey: "P/DSS2/color", fov:0.25, Target: "{{ Target.targetName }}"});
             });
             </script></td>
         <td width="33%"><div id="plotly-div" style="width:400px;height:400px;"></div>
@@ -23,22 +23,22 @@
             </script></td>
         <td>
           <table class="table table-dark">
-          <tr><td>RA(2000)</td><td>{{ target.targetRA2000 }}</td></tr>
-          <tr><td>Dec(2000)</td><td>{{ target.targetDec2000 }}</td></tr>
-          <tr><td>Magnitude</td><td>{{ target.targetMag }}</td></tr>
-          <tr><td>Target Type</td><td>{{ target.targetType }}</td></tr>
-          <tr><td>Target Class</td><td>{{ target.targetClass }}</td></tr>
-          <tr><td>Name</td><td>{{ target.targetName }}</td></tr>
-          <tr><td>Constellation</td><td>{{ target.targetConst }}</td></tr>
+          <tr><td>RA(2000)</td><td>{{ Target.targetRA2000 }}</td></tr>
+          <tr><td>Dec(2000)</td><td>{{ Target.targetDec2000 }}</td></tr>
+          <tr><td>Magnitude</td><td>{{ Target.targetMag }}</td></tr>
+          <tr><td>Target Type</td><td>{{ Target.targetType }}</td></tr>
+          <tr><td>Target Class</td><td>{{ Target.targetClass }}</td></tr>
+          <tr><td>Name</td><td>{{ Target.targetName }}</td></tr>
+          <tr><td>Constellation</td><td>{{ Target.targetConst }}</td></tr>
           </table>
         </td>
     </tr>
     </table>
     <center>
     <button type="button" class="btn btn-primary">< </button>
-    <A HREF="edit/{{ target.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
-    <A HREF="delete/{{ target.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
-    <A HREF="{% url 'observation_create' target.targetId %}""><button type="button" class="btn btn-info">Observe</button></A>
+    <A HREF="edit/{{ Target.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
+    <A HREF="delete/{{ Target.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
+    <A HREF="{% url 'observation_create' Target.targetId %}""><button type="button" class="btn btn-info">Observe</button></A>
     <button type="button" class="btn btn-primary"> ></button>
 </center></div>    
 

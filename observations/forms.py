@@ -1,6 +1,6 @@
 from django import forms
 from .models import observation, scheduleMaster, scheduleDetail,sequenceFile
-from targets.models import target
+from targets.models import Target
 from setup.models import observatory,telescope,imager 
 import datetime
 
@@ -50,7 +50,7 @@ class ObservationForm(forms.ModelForm):
         fields = ['targetId','observationDate','targetPA','targetInactive','observeOnce','observatoryId','telescopeId','imagerId','sequenceFileId']
         labels = {
             'observationDate' : 'Requested Date YYYY-MM-DD HH:MM (or blank for any)',
-            'targetPA': 'Rotation for imaging target', 
+            'targetPA': 'Rotation for imaging Target', 
             'targetInactive': 'Create observation but do not schedule',
             'observeOnce' : 'Do not include in repeated schedules',
         }

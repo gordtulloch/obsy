@@ -13,17 +13,17 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='target',
+            model_name='Target',
             old_name='imager',
             new_name='imagerId',
         ),
         migrations.RenameField(
-            model_name='target',
+            model_name='Target',
             old_name='observatory',
             new_name='observatoryId',
         ),
         migrations.RenameField(
-            model_name='target',
+            model_name='Target',
             old_name='telescope',
             new_name='telescopeId',
         ),

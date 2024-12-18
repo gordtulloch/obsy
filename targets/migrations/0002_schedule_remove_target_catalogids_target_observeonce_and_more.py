@@ -39,21 +39,21 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.RemoveField(
-            model_name='target',
+            model_name='Target',
             name='catalogIDs',
         ),
         migrations.AddField(
-            model_name='target',
+            model_name='Target',
             name='observeOnce',
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='target',
+            model_name='Target',
             name='targetInactive',
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='target',
+            model_name='Target',
             name='targetPA',
             field=models.DecimalField(decimal_places=2, default=0.0, max_digits=6),
         ),
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('jobStepAlign', models.BooleanField(default=True)),
                 ('jobStepGuide', models.BooleanField(default=True)),
                 ('scheduleId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='targets.schedule')),
-                ('targetId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='targets.target')),
+                ('targetId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='targets.Target')),
             ],
         ),
     ]

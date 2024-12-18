@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import target,simbadType
+from .models import Target,simbadType
 
 class targetAdmin(admin.ModelAdmin):
     list_display = ("targetName","targetClass","targetType")
@@ -7,5 +7,5 @@ class targetAdmin(admin.ModelAdmin):
 class simbadTypeAdmin(admin.ModelAdmin):
     list_display = ("label", "description","category")
 
-admin.site.register(target, targetAdmin)
+admin.site.register(Target, targetAdmin)
 admin.site.register(simbadType, simbadTypeAdmin)

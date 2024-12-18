@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='target',
+            name='Target',
             fields=[
                 ('targetId', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('userId', models.CharField(max_length=255)),

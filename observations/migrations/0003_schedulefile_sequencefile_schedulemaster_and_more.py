@@ -77,7 +77,7 @@ class Migration(migrations.Migration):
                 ('jobStepFocus', models.BooleanField(default=True)),
                 ('jobStepAlign', models.BooleanField(default=True)),
                 ('jobStepGuide', models.BooleanField(default=True)),
-                ('targetId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='targets.target')),
+                ('targetId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='targets.Target')),
                 ('scheduleMasterId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='observations.schedulemaster')),
             ],
         ),

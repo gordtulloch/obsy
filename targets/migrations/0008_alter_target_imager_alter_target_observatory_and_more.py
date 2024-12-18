@@ -13,17 +13,17 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='target',
+            model_name='Target',
             name='imager',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='setup.imager'),
         ),
         migrations.AlterField(
-            model_name='target',
+            model_name='Target',
             name='observatory',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='setup.observatory'),
         ),
         migrations.AlterField(
-            model_name='target',
+            model_name='Target',
             name='telescope',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='setup.telescope'),
         ),

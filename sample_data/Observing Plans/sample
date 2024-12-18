@@ -1,0 +1,3994 @@
+<?xml version="1.0"?>
+<oal:observations xmlns:oal="http://observation.sourceforge.net/openastronomylog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:schemaLocation="http://observation.sourceforge.net/openastronomylog oal20.xsd" version="2.0">
+    <observers/>
+    <sites/>
+    <sessions/>
+    <targets>
+        <target id="IC410" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 410]]></name>
+            <position>
+                <ra unit="rad">1.41531</ra>
+                <dec unit="rad">0.582789</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2126" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2126]]></name>
+            <position>
+                <ra unit="rad">1.59052</ra>
+                <dec unit="rad">0.870321</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2165" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2165]]></name>
+            <position>
+                <ra unit="rad">1.6279</ra>
+                <dec unit="rad">0.901842</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1821NED02" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1821 NED02]]></name>
+            <position>
+                <ra unit="rad">0.688639</ra>
+                <dec unit="rad">0.24241</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC797" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 797]]></name>
+            <position>
+                <ra unit="rad">0.545209</ra>
+                <dec unit="rad">0.667372</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1798" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1798]]></name>
+            <position>
+                <ra unit="rad">0.644158</ra>
+                <dec unit="rad">0.236399</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC272" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 272]]></name>
+            <position>
+                <ra unit="rad">0.230342</ra>
+                <dec unit="rad">0.627636</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1088" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1088]]></name>
+            <position>
+                <ra unit="rad">0.735111</ra>
+                <dec unit="rad">0.284615</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1790" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1790]]></name>
+            <position>
+                <ra unit="rad">1.36549</ra>
+                <dec unit="rad">0.90917</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1798" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1798]]></name>
+            <position>
+                <ra unit="rad">1.36817</ra>
+                <dec unit="rad">0.832991</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC810" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 810]]></name>
+            <position>
+                <ra unit="rad">0.553447</ra>
+                <dec unit="rad">0.233389</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1817" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1817]]></name>
+            <position>
+                <ra unit="rad">0.677181</ra>
+                <dec unit="rad">0.197472</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2013" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2013]]></name>
+            <position>
+                <ra unit="rad">1.51041</ra>
+                <dec unit="rad">0.973979</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1821" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1821]]></name>
+            <position>
+                <ra unit="rad">0.688597</ra>
+                <dec unit="rad">0.242421</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC417" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 417]]></name>
+            <position>
+                <ra unit="rad">1.43894</ra>
+                <dec unit="rad">0.601184</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC704" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 704]]></name>
+            <position>
+                <ra unit="rad">0.49796</ra>
+                <dec unit="rad">0.63269</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC317" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 317]]></name>
+            <position>
+                <ra unit="rad">0.25777</ra>
+                <dec unit="rad">0.766814</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1724" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1724]]></name>
+            <position>
+                <ra unit="rad">1.33291</ra>
+                <dec unit="rad">0.864428</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1896" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1896]]></name>
+            <position>
+                <ra unit="rad">1.42763</ra>
+                <dec unit="rad">0.511088</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2240" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2240]]></name>
+            <position>
+                <ra unit="rad">1.72294</ra>
+                <dec unit="rad">0.614903</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="M31" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[M 31]]></name>
+            <position>
+                <ra unit="rad">0.192465</ra>
+                <dec unit="rad">0.722735</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2281" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2281]]></name>
+            <position>
+                <ra unit="rad">1.7893</ra>
+                <dec unit="rad">0.716468</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="M36" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[M 36]]></name>
+            <position>
+                <ra unit="rad">1.47469</ra>
+                <dec unit="rad">0.596154</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="M37" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[M 37]]></name>
+            <position>
+                <ra unit="rad">1.54446</ra>
+                <dec unit="rad">0.56827</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC752" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 752]]></name>
+            <position>
+                <ra unit="rad">0.519594</ra>
+                <dec unit="rad">0.662498</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="M38" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[M 38]]></name>
+            <position>
+                <ra unit="rad">1.44169</ra>
+                <dec unit="rad">0.626153</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7686" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7686]]></name>
+            <position>
+                <ra unit="rad">6.15799</ra>
+                <dec unit="rad">0.860029</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1893" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1893]]></name>
+            <position>
+                <ra unit="rad">1.41547</ra>
+                <dec unit="rad">0.58358</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1664" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1664]]></name>
+            <position>
+                <ra unit="rad">1.27803</ra>
+                <dec unit="rad">0.763056</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1857" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1857]]></name>
+            <position>
+                <ra unit="rad">1.40432</ra>
+                <dec unit="rad">0.687134</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1778" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1778]]></name>
+            <position>
+                <ra unit="rad">1.35179</ra>
+                <dec unit="rad">0.646756</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1907" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1907]]></name>
+            <position>
+                <ra unit="rad">1.4389</ra>
+                <dec unit="rad">0.616923</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="M32" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[M 32]]></name>
+            <position>
+                <ra unit="rad">0.192276</ra>
+                <dec unit="rad">0.715687</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC956" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 956]]></name>
+            <position>
+                <ra unit="rad">0.672599</ra>
+                <dec unit="rad">0.780282</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="M110" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[M 110]]></name>
+            <position>
+                <ra unit="rad">0.182102</ra>
+                <dec unit="rad">0.730004</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2219" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 219]]></name>
+            <position>
+                <ra unit="rad">1.30036</ra>
+                <dec unit="rad">0.827912</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2235" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 235]]></name>
+            <position>
+                <ra unit="rad">1.49543</ra>
+                <dec unit="rad">0.626008</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2237" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 237]]></name>
+            <position>
+                <ra unit="rad">1.45343</ra>
+                <dec unit="rad">0.598587</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2228" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 228]]></name>
+            <position>
+                <ra unit="rad">1.37578</ra>
+                <dec unit="rad">0.654211</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2241" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 241]]></name>
+            <position>
+                <ra unit="rad">1.59587</ra>
+                <dec unit="rad">0.52791</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2236" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 236]]></name>
+            <position>
+                <ra unit="rad">1.41471</ra>
+                <dec unit="rad">0.582762</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2229" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 229]]></name>
+            <position>
+                <ra unit="rad">1.3875</ra>
+                <dec unit="rad">0.601997</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2234" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 234]]></name>
+            <position>
+                <ra unit="rad">1.43907</ra>
+                <dec unit="rad">0.601377</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2226" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 226]]></name>
+            <position>
+                <ra unit="rad">1.36503</ra>
+                <dec unit="rad">0.66365</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7662" xsi:type="oal:deepSkyPN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7662]]></name>
+            <position>
+                <ra unit="rad">6.1396</ra>
+                <dec unit="rad">0.744837</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2230" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 230]]></name>
+            <position>
+                <ra unit="rad">1.41451</ra>
+                <dec unit="rad">0.596149</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2227" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 227]]></name>
+            <position>
+                <ra unit="rad">1.4034</ra>
+                <dec unit="rad">0.680358</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2233" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 233]]></name>
+            <position>
+                <ra unit="rad">1.48536</ra>
+                <dec unit="rad">0.624967</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2217" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 217]]></name>
+            <position>
+                <ra unit="rad">1.31202</ra>
+                <dec unit="rad">0.83854</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2231" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 231]]></name>
+            <position>
+                <ra unit="rad">1.48803</ra>
+                <dec unit="rad">0.62726</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2225" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 225]]></name>
+            <position>
+                <ra unit="rad">1.43459</ra>
+                <dec unit="rad">0.709363</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2224" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 224]]></name>
+            <position>
+                <ra unit="rad">1.43591</ra>
+                <dec unit="rad">0.75037</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2232" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 232]]></name>
+            <position>
+                <ra unit="rad">1.50165</ra>
+                <dec unit="rad">0.632043</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2223" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 223]]></name>
+            <position>
+                <ra unit="rad">1.39189</ra>
+                <dec unit="rad">0.737225</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC405" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 405]]></name>
+            <position>
+                <ra unit="rad">1.38827</ra>
+                <dec unit="rad">0.600125</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1931" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1931]]></name>
+            <position>
+                <ra unit="rad">1.45343</ra>
+                <dec unit="rad">0.598053</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC772" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 772]]></name>
+            <position>
+                <ra unit="rad">0.526704</ra>
+                <dec unit="rad">0.333893</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC891" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 891]]></name>
+            <position>
+                <ra unit="rad">0.628953</ra>
+                <dec unit="rad">0.741173</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2192" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2192]]></name>
+            <position>
+                <ra unit="rad">1.64524</ra>
+                <dec unit="rad">0.695467</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2218" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 218]]></name>
+            <position>
+                <ra unit="rad">1.49793</ra>
+                <dec unit="rad">0.911088</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Sh2221" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Sh2 221]]></name>
+            <position>
+                <ra unit="rad">1.32443</ra>
+                <dec unit="rad">0.809595</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC2149" xsi:type="oal:deepSkyPN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 2149]]></name>
+            <position>
+                <ra unit="rad">1.56332</ra>
+                <dec unit="rad">0.804745</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC404" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 404]]></name>
+            <position>
+                <ra unit="rad">0.309157</ra>
+                <dec unit="rad">0.625779</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7640" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7640]]></name>
+            <position>
+                <ra unit="rad">6.12305</ra>
+                <dec unit="rad">0.71534</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC821" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 821]]></name>
+            <position>
+                <ra unit="rad">0.565927</ra>
+                <dec unit="rad">0.193988</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC239" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 239]]></name>
+            <position>
+                <ra unit="rad">0.689591</ra>
+                <dec unit="rad">0.682101</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1883" xsi:type="oal:deepSkyOC">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1883]]></name>
+            <position>
+                <ra unit="rad">1.43026</ra>
+                <dec unit="rad">0.811801</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1156" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1156]]></name>
+            <position>
+                <ra unit="rad">0.79057</ra>
+                <dec unit="rad">0.442253</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC972" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 972]]></name>
+            <position>
+                <ra unit="rad">0.679416</ra>
+                <dec unit="rad">0.513532</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC691" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 691]]></name>
+            <position>
+                <ra unit="rad">0.489074</ra>
+                <dec unit="rad">0.381979</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC877" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 877]]></name>
+            <position>
+                <ra unit="rad">0.608106</ra>
+                <dec unit="rad">0.255881</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC812" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 812]]></name>
+            <position>
+                <ra unit="rad">0.560416</ra>
+                <dec unit="rad">0.780081</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1985" xsi:type="oal:deepSkyGN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1985]]></name>
+            <position>
+                <ra unit="rad">1.48111</ra>
+                <dec unit="rad">0.55858</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC674" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 674]]></name>
+            <position>
+                <ra unit="rad">0.491697</ra>
+                <dec unit="rad">0.392414</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC704-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 704-1.0]]></name>
+            <position>
+                <ra unit="rad">0.497895</ra>
+                <dec unit="rad">0.632738</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC680" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 680]]></name>
+            <position>
+                <ra unit="rad">0.485117</ra>
+                <dec unit="rad">0.385665</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC214" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 214]]></name>
+            <position>
+                <ra unit="rad">0.186735</ra>
+                <dec unit="rad">0.447484</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1012" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1012]]></name>
+            <position>
+                <ra unit="rad">0.7014</ra>
+                <dec unit="rad">0.528162</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC803" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 803]]></name>
+            <position>
+                <ra unit="rad">0.545929</ra>
+                <dec unit="rad">0.281915</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC753" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 753]]></name>
+            <position>
+                <ra unit="rad">0.520069</ra>
+                <dec unit="rad">0.629032</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1134" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1134]]></name>
+            <position>
+                <ra unit="rad">0.763896</ra>
+                <dec unit="rad">0.228942</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC918" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 918]]></name>
+            <position>
+                <ra unit="rad">0.6425</ra>
+                <dec unit="rad">0.324817</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC846" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 846]]></name>
+            <position>
+                <ra unit="rad">0.583797</ra>
+                <dec unit="rad">0.779971</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC982" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 982]]></name>
+            <position>
+                <ra unit="rad">0.685089</ra>
+                <dec unit="rad">0.715268</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC529" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 529]]></name>
+            <position>
+                <ra unit="rad">0.380046</ra>
+                <dec unit="rad">0.608184</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC828" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 828]]></name>
+            <position>
+                <ra unit="rad">0.574627</ra>
+                <dec unit="rad">0.686114</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC818" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 818]]></name>
+            <position>
+                <ra unit="rad">0.568415</ra>
+                <dec unit="rad">0.67891</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1525" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1525]]></name>
+            <position>
+                <ra unit="rad">0.0023285</ra>
+                <dec unit="rad">0.820878</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC673" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 673]]></name>
+            <position>
+                <ra unit="rad">0.478722</ra>
+                <dec unit="rad">0.203278</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC536" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 536]]></name>
+            <position>
+                <ra unit="rad">0.38306</ra>
+                <dec unit="rad">0.608001</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1024" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1024]]></name>
+            <position>
+                <ra unit="rad">0.700581</ra>
+                <dec unit="rad">0.191214</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC976" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 976]]></name>
+            <position>
+                <ra unit="rad">0.678174</ra>
+                <dec unit="rad">0.368061</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC910" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 910]]></name>
+            <position>
+                <ra unit="rad">0.64156</ra>
+                <dec unit="rad">0.731994</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC108" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 108]]></name>
+            <position>
+                <ra unit="rad">0.119163</ra>
+                <dec unit="rad">0.512309</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC677" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 677]]></name>
+            <position>
+                <ra unit="rad">0.482509</ra>
+                <dec unit="rad">0.230051</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7831" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7831]]></name>
+            <position>
+                <ra unit="rad">0.0375837</ra>
+                <dec unit="rad">0.571619</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC80" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 80]]></name>
+            <position>
+                <ra unit="rad">0.0980943</ra>
+                <dec unit="rad">0.392664</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC252" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 252]]></name>
+            <position>
+                <ra unit="rad">0.215407</ra>
+                <dec unit="rad">0.484549</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC678" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 678]]></name>
+            <position>
+                <ra unit="rad">0.483484</ra>
+                <dec unit="rad">0.386128</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC841" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 841]]></name>
+            <position>
+                <ra unit="rad">0.579501</ra>
+                <dec unit="rad">0.656554</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC513" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 513]]></name>
+            <position>
+                <ra unit="rad">0.374667</ra>
+                <dec unit="rad">0.592237</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1056" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1056]]></name>
+            <position>
+                <ra unit="rad">0.716878</ra>
+                <dec unit="rad">0.500609</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC97" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 97]]></name>
+            <position>
+                <ra unit="rad">0.103891</ra>
+                <dec unit="rad">0.521622</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC21" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 21]]></name>
+            <position>
+                <ra unit="rad">0.0526909</ra>
+                <dec unit="rad">0.584597</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC169" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 169]]></name>
+            <position>
+                <ra unit="rad">0.166595</ra>
+                <dec unit="rad">0.421161</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC551" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 551]]></name>
+            <position>
+                <ra unit="rad">0.388865</ra>
+                <dec unit="rad">0.651281</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC776" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 776]]></name>
+            <position>
+                <ra unit="rad">0.529357</ra>
+                <dec unit="rad">0.414824</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC425" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 425]]></name>
+            <position>
+                <ra unit="rad">0.324923</ra>
+                <dec unit="rad">0.679007</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC990" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 990]]></name>
+            <position>
+                <ra unit="rad">0.687962</ra>
+                <dec unit="rad">0.205114</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC523" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 523]]></name>
+            <position>
+                <ra unit="rad">0.378597</ra>
+                <dec unit="rad">0.59617</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC573" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 573]]></name>
+            <position>
+                <ra unit="rad">0.402724</ra>
+                <dec unit="rad">0.722385</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC218" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 218]]></name>
+            <position>
+                <ra unit="rad">0.208989</ra>
+                <dec unit="rad">0.636442</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC679" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 679]]></name>
+            <position>
+                <ra unit="rad">0.485215</ra>
+                <dec unit="rad">0.626795</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC179" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 179]]></name>
+            <position>
+                <ra unit="rad">0.531014</ra>
+                <dec unit="rad">0.665764</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC687" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 687]]></name>
+            <position>
+                <ra unit="rad">0.488836</ra>
+                <dec unit="rad">0.637005</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC797NED02" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 797 NED02]]></name>
+            <position>
+                <ra unit="rad">0.545328</ra>
+                <dec unit="rad">0.667415</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC65" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 65]]></name>
+            <position>
+                <ra unit="rad">0.272125</ra>
+                <dec unit="rad">0.834626</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC160" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 160]]></name>
+            <position>
+                <ra unit="rad">0.163134</ra>
+                <dec unit="rad">0.420586</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC167" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 167]]></name>
+            <position>
+                <ra unit="rad">0.491031</ra>
+                <dec unit="rad">0.384645</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC393" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 393]]></name>
+            <position>
+                <ra unit="rad">0.305587</ra>
+                <dec unit="rad">0.694311</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC83" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 83]]></name>
+            <position>
+                <ra unit="rad">0.0989355</ra>
+                <dec unit="rad">0.393998</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC528" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 528]]></name>
+            <position>
+                <ra unit="rad">0.379527</ra>
+                <dec unit="rad">0.590003</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC820" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 820]]></name>
+            <position>
+                <ra unit="rad">0.566285</ra>
+                <dec unit="rad">0.252541</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC746" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 746]]></name>
+            <position>
+                <ra unit="rad">0.521039</ra>
+                <dec unit="rad">0.786163</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC163" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 163]]></name>
+            <position>
+                <ra unit="rad">0.482737</ra>
+                <dec unit="rad">0.363682</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC898" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 898]]></name>
+            <position>
+                <ra unit="rad">0.632356</ra>
+                <dec unit="rad">0.734226</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC668" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 668]]></name>
+            <position>
+                <ra unit="rad">0.470585</ra>
+                <dec unit="rad">0.638587</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC183" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 183]]></name>
+            <position>
+                <ra unit="rad">0.173762</ra>
+                <dec unit="rad">0.517514</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC924" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 924]]></name>
+            <position>
+                <ra unit="rad">0.646632</ra>
+                <dec unit="rad">0.359742</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC317B" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 317B]]></name>
+            <position>
+                <ra unit="rad">0.257825</ra>
+                <dec unit="rad">0.766742</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC938" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 938]]></name>
+            <position>
+                <ra unit="rad">0.65439</ra>
+                <dec unit="rad">0.355998</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC233" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 233]]></name>
+            <position>
+                <ra unit="rad">0.196143</ra>
+                <dec unit="rad">0.536282</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC695" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 695]]></name>
+            <position>
+                <ra unit="rad">0.49146</ra>
+                <dec unit="rad">0.396331</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC708" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 708]]></name>
+            <position>
+                <ra unit="rad">0.498535</ra>
+                <dec unit="rad">0.633172</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1036" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1036]]></name>
+            <position>
+                <ra unit="rad">0.706431</ra>
+                <dec unit="rad">0.3387</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC906" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 906]]></name>
+            <position>
+                <ra unit="rad">0.640806</ra>
+                <dec unit="rad">0.736631</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC914" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 914]]></name>
+            <position>
+                <ra unit="rad">0.644373</ra>
+                <dec unit="rad">0.737572</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC794" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 794]]></name>
+            <position>
+                <ra unit="rad">0.540499</ra>
+                <dec unit="rad">0.322801</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC935" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 935]]></name>
+            <position>
+                <ra unit="rad">0.652743</ra>
+                <dec unit="rad">0.344052</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC834" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 834]]></name>
+            <position>
+                <ra unit="rad">0.578337</ra>
+                <dec unit="rad">0.659507</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC759" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 759]]></name>
+            <position>
+                <ra unit="rad">0.520675</ra>
+                <dec unit="rad">0.636484</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC19" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 19]]></name>
+            <position>
+                <ra unit="rad">0.0522508</ra>
+                <dec unit="rad">0.578143</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC817" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 817]]></name>
+            <position>
+                <ra unit="rad">0.562623</ra>
+                <dec unit="rad">0.302345</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC620" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 620]]></name>
+            <position>
+                <ra unit="rad">0.429744</ra>
+                <dec unit="rad">0.740965</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC43" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 43]]></name>
+            <position>
+                <ra unit="rad">0.0624348</ra>
+                <dec unit="rad">0.542049</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC512" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 512]]></name>
+            <position>
+                <ra unit="rad">0.3727</ra>
+                <dec unit="rad">0.59413</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC765" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 765]]></name>
+            <position>
+                <ra unit="rad">0.524548</ra>
+                <dec unit="rad">0.436615</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC267" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 267]]></name>
+            <position>
+                <ra unit="rad">0.764539</ra>
+                <dec unit="rad">0.226062</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC932" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 932]]></name>
+            <position>
+                <ra unit="rad">0.651566</ra>
+                <dec unit="rad">0.356854</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC810-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 810-1.0]]></name>
+            <position>
+                <ra unit="rad">0.553425</ra>
+                <dec unit="rad">0.233385</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1117A" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1117A]]></name>
+            <position>
+                <ra unit="rad">0.753101</ra>
+                <dec unit="rad">0.232073</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1804-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1804-1.0]]></name>
+            <position>
+                <ra unit="rad">0.660361</ra>
+                <dec unit="rad">0.405098</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC477" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 477]]></name>
+            <position>
+                <ra unit="rad">0.361239</ra>
+                <dec unit="rad">0.708997</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC781" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 781]]></name>
+            <position>
+                <ra unit="rad">0.530154</ra>
+                <dec unit="rad">0.223027</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC801" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 801]]></name>
+            <position>
+                <ra unit="rad">0.546564</ra>
+                <dec unit="rad">0.669889</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC43" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 43]]></name>
+            <position>
+                <ra unit="rad">0.190708</ra>
+                <dec unit="rad">0.519783</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC911" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 911]]></name>
+            <position>
+                <ra unit="rad">0.642705</ra>
+                <dec unit="rad">0.734296</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC304" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 304]]></name>
+            <position>
+                <ra unit="rad">0.250647</ra>
+                <dec unit="rad">0.423495</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2303" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2303]]></name>
+            <position>
+                <ra unit="rad">1.82452</ra>
+                <dec unit="rad">0.793417</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC431" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 431]]></name>
+            <position>
+                <ra unit="rad">0.329335</ra>
+                <dec unit="rad">0.590611</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC704B" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 704B]]></name>
+            <position>
+                <ra unit="rad">0.497895</ra>
+                <dec unit="rad">0.632736</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2208" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2208]]></name>
+            <position>
+                <ra unit="rad">1.67812</ra>
+                <dec unit="rad">0.905769</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC716" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 716]]></name>
+            <position>
+                <ra unit="rad">0.498919</ra>
+                <dec unit="rad">0.223978</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC238" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 238]]></name>
+            <position>
+                <ra unit="rad">0.683954</ra>
+                <dec unit="rad">0.225989</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC561" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 561]]></name>
+            <position>
+                <ra unit="rad">0.391572</ra>
+                <dec unit="rad">0.60111</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC712" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 712]]></name>
+            <position>
+                <ra unit="rad">0.500155</ra>
+                <dec unit="rad">0.64483</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC178" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 178]]></name>
+            <position>
+                <ra unit="rad">0.525387</ra>
+                <dec unit="rad">0.642266</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC76" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 76]]></name>
+            <position>
+                <ra unit="rad">0.0913494</ra>
+                <dec unit="rad">0.524914</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC653" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 653]]></name>
+            <position>
+                <ra unit="rad">0.453302</ra>
+                <dec unit="rad">0.624259</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC13" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 13]]></name>
+            <position>
+                <ra unit="rad">0.0440091</ra>
+                <dec unit="rad">0.586003</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC590" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 590]]></name>
+            <position>
+                <ra unit="rad">0.415343</ra>
+                <dec unit="rad">0.786454</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC714" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 714]]></name>
+            <position>
+                <ra unit="rad">0.501682</ra>
+                <dec unit="rad">0.634381</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC196" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 196]]></name>
+            <position>
+                <ra unit="rad">0.54627</ra>
+                <dec unit="rad">0.259366</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC195" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 195]]></name>
+            <position>
+                <ra unit="rad">0.545892</ra>
+                <dec unit="rad">0.258846</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC591" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 591]]></name>
+            <position>
+                <ra unit="rad">0.414369</ra>
+                <dec unit="rad">0.62482</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1683" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1683]]></name>
+            <position>
+                <ra unit="rad">0.366825</ra>
+                <dec unit="rad">0.603371</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC871" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 871]]></name>
+            <position>
+                <ra unit="rad">0.604547</ra>
+                <dec unit="rad">0.255952</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC770" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 770]]></name>
+            <position>
+                <ra unit="rad">0.52627</ra>
+                <dec unit="rad">0.332971</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC962" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 962]]></name>
+            <position>
+                <ra unit="rad">0.672563</ra>
+                <dec unit="rad">0.491876</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC721" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 721]]></name>
+            <position>
+                <ra unit="rad">0.507308</ra>
+                <dec unit="rad">0.689569</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC140" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 140]]></name>
+            <position>
+                <ra unit="rad">0.142533</ra>
+                <dec unit="rad">0.539889</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1543" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1543]]></name>
+            <position>
+                <ra unit="rad">0.0969712</ra>
+                <dec unit="rad">0.384091</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC980" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 980]]></name>
+            <position>
+                <ra unit="rad">0.684632</ra>
+                <dec unit="rad">0.71626</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC605" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 605]]></name>
+            <position>
+                <ra unit="rad">0.42116</ra>
+                <dec unit="rad">0.722207</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC71" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 71]]></name>
+            <position>
+                <ra unit="rad">0.085945</ra>
+                <dec unit="rad">0.527174</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC262" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 262]]></name>
+            <position>
+                <ra unit="rad">0.21878</ra>
+                <dec unit="rad">0.560184</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7618" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7618]]></name>
+            <position>
+                <ra unit="rad">6.11286</ra>
+                <dec unit="rad">0.750371</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1675" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1675]]></name>
+            <position>
+                <ra unit="rad">0.359603</ra>
+                <dec unit="rad">0.60009</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC260" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 260]]></name>
+            <position>
+                <ra unit="rad">0.217821</ra>
+                <dec unit="rad">0.485748</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC710" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 710]]></name>
+            <position>
+                <ra unit="rad">0.499075</ra>
+                <dec unit="rad">0.631444</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC786" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 786]]></name>
+            <position>
+                <ra unit="rad">0.535733</ra>
+                <dec unit="rad">0.275217</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC671" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 671]]></name>
+            <position>
+                <ra unit="rad">0.472695</ra>
+                <dec unit="rad">0.231279</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC46" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 46]]></name>
+            <position>
+                <ra unit="rad">0.1933</ra>
+                <dec unit="rad">0.478098</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC774" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 774]]></name>
+            <position>
+                <ra unit="rad">0.527693</ra>
+                <dec unit="rad">0.24663</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1821-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1821-1.0]]></name>
+            <position>
+                <ra unit="rad">0.688537</ra>
+                <dec unit="rad">0.242439</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1117-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1117-1.0]]></name>
+            <position>
+                <ra unit="rad">0.753123</ra>
+                <dec unit="rad">0.231956</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC694" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 694]]></name>
+            <position>
+                <ra unit="rad">0.4903</ra>
+                <dec unit="rad">0.386124</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC93" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 93]]></name>
+            <position>
+                <ra unit="rad">0.101908</ra>
+                <dec unit="rad">0.393551</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC39" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 39]]></name>
+            <position>
+                <ra unit="rad">0.059384</ra>
+                <dec unit="rad">0.544594</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC845" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 845]]></name>
+            <position>
+                <ra unit="rad">0.584048</ra>
+                <dec unit="rad">0.656201</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1029" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1029]]></name>
+            <position>
+                <ra unit="rad">0.702367</ra>
+                <dec unit="rad">0.190277</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC703" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 703]]></name>
+            <position>
+                <ra unit="rad">0.498034</ra>
+                <dec unit="rad">0.633514</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC248" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 248]]></name>
+            <position>
+                <ra unit="rad">0.710523</ra>
+                <dec unit="rad">0.312775</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC5355" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 5355]]></name>
+            <position>
+                <ra unit="rad">6.23305</ra>
+                <dec unit="rad">0.574642</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC70" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 70]]></name>
+            <position>
+                <ra unit="rad">0.0858694</ra>
+                <dec unit="rad">0.527459</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7836" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7836]]></name>
+            <position>
+                <ra unit="rad">0.0406518</ra>
+                <dec unit="rad">0.579675</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC923" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 923]]></name>
+            <position>
+                <ra unit="rad">0.650883</ra>
+                <dec unit="rad">0.734657</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC226" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 226]]></name>
+            <position>
+                <ra unit="rad">0.193067</ra>
+                <dec unit="rad">0.571088</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC6" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 6]]></name>
+            <position>
+                <ra unit="rad">0.0472856</ra>
+                <dec unit="rad">0.583826</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7440" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7440]]></name>
+            <position>
+                <ra unit="rad">6.02009</ra>
+                <dec unit="rad">0.627259</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC705" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 705]]></name>
+            <position>
+                <ra unit="rad">0.498173</ra>
+                <dec unit="rad">0.633036</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC68" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 68]]></name>
+            <position>
+                <ra unit="rad">0.0855744</ra>
+                <dec unit="rad">0.527322</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1030" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1030]]></name>
+            <position>
+                <ra unit="rad">0.703599</ra>
+                <dec unit="rad">0.316487</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC27" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 27]]></name>
+            <position>
+                <ra unit="rad">0.0516526</ra>
+                <dec unit="rad">0.508554</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1764" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1764]]></name>
+            <position>
+                <ra unit="rad">0.531483</ra>
+                <dec unit="rad">0.431162</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC927" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 927]]></name>
+            <position>
+                <ra unit="rad">0.645711</ra>
+                <dec unit="rad">0.214134</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC11" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 11]]></name>
+            <position>
+                <ra unit="rad">0.043636</ra>
+                <dec unit="rad">0.656076</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC51" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 51]]></name>
+            <position>
+                <ra unit="rad">0.0693628</ra>
+                <dec unit="rad">0.844718</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC112" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 112]]></name>
+            <position>
+                <ra unit="rad">0.122746</ra>
+                <dec unit="rad">0.555793</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC996" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 996]]></name>
+            <position>
+                <ra unit="rad">0.699332</ra>
+                <dec unit="rad">0.728822</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC562" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 562]]></name>
+            <position>
+                <ra unit="rad">0.392743</ra>
+                <dec unit="rad">0.846839</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC946" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 946]]></name>
+            <position>
+                <ra unit="rad">0.664286</ra>
+                <dec unit="rad">0.739088</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC909" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 909]]></name>
+            <position>
+                <ra unit="rad">0.641279</ra>
+                <dec unit="rad">0.735684</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC792" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 792]]></name>
+            <position>
+                <ra unit="rad">0.539418</ra>
+                <dec unit="rad">0.276359</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC243" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 243]]></name>
+            <position>
+                <ra unit="rad">0.206647</ra>
+                <dec unit="rad">0.525324</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1791" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1791]]></name>
+            <position>
+                <ra unit="rad">0.606722</ra>
+                <dec unit="rad">0.219692</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC722" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 722]]></name>
+            <position>
+                <ra unit="rad">0.5069</ra>
+                <dec unit="rad">0.363427</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1054" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1054]]></name>
+            <position>
+                <ra unit="rad">0.714167</ra>
+                <dec unit="rad">0.319838</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC711" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 711]]></name>
+            <position>
+                <ra unit="rad">0.496698</ra>
+                <dec unit="rad">0.307836</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC280" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 280]]></name>
+            <position>
+                <ra unit="rad">0.23494</ra>
+                <dec unit="rad">0.427408</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1802" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1802]]></name>
+            <position>
+                <ra unit="rad">0.657418</ra>
+                <dec unit="rad">0.404849</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1838-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1838-1.0]]></name>
+            <position>
+                <ra unit="rad">0.724922</ra>
+                <dec unit="rad">0.341426</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1835-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1835-1.0]]></name>
+            <position>
+                <ra unit="rad">0.720853</ra>
+                <dec unit="rad">0.261744</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC94-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 94-1.0]]></name>
+            <position>
+                <ra unit="rad">0.102663</ra>
+                <dec unit="rad">0.394865</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC704-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 704-2.0]]></name>
+            <position>
+                <ra unit="rad">0.497916</ra>
+                <dec unit="rad">0.632694</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC72" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 72]]></name>
+            <position>
+                <ra unit="rad">0.0862938</ra>
+                <dec unit="rad">0.52678</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC5376" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 5376]]></name>
+            <position>
+                <ra unit="rad">0.0113767</ra>
+                <dec unit="rad">0.605071</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC5" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 5]]></name>
+            <position>
+                <ra unit="rad">0.0397249</ra>
+                <dec unit="rad">0.619672</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC90" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 90]]></name>
+            <position>
+                <ra unit="rad">0.101047</ra>
+                <dec unit="rad">0.393411</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC193" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 193]]></name>
+            <position>
+                <ra unit="rad">0.540453</ra>
+                <dec unit="rad">0.195733</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC662" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 662]]></name>
+            <position>
+                <ra unit="rad">0.462811</ra>
+                <dec unit="rad">0.66016</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC229" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 229]]></name>
+            <position>
+                <ra unit="rad">0.193751</ra>
+                <dec unit="rad">0.41274</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1861" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1861]]></name>
+            <position>
+                <ra unit="rad">0.761804</ra>
+                <dec unit="rad">0.44671</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC928" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 928]]></name>
+            <position>
+                <ra unit="rad">0.650781</ra>
+                <dec unit="rad">0.477094</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC999" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 999]]></name>
+            <position>
+                <ra unit="rad">0.699886</ra>
+                <dec unit="rad">0.729222</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC2190" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 2190]]></name>
+            <position>
+                <ra unit="rad">1.97049</ra>
+                <dec unit="rad">0.652734</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1748" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1748]]></name>
+            <position>
+                <ra unit="rad">0.512792</ra>
+                <dec unit="rad">0.310062</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7707" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7707]]></name>
+            <position>
+                <ra unit="rad">6.17876</ra>
+                <dec unit="rad">0.77573</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC67A" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 67A]]></name>
+            <position>
+                <ra unit="rad">0.0851089</ra>
+                <dec unit="rad">0.527035</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1804-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1804-2.0]]></name>
+            <position>
+                <ra unit="rad">0.660034</ra>
+                <dec unit="rad">0.405297</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1817-1.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1817-1.0]]></name>
+            <position>
+                <ra unit="rad">0.67713</ra>
+                <dec unit="rad">0.197472</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC169A" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 169A]]></name>
+            <position>
+                <ra unit="rad">0.166648</ra>
+                <dec unit="rad">0.421057</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1586" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1586]]></name>
+            <position>
+                <ra unit="rad">0.214975</ra>
+                <dec unit="rad">0.392898</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1755" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1755]]></name>
+            <position>
+                <ra unit="rad">0.517158</ra>
+                <dec unit="rad">0.256098</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC984" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 984]]></name>
+            <position>
+                <ra unit="rad">0.681385</ra>
+                <dec unit="rad">0.410578</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC109" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 109]]></name>
+            <position>
+                <ra unit="rad">0.120208</ra>
+                <dec unit="rad">0.383061</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1801" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1801]]></name>
+            <position>
+                <ra unit="rad">0.652859</ra>
+                <dec unit="rad">0.343776</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC192" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 192]]></name>
+            <position>
+                <ra unit="rad">0.540666</ra>
+                <dec unit="rad">0.281628</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC5370" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 5370]]></name>
+            <position>
+                <ra unit="rad">0.00623525</ra>
+                <dec unit="rad">0.573873</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1088NED01" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1088 NED01]]></name>
+            <position>
+                <ra unit="rad">0.735083</ra>
+                <dec unit="rad">0.284594</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1544" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1544]]></name>
+            <position>
+                <ra unit="rad">0.0985814</ra>
+                <dec unit="rad">0.40547</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1732" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1732]]></name>
+            <position>
+                <ra unit="rad">0.48989</ra>
+                <dec unit="rad">0.629358</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC228" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 228]]></name>
+            <position>
+                <ra unit="rad">0.193013</ra>
+                <dec unit="rad">0.412635</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC995" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 995]]></name>
+            <position>
+                <ra unit="rad">0.698756</ra>
+                <dec unit="rad">0.726758</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC719" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 719]]></name>
+            <position>
+                <ra unit="rad">0.501923</ra>
+                <dec unit="rad">0.34846</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC717" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 717]]></name>
+            <position>
+                <ra unit="rad">0.503537</ra>
+                <dec unit="rad">0.63452</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC189" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 189]]></name>
+            <position>
+                <ra unit="rad">0.537975</ra>
+                <dec unit="rad">0.413193</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1112" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1112]]></name>
+            <position>
+                <ra unit="rad">0.743459</ra>
+                <dec unit="rad">0.232634</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC86" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 86]]></name>
+            <position>
+                <ra unit="rad">0.0993852</ra>
+                <dec unit="rad">0.396141</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC732" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 732]]></name>
+            <position>
+                <ra unit="rad">0.514671</ra>
+                <dec unit="rad">0.644505</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1117" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1117]]></name>
+            <position>
+                <ra unit="rad">0.753116</ra>
+                <dec unit="rad">0.231947</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC531" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 531]]></name>
+            <position>
+                <ra unit="rad">0.382851</ra>
+                <dec unit="rad">0.608889</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC882" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 882]]></name>
+            <position>
+                <ra unit="rad">0.615435</ra>
+                <dec unit="rad">0.278042</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1774" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1774]]></name>
+            <position>
+                <ra unit="rad">0.546953</ra>
+                <dec unit="rad">0.26947</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1540" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1540]]></name>
+            <position>
+                <ra unit="rad">0.0921226</ra>
+                <dec unit="rad">0.417371</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC235" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 235]]></name>
+            <position>
+                <ra unit="rad">0.673125</ra>
+                <dec unit="rad">0.362212</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1799" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1799]]></name>
+            <position>
+                <ra unit="rad">0.656277</ra>
+                <dec unit="rad">0.804344</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC912" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 912]]></name>
+            <position>
+                <ra unit="rad">0.64272</ra>
+                <dec unit="rad">0.731175</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC683" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 683]]></name>
+            <position>
+                <ra unit="rad">0.484856</ra>
+                <dec unit="rad">0.206414</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC48" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 48]]></name>
+            <position>
+                <ra unit="rad">0.0669757</ra>
+                <dec unit="rad">0.844354</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC389" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 389]]></name>
+            <position>
+                <ra unit="rad">0.305077</ra>
+                <dec unit="rad">0.695204</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1736" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1736]]></name>
+            <position>
+                <ra unit="rad">0.489833</ra>
+                <dec unit="rad">0.321635</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC937" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 937]]></name>
+            <position>
+                <ra unit="rad">0.659161</ra>
+                <dec unit="rad">0.739398</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC149" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 149]]></name>
+            <position>
+                <ra unit="rad">0.153442</ra>
+                <dec unit="rad">0.53868</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1809" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1809]]></name>
+            <position>
+                <ra unit="rad">0.668067</ra>
+                <dec unit="rad">0.401945</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC213" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 213]]></name>
+            <position>
+                <ra unit="rad">0.591027</ra>
+                <dec unit="rad">0.289274</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC900" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 900]]></name>
+            <position>
+                <ra unit="rad">0.632643</ra>
+                <dec unit="rad">0.464733</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC904" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 904]]></name>
+            <position>
+                <ra unit="rad">0.6351</ra>
+                <dec unit="rad">0.479232</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1542" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1542]]></name>
+            <position>
+                <ra unit="rad">0.0959359</ra>
+                <dec unit="rad">0.396771</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC913" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 913]]></name>
+            <position>
+                <ra unit="rad">0.642861</ra>
+                <dec unit="rad">0.731558</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1584" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1584]]></name>
+            <position>
+                <ra unit="rad">0.212283</ra>
+                <dec unit="rad">0.488111</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC190" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 190]]></name>
+            <position>
+                <ra unit="rad">0.539021</ra>
+                <dec unit="rad">0.413162</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1550" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1550]]></name>
+            <position>
+                <ra unit="rad">0.11251</ra>
+                <dec unit="rad">0.668942</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC704A" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 704A]]></name>
+            <position>
+                <ra unit="rad">0.49806</ra>
+                <dec unit="rad">0.632633</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC810NED01" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 810 NED01]]></name>
+            <position>
+                <ra unit="rad">0.553419</ra>
+                <dec unit="rad">0.233386</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1794" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1794]]></name>
+            <position>
+                <ra unit="rad">0.623457</ra>
+                <dec unit="rad">0.277112</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1534" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1534]]></name>
+            <position>
+                <ra unit="rad">0.0657537</ra>
+                <dec unit="rad">0.842897</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1841" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1841]]></name>
+            <position>
+                <ra unit="rad">0.728779</ra>
+                <dec unit="rad">0.332238</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1857" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1857]]></name>
+            <position>
+                <ra unit="rad">0.746306</ra>
+                <dec unit="rad">0.256996</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC5373" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 5373]]></name>
+            <position>
+                <ra unit="rad">0.00766516</ra>
+                <dec unit="rad">0.574641</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2242" xsi:type="oal:deepSkyPN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2242]]></name>
+            <position>
+                <ra unit="rad">1.72777</ra>
+                <dec unit="rad">0.781163</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1585" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1585]]></name>
+            <position>
+                <ra unit="rad">0.211923</ra>
+                <dec unit="rad">0.404781</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1647" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1647]]></name>
+            <position>
+                <ra unit="rad">0.325804</ra>
+                <dec unit="rad">0.681047</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC916" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 916]]></name>
+            <position>
+                <ra unit="rad">0.642527</ra>
+                <dec unit="rad">0.477478</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC222" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 222]]></name>
+            <position>
+                <ra unit="rad">0.629002</ra>
+                <dec unit="rad">0.205134</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1535" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1535]]></name>
+            <position>
+                <ra unit="rad">0.0666216</ra>
+                <dec unit="rad">0.843012</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC79" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 79]]></name>
+            <position>
+                <ra unit="rad">0.0975127</ra>
+                <dec unit="rad">0.396319</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1742" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1742]]></name>
+            <position>
+                <ra unit="rad">0.500198</ra>
+                <dec unit="rad">0.398748</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1838" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1838]]></name>
+            <position>
+                <ra unit="rad">0.724921</ra>
+                <dec unit="rad">0.341428</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1854" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1854]]></name>
+            <position>
+                <ra unit="rad">0.745128</ra>
+                <dec unit="rad">0.338757</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1832" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1832]]></name>
+            <position>
+                <ra unit="rad">0.712876</ra>
+                <dec unit="rad">0.334029</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1817NED02" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1817 NED02]]></name>
+            <position>
+                <ra unit="rad">0.677223</ra>
+                <dec unit="rad">0.197475</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC279" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 279]]></name>
+            <position>
+                <ra unit="rad">0.796802</ra>
+                <dec unit="rad">0.284654</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC915" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 915]]></name>
+            <position>
+                <ra unit="rad">0.642377</ra>
+                <dec unit="rad">0.477103</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC49" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 49]]></name>
+            <position>
+                <ra unit="rad">0.0684519</ra>
+                <dec unit="rad">0.844559</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC709" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 709]]></name>
+            <position>
+                <ra unit="rad">0.498839</ra>
+                <dec unit="rad">0.634421</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC258" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 258]]></name>
+            <position>
+                <ra unit="rad">0.216229</ra>
+                <dec unit="rad">0.485134</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC5369" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 5369]]></name>
+            <position>
+                <ra unit="rad">0.00487746</ra>
+                <dec unit="rad">0.573244</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1028" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1028]]></name>
+            <position>
+                <ra unit="rad">0.702413</ra>
+                <dec unit="rad">0.191156</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1839" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1839]]></name>
+            <position>
+                <ra unit="rad">0.724787</ra>
+                <dec unit="rad">0.267858</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1797" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1797]]></name>
+            <position>
+                <ra unit="rad">0.640884</ra>
+                <dec unit="rad">0.357967</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC180" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 180]]></name>
+            <position>
+                <ra unit="rad">0.529787</ra>
+                <dec unit="rad">0.414125</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC933" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 933]]></name>
+            <position>
+                <ra unit="rad">0.658575</ra>
+                <dec unit="rad">0.803305</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1583" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1583]]></name>
+            <position>
+                <ra unit="rad">0.211632</ra>
+                <dec unit="rad">0.405135</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1116" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1116]]></name>
+            <position>
+                <ra unit="rad">0.750398</ra>
+                <dec unit="rad">0.234565</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1168" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1168]]></name>
+            <position>
+                <ra unit="rad">0.794828</ra>
+                <dec unit="rad">0.207214</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7449" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7449]]></name>
+            <position>
+                <ra unit="rad">6.02477</ra>
+                <dec unit="rad">0.685621</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1166" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1166]]></name>
+            <position>
+                <ra unit="rad">0.793955</ra>
+                <dec unit="rad">0.208446</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1109" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1109]]></name>
+            <position>
+                <ra unit="rad">0.737873</ra>
+                <dec unit="rad">0.233194</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1777" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1777]]></name>
+            <position>
+                <ra unit="rad">0.556389</ra>
+                <dec unit="rad">0.267563</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC94" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 94]]></name>
+            <position>
+                <ra unit="rad">0.102658</ra>
+                <dec unit="rad">0.39486</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC317A" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 317A]]></name>
+            <position>
+                <ra unit="rad">0.257723</ra>
+                <dec unit="rad">0.766891</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC919" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 919]]></name>
+            <position>
+                <ra unit="rad">0.64464</ra>
+                <dec unit="rad">0.476944</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7446" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7446]]></name>
+            <position>
+                <ra unit="rad">6.02415</ra>
+                <dec unit="rad">0.684521</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC675" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 675]]></name>
+            <position>
+                <ra unit="rad">0.482113</ra>
+                <dec unit="rad">0.23013</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1000" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1000]]></name>
+            <position>
+                <ra unit="rad">0.700042</ra>
+                <dec unit="rad">0.725542</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC184" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 184]]></name>
+            <position>
+                <ra unit="rad">0.174226</ra>
+                <dec unit="rad">0.516403</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC96" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 96]]></name>
+            <position>
+                <ra unit="rad">0.102963</ra>
+                <dec unit="rad">0.395963</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC94-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 94-2.0]]></name>
+            <position>
+                <ra unit="rad">0.102678</ra>
+                <dec unit="rad">0.3947</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1117-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1117-2.0]]></name>
+            <position>
+                <ra unit="rad">0.753152</ra>
+                <dec unit="rad">0.23199</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC810-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 810-2.0]]></name>
+            <position>
+                <ra unit="rad">0.553483</ra>
+                <dec unit="rad">0.233384</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1835-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1835-2.0]]></name>
+            <position>
+                <ra unit="rad">0.720824</ra>
+                <dec unit="rad">0.2617</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC700" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 700]]></name>
+            <position>
+                <ra unit="rad">0.496372</ra>
+                <dec unit="rad">0.631165</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC85B" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 85B]]></name>
+            <position>
+                <ra unit="rad">0.0994163</ra>
+                <dec unit="rad">0.395258</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1775" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1775]]></name>
+            <position>
+                <ra unit="rad">0.552626</ra>
+                <dec unit="rad">0.23783</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1115" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1115]]></name>
+            <position>
+                <ra unit="rad">0.749646</ra>
+                <dec unit="rad">0.233365</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC181" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 181]]></name>
+            <position>
+                <ra unit="rad">0.173311</ra>
+                <dec unit="rad">0.51684</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1780" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1780]]></name>
+            <position>
+                <ra unit="rad">0.559467</ra>
+                <dec unit="rad">0.259049</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1536" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1536]]></name>
+            <position>
+                <ra unit="rad">0.0682019</ra>
+                <dec unit="rad">0.842756</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC992" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 992]]></name>
+            <position>
+                <ra unit="rad">0.693132</ra>
+                <dec unit="rad">0.370203</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC920" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 920]]></name>
+            <position>
+                <ra unit="rad">0.652331</ra>
+                <dec unit="rad">0.803938</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1807" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1807]]></name>
+            <position>
+                <ra unit="rad">0.66302</ra>
+                <dec unit="rad">0.40252</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC2387" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 2387]]></name>
+            <position>
+                <ra unit="rad">1.96635</ra>
+                <dec unit="rad">0.642762</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC7445" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 7445]]></name>
+            <position>
+                <ra unit="rad">6.02367</ra>
+                <dec unit="rad">0.684951</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1541" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1541]]></name>
+            <position>
+                <ra unit="rad">0.0930776</ra>
+                <dec unit="rad">0.386426</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC5372" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 5372]]></name>
+            <position>
+                <ra unit="rad">0.00675096</ra>
+                <dec unit="rad">0.57482</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1842" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1842]]></name>
+            <position>
+                <ra unit="rad">0.727623</ra>
+                <dec unit="rad">0.201841</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1548" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1548]]></name>
+            <position>
+                <ra unit="rad">0.101319</ra>
+                <dec unit="rad">0.386539</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1890" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1890]]></name>
+            <position>
+                <ra unit="rad">0.835194</ra>
+                <dec unit="rad">0.336929</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC74" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 74]]></name>
+            <position>
+                <ra unit="rad">0.0878212</ra>
+                <dec unit="rad">0.527151</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1730" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1730]]></name>
+            <position>
+                <ra unit="rad">0.485893</ra>
+                <dec unit="rad">0.386384</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1821NED01" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1821 NED01]]></name>
+            <position>
+                <ra unit="rad">0.688545</ra>
+                <dec unit="rad">0.242432</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC901" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 901]]></name>
+            <position>
+                <ra unit="rad">0.632783</ra>
+                <dec unit="rad">0.465528</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1790" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1790]]></name>
+            <position>
+                <ra unit="rad">0.606465</ra>
+                <dec unit="rad">0.220362</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC542" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 542]]></name>
+            <position>
+                <ra unit="rad">0.383723</ra>
+                <dec unit="rad">0.607516</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC72A" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 72A]]></name>
+            <position>
+                <ra unit="rad">0.0867257</ra>
+                <dec unit="rad">0.526705</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC255" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 255]]></name>
+            <position>
+                <ra unit="rad">0.735027</ra>
+                <dec unit="rad">0.286133</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1806" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1806]]></name>
+            <position>
+                <ra unit="rad">0.658941</ra>
+                <dec unit="rad">0.402412</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC5371" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 5371]]></name>
+            <position>
+                <ra unit="rad">0.00664312</ra>
+                <dec unit="rad">0.575507</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1803" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1803]]></name>
+            <position>
+                <ra unit="rad">0.660037</ra>
+                <dec unit="rad">0.405297</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1236" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1236]]></name>
+            <position>
+                <ra unit="rad">0.841428</ra>
+                <dec unit="rad">0.190306</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC212" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 212]]></name>
+            <position>
+                <ra unit="rad">0.589137</ra>
+                <dec unit="rad">0.291686</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC69" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 69]]></name>
+            <position>
+                <ra unit="rad">0.0857213</ra>
+                <dec unit="rad">0.526768</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC85" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 85]]></name>
+            <position>
+                <ra unit="rad">0.0991637</ra>
+                <dec unit="rad">0.395362</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1817-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1817-2.0]]></name>
+            <position>
+                <ra unit="rad">0.677225</ra>
+                <dec unit="rad">0.197462</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1804" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1804]]></name>
+            <position>
+                <ra unit="rad">0.660362</ra>
+                <dec unit="rad">0.405096</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1829" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1829]]></name>
+            <position>
+                <ra unit="rad">0.706559</ra>
+                <dec unit="rad">0.251442</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1894" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1894]]></name>
+            <position>
+                <ra unit="rad">0.837176</ra>
+                <dec unit="rad">0.343882</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC810NED02" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 810 NED02]]></name>
+            <position>
+                <ra unit="rad">0.553475</ra>
+                <dec unit="rad">0.233382</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC181" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 181]]></name>
+            <position>
+                <ra unit="rad">0.529928</ra>
+                <dec unit="rad">0.415073</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1111" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1111]]></name>
+            <position>
+                <ra unit="rad">0.741931</ra>
+                <dec unit="rad">0.233261</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1847" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1847]]></name>
+            <position>
+                <ra unit="rad">0.738645</ra>
+                <dec unit="rad">0.255007</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1127" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1127]]></name>
+            <position>
+                <ra unit="rad">0.760302</ra>
+                <dec unit="rad">0.233176</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1838-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1838-2.0]]></name>
+            <position>
+                <ra unit="rad">0.724922</ra>
+                <dec unit="rad">0.341494</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1855" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1855]]></name>
+            <position>
+                <ra unit="rad">0.743753</ra>
+                <dec unit="rad">0.236458</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC81" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 81]]></name>
+            <position>
+                <ra unit="rad">0.0982706</ra>
+                <dec unit="rad">0.393112</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC870" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 870]]></name>
+            <position>
+                <ra unit="rad">0.604436</ra>
+                <dec unit="rad">0.25552</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1817NED01" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1817 NED01]]></name>
+            <position>
+                <ra unit="rad">0.677137</ra>
+                <dec unit="rad">0.197471</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC67" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 67]]></name>
+            <position>
+                <ra unit="rad">0.0851154</ra>
+                <dec unit="rad">0.527039</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1821-2.0" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1821-2.0]]></name>
+            <position>
+                <ra unit="rad">0.688631</ra>
+                <dec unit="rad">0.242424</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC876" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 876]]></name>
+            <position>
+                <ra unit="rad">0.607644</ra>
+                <dec unit="rad">0.255484</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC797NED01" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 797 NED01]]></name>
+            <position>
+                <ra unit="rad">0.545081</ra>
+                <dec unit="rad">0.667333</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="Abell8" xsi:type="oal:deepSkyPN">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[Abell 8]]></name>
+            <position>
+                <ra unit="rad">1.34559</ra>
+                <dec unit="rad">0.68365</dec>
+            </position>
+            <constellation><![CDATA[Auriga]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1891" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1891]]></name>
+            <position>
+                <ra unit="rad">0.836197</ra>
+                <dec unit="rad">0.343883</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1545" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1545]]></name>
+            <position>
+                <ra unit="rad">0.0988252</ra>
+                <dec unit="rad">0.38614</dec>
+            </position>
+            <constellation><![CDATA[Andromeda]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC903" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 903]]></name>
+            <position>
+                <ra unit="rad">0.634759</ra>
+                <dec unit="rad">0.479475</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="IC1893" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[IC 1893]]></name>
+            <position>
+                <ra unit="rad">0.836528</ra>
+                <dec unit="rad">0.344062</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+        <target id="NGC1088NED02" xsi:type="oal:deepSkyGX">
+            <datasource><![CDATA[KStars]]></datasource>
+            <name><![CDATA[NGC 1088 NED02]]></name>
+            <position>
+                <ra unit="rad">0.735147</ra>
+                <dec unit="rad">0.284638</dec>
+            </position>
+            <constellation><![CDATA[Aries]]></constellation>
+            <notes><![CDATA[]]></notes>
+        </target>
+    </targets>
+    <scopes/>
+    <dslrlenses/>
+    <eyepieces/>
+    <lenses/>
+    <filters/>
+    <imagers/>
+</oal:observations>

@@ -1,5 +1,5 @@
 import uuid
-from targets.models import target
+from targets.models import Target
 from setup.models import observatory, telescope, imager
 from django.db import models
 from django.urls import reverse
@@ -24,7 +24,7 @@ class sequenceFile(models.Model):
         return reverse("sequence_detail", args=[str(self.sequenceId)])
 
 ##################################################################################################
-## observation - a request and subsequent updates on the observations required of a target      ##
+## observation - a request and subsequent updates on the observations required of a Target      ##
 ##################################################################################################    
 class observation(models.Model):
     observationId       = models.UUIDField( 
@@ -32,7 +32,7 @@ class observation(models.Model):
                         default=uuid.uuid4,
                         editable=False)
     observationDate     = models.DateField(null=True, blank=True)
-    targetId        = models.ForeignKey(target, on_delete=models.CASCADE,null=True, blank=True)
+    targetId        = models.ForeignKey(Target, on_delete=models.CASCADE,null=True, blank=True)
     userId          = models.CharField(max_length=255)
     targetPA        = models.DecimalField(default=0.0,max_digits=6, decimal_places=2,null=True, blank=True)
     targetInactive  = models.BooleanField(default=False)
@@ -66,7 +66,7 @@ class scheduleDetail(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
-    targetId                = models.ForeignKey(target, on_delete=models.CASCADE)  
+    targetId                = models.ForeignKey(Target, on_delete=models.CASCADE)  
     scheduledDateTime       = models.DateTimeField()
     targetPriority          = models.IntegerField(default=1,validators=[MaxValueValidator(100),MinValueValidator(1)])
     requiredStartTime       = models.DateTimeField()

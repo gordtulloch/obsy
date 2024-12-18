@@ -6,7 +6,7 @@ from .views import observation_detail_view, observation_all_list
 from .views import observation_create,observation_update,observation_delete,ScheduleUpdateView,ScheduleDeleteView, ScheduleRegenView,\
     scheduleMasterList,ScheduleCreateView, daily_observations_task, list_fits_files, fitsfile_detail, sequence_file_list, \
     sequence_file_create, sequence_file_edit, sequence_file_delete,taskPostProcessing
-from targets.models import target
+from targets.models import Target
 
 urlpatterns = [
     # Observations

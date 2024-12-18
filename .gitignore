@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Thumbnails
+static/images/thumbnails/*
+
 # C extensions
 *.so
 
@@ -88,7 +91,7 @@ docs/_build/
 
 # PyBuilder
 .pybuilder/
-target/
+Target/
 
 # Jupyter Notebook
 .ipynb_checkpoints

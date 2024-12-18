@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='target',
+            model_name='Target',
             name='targetDec2000',
             field=models.DecimalField(decimal_places=6, default=0.0, max_digits=9),
         ),
         migrations.AlterField(
-            model_name='target',
+            model_name='Target',
             name='targetRA2000',
             field=models.DecimalField(decimal_places=6, default=0.0, max_digits=9),
         ),
