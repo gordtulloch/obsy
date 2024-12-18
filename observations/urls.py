@@ -5,7 +5,7 @@ from . import views
 from .views import observation_detail_view, observation_all_list
 from .views import observation_create,observation_update,observation_delete,ScheduleUpdateView,ScheduleDeleteView, ScheduleRegenView,\
     scheduleMasterList,ScheduleCreateView, daily_observations_task, list_fits_files, fitsfile_detail, sequence_file_list, \
-    sequence_file_create, sequence_file_edit, sequence_file_delete,taskPostProcessing
+    sequence_file_create, sequence_file_edit, sequence_file_delete,taskPostProcessing,observation_updateDS
 from targets.models import Target
 
 urlpatterns = [
@@ -13,7 +13,7 @@ urlpatterns = [
     path("",                                observation_all_list.as_view(), name="observation_all_list"),
     path("<uuid:pk>/",                      observation_detail_view.as_view(), name="observation_detail" ),
     path("all_list/",                       observation_all_list.as_view(), name="observation_all_list"),
-    path("<uuid:pk>/edit/",                 observation_update.as_view(), name="observation_update"),
+    path("<uuid:pk>/edit/",                 observation_update, name="observation_update"),
     path("<uuid:pk>/delete/",               observation_delete.as_view(), name="observation_delete"),
     path('create/',                         observation_create, name='observation_create'),
     path('create/<uuid:target_uuid>/',      observation_create, name='observation_create'),

@@ -33,6 +33,7 @@ class observation(models.Model):
                         editable=False)
     observationDate     = models.DateField(null=True, blank=True)
     targetId        = models.ForeignKey(Target, on_delete=models.CASCADE,null=True, blank=True)
+    targetClass     = models.CharField(max_length=255,null=True, blank=True)
     userId          = models.CharField(max_length=255)
     targetPA        = models.DecimalField(default=0.0,max_digits=6, decimal_places=2,null=True, blank=True)
     targetInactive  = models.BooleanField(default=False)

@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # Thumbnails
-static/images/thumbnails/*
+static/images/thumbnails
 
 # C extensions
 *.so

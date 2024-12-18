@@ -7,8 +7,9 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponse
 
-from .forms import ObservationForm,SequenceFileForm,ScheduleMasterForm
+from .forms import ObservationForm,ObservationFormDS,SequenceFileForm,ScheduleMasterForm
 from .models import observation, scheduleMaster,fitsFile,scheduleDetail,sequenceFile,fitsSequence
+from targets.models import Target
 from setup.models import observatory,telescope,imager
 from observations.models import observation
 from observations.postProcess import PostProcess
@@ -51,10 +52,31 @@ def get_queryset(self):
 ##################################################################################################
 ## Observation Update     -  Use the UpdateView class to edit observation records               ##
 ##################################################################################################
-class observation_update(UpdateView):
+def observation_update(request, pk):
+    observationObj = get_object_or_404(observation, pk=pk)
+    # Get the target object
+    targetObj = get_object_or_404(Target, targetId=observationObj.targetId)
+    if targetObj.targetClass == 'DS':
+        form = ObservationFormDS(request.POST, target_uuid=targetObj.targetId)
+        formTemplate="observations/observation_form_ds.html"
+    else:
+        form = ObservationForm(request.POST, target_uuid=observationObj.targetId)
+        formTemplate="observations/observation_form.html"
+                
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('observation_all_list')
+
+    return render(request, formTemplate, {'form': form})
+    
+####################################################################################################
+## Observation UpdateDS     -  Use the UpdateView class to edit observation records for DSO class ##
+####################################################################################################
+class observation_updateDS(UpdateView):
     model = observation
-    form_class = ObservationForm
-    template_name = "observations/observation_form.html"
+    form_class = ObservationFormDS
+    template_name = "observations/observation_form_ds.html"
     success_url = reverse_lazy('observation_all_list')
     
 ##################################################################################################
@@ -69,14 +91,21 @@ class observation_delete(DeleteView):
 ## Observation create     -  Use the class to edit observation records                          ##
 ################################################################################################## 
 def observation_create(request, target_uuid):
-    if request.method == 'POST':
+    # Get the target object
+    targetObj = get_object_or_404(Target, uuid=target_uuid)
+    if targetObj.targetClass == 'DS':
+        form = ObservationFormDS(request.POST, target_uuid=target_uuid)
+        formTemplate="observations/observation_form_ds.html"
+    else:
         form = ObservationForm(request.POST, target_uuid=target_uuid)
+        formTemplate="observations/observation_form.html"
+                
+    if request.method == 'POST':
         if form.is_valid():
             form.save()
             return redirect('observation_all_list')
-    else:
-        form = ObservationForm(target_uuid=target_uuid)
-    return render(request, 'observations/observation_create.html', {'form': form})
+
+    return render(request, formTemplate, {'form': form})
 
 ##################################################################################################
 ## ScheduleCreateView -  Use the CreateView class to create a schedule of targets               ##

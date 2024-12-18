@@ -8,9 +8,9 @@
     <table class="table table-dark">
         {% for observation in observation_list %}
             {% if forloop.first %}
-                <tr><th>Target</th><th>Rotation</th><th>Do Not Schedule</th><th>Schedule Once</th><th>Observatory</th><th>Telescope</th><th>Imager</th><th>Sequence</th><th>Duration (secs)</th></tr>
+                <tr><th>Target</th><th>Rotation</th><th>Do Not Schedule</th><th>Schedule Once</th><th>Observatory</th><th>Telescope</th><th>Imager</th><th>Sequence</th><th>Duration (s)</th><th>Actions</th></tr>
                 {% endif %}    
-            <tr><td><A HREF="{{ observation.get_absolute_url }}">{{ observation.targetId }}</A></td>
+            <tr><td><b>{{ observation.targetId }}</b></td>
                 <td>{{ observation.targetPA }}</td>
                 <td>{{ observation.targetInactive }}</td>
                 <td>{{ observation.observeOnce }}</td>
@@ -19,6 +19,9 @@
                 <td>{{ observation.imagerId }}</td>
                 <td>{{ observation.sequenceFileId.sequenceFileName }}</td>
                 <td>{{ observation.sequenceFileId.sequenceDuration }}</td>
+                <td><button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{% url 'observation_update' observation.observationId %}'">Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='{% url 'observation_delete' observation.observationId %}">Delete</button>
+                </td>
             </tr>
         {% empty %}
             <p><i>No results found.</i></p>

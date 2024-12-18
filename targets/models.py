@@ -42,7 +42,7 @@ class Target(models.Model):
     targetMag       = models.CharField(max_length=200)
     targetDefaultThumbnail = models.CharField(max_length=255, blank=True, null=True)
     def __str__(self):
-        return f"{self.targetName}"
+        return f"{self.targetId}"
     
     def get_absolute_url(self):
         return reverse("target_detail", args=[str(self.targetId)])
