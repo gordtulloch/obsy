@@ -49,17 +49,3 @@ Currently working on sub-projects as follows:
 ## Other contributors
 I stand on the shoulders of:
 * **Aaron Morris** (decep on CN) - Aaron's indi-allsky has a lot of functions similar to those needed in oMCP.py so many thanks for allowing me to modify some of the code for my purposes https://github.com/aaronwmorris/indi-allsky
-
-## Installation
-Full installation instructions will be provided when the initial release is created. Essentially the process will be to clone the repository via git and run a setup.sh script with a parameter (observatory, telescope, remote, master) to determine what the node should be configured as. Auto-discovery of nodes on the same network will hopefully be implemented on release.
-
-Installation will most likely look like the following:
-
-1. git clone https://github.com/gordtulloch/obsy.git
-2. cd obsy
-3. ./setup.sh (dome|telescope) --noscan --port=8888
-
-The setup script will start up the Django/Unicorn environment, set up the environment for MCP, and schedule MCP execution. Once installed the user can access the obsy user interface at:
-
-https://localhost:8888
-
