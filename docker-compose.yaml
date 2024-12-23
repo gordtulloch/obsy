@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: obsy
       POSTGRES_PASSWORD: obsy
       POSTGRES_HOST_AUTH_METHOD: trust
-  
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -21,7 +21,7 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
 
   web:
-    build: https://www.github.com/gordtulloch/obsy.git
+    build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
@@ -29,20 +29,25 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - rabbitmq
     environment:
       - DATABASE_NAME=obsy
       - DATABASE_USER=obsy
       - DATABASE_PASSWORD=obsy
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
-  
+
   celery:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
     command: celery -A your_project worker --loglevel=info
     volumes:
-      - .:/app
+      - ./your_project:/app/your_project
+      - ./requirements.txt:/app/requirements.txt
     depends_on:
       - db
+      - rabbitmq
     environment:
       - DATABASE_NAME=obsy
       - DATABASE_USER=obsy
@@ -51,12 +56,16 @@ services:
       - DATABASE_PORT=5432
 
   celery-beat:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
     command: celery -A your_project beat --loglevel=info
     volumes:
-      - .:/app
+      - ./your_project:/app/your_project
+      - ./requirements.txt:/app/requirements.txt
     depends_on:
       - db
+      - rabbitmq
     environment:
       - DATABASE_NAME=obsy
       - DATABASE_USER=obsy
