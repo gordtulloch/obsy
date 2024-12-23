@@ -40,7 +40,7 @@ class Target(models.Model):
     targetDec2000   = models.CharField(max_length=255)
     targetConst     = models.CharField(max_length=200)
     targetMag       = models.CharField(max_length=200)
-    targetDefaultThumbnail = models.CharField(max_length=255, blank=True, null=True)
+    targetDefaultThumbnail = models.ImageField(upload_to='thumbnails/')
     def __str__(self):
         return f"{self.targetId}"
     
@@ -51,7 +51,7 @@ class Target(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         # Create relative path with no extension (used for fits and jpg)
-        relative_path = os.path.join('static','images', 'thumbnails', self.targetName)  
+        relative_path = os.path.join(settings.MEDIA_ROOT, 'images/thumbnails', f"{self.targetName}") 
         if self.targetDefaultThumbnail:
             try:
                 os.remove(relative_path+'.jpg')
@@ -119,7 +119,7 @@ class Target(models.Model):
     ##############################################################################################
     # On delete, remove the thumbnail file                                                      ##       
     def delete(self, *args, **kwargs):
-        relative_path = os.path.join('static','images', 'thumbnails', self.targetName)
+        relative_path = os.path.join(settings.MEDIA_ROOT, 'images/thumbnails', f"{self.targetName}")
         jpg_filename = os.path.join(settings.BASE_DIR, relative_path)+'.jpg'
         logger.debug("Deleting thumbnail file "+jpg_filename)
         if self.targetDefaultThumbnail:
@@ -134,7 +134,7 @@ class Target(models.Model):
 ##################################################################################################
 class simbadType(models.Model):
     def populate_db():
-        with open('catalog\targets_simbadtype.csv') as f:
+        with open('catalog/targets_simbadtype.csv') as f:
             reader = csv.reader(f)
             for row in reader:
                 _, created = simbadType.objects.get_or_create(
