@@ -41,9 +41,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.celery
-    command: celery -A your_project worker --loglevel=info
+    command: celery -A obsy worker --loglevel=info
     volumes:
-      - ./your_project:/app/your_project
+      - .:/app
       - ./requirements.txt:/app/requirements.txt
     depends_on:
       - db
@@ -59,9 +59,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.celery
-    command: celery -A your_project beat --loglevel=info
+    command: celery -A obsy beat --loglevel=info
     volumes:
-      - ./your_project:/app/your_project
+      - .:/app
       - ./requirements.txt:/app/requirements.txt
     depends_on:
       - db

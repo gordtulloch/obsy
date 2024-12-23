@@ -19,10 +19,10 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt
 
 # Copy the project
-COPY ./obsy /app/obsy
+COPY . /app
 
 # Expose the port the app runs on
 EXPOSE 8000
 
 # Run the application
-CMD ["celery", "-A", "your_project", "worker", "--loglevel=info"]
+CMD ["celery", "-A", "obsy", "worker", "--loglevel=info"]
