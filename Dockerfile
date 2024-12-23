@@ -1,22 +1,22 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.11-alpine
+FROM python:3.11-bullseye
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Install dependencies
-RUN apk update \
-    && apk add --no-cache gcc musl-dev libffi-dev \
-    && apk add --no-cache mariadb-dev
-
+RUN apt-get update \
+    && apt-get install -y gcc libffi-dev libpq-dev g++ python3-dev libopenblas-dev \
+    && rm -rf /var/lib/apt/lists/*
+ 
 # Set the working directory
 WORKDIR /app
 
 # Install dependencies
 COPY requirements.txt /app/
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
 # Copy the project
 COPY . /app/

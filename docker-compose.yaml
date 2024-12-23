@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:8
+    image: postgres:13
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      MYSQL_DATABASE: obsy
-      MYSQL_USER: obsy
-      MYSQL_PASSWORD: obsy
-      MYSQL_ROOT_PASSWORD: rootpassword
+      POSTGRES_DB: obsy
+      POSTGRES_USER: obsy
+      POSTGRES_PASSWORD: obsy
+      POSTGRES_HOST_AUTH_METHOD: trust
 
   web:
-    build: .
+    build: https://www.github.com/gordtulloch/obsy.git
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
@@ -25,7 +25,7 @@ services:
       - DATABASE_USER=obsy
       - DATABASE_PASSWORD=obsy
       - DATABASE_HOST=db
-      - DATABASE_PORT=3306
+      - DATABASE_PORT=5432
 
 volumes:
-  mysql_data:
+  postgres_data:
