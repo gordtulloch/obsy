@@ -215,7 +215,7 @@ config = Config()
 ###########################################################################################
 # Celery Configuration Options
 # Celery settings
-CELERY_BROKER_URL = 'pyamqp://guest@localhost//'
+CELERY_BROKER_URL = 'pyamqp://guest@rabbitmq//'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['json']  # Ignore other content

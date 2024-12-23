@@ -10,6 +10,15 @@ services:
       POSTGRES_USER: obsy
       POSTGRES_PASSWORD: obsy
       POSTGRES_HOST_AUTH_METHOD: trust
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
 
   web:
     build: https://www.github.com/gordtulloch/obsy.git
@@ -18,6 +27,34 @@ services:
       - .:/app
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_NAME=obsy
+      - DATABASE_USER=obsy
+      - DATABASE_PASSWORD=obsy
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+  
+  celery:
+    build: .
+    command: celery -A your_project worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      - DATABASE_NAME=obsy
+      - DATABASE_USER=obsy
+      - DATABASE_PASSWORD=obsy
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+
+  celery-beat:
+    build: .
+    command: celery -A your_project beat --loglevel=info
+    volumes:
+      - .:/app
     depends_on:
       - db
     environment:
