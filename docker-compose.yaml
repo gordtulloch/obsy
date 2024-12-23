@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: obsy
+      MYSQL_USER: obsy
+      MYSQL_PASSWORD: obsy
+      MYSQL_ROOT_PASSWORD: rootpassword
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_NAME=obsy
+      - DATABASE_USER=obsy
+      - DATABASE_PASSWORD=obsy
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+
+volumes:
+  mysql_data:
