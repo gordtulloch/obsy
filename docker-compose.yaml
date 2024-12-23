@@ -22,47 +22,10 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-      - rabbitmq
-    environment:
-      - DATABASE_NAME=obsy
-      - DATABASE_USER=obsy
-      - DATABASE_PASSWORD=obsy
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-
-  celery:
-    build:
-      context: .
-      dockerfile: Dockerfile.celery
-    command: celery -A obsy worker --loglevel=info
-    volumes:
-      - .:/app
-      - ./requirements.txt:/app/requirements.txt
-    depends_on:
-      - db
-      - rabbitmq
-    environment:
-      - DATABASE_NAME=obsy
-      - DATABASE_USER=obsy
-      - DATABASE_PASSWORD=obsy
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-
-  celery-beat:
-    build:
-      context: .
-      dockerfile: Dockerfile.celery
-    command: celery -A obsy beat --loglevel=info
-    volumes:
-      - .:/app
-      - ./requirements.txt:/app/requirements.txt
     depends_on:
       - db
       - rabbitmq
