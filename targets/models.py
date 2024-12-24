@@ -52,7 +52,7 @@ class Target(models.Model):
         super().save(*args, **kwargs)
         # Check if the thumbnail folder exists
         if not os.path.exists('./media/images/thumbnails'):
-            os.makedirs('./images/thumbnails'))
+            os.makedirs('./images/thumbnails')
         # Create relative path with no extension (used for fits and jpg)
         relative_path = os.path.join('./media/images/thumbnails', f"{self.targetName}") 
         if self.targetDefaultThumbnail:

@@ -11,6 +11,15 @@ services:
       POSTGRES_PASSWORD: obsy
       POSTGRES_HOST_AUTH_METHOD: trust
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
   web:
     build: .
     volumes:
@@ -19,6 +28,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - rabbitmq
     environment:
       - DATABASE_NAME=obsy
       - DATABASE_USER=obsy
