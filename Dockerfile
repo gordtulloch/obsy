@@ -28,9 +28,5 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Expose the port the app runs on
 EXPOSE 8000
 
-# Migrate database
-RUN python manage.py collectstatic --noinput
-RUN python manage.py migrate
-
 # Run supervisord
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

@@ -91,5 +91,7 @@ While the software is not complete and still has significant code to be develope
 To update Obsy you need to pull the new version from Github then rebuild your docker containers.
 
     cd obsy
-    git pull origin main
-    
+    docker-compose down
+    git pull
+    docker-compose build
+    docker-compose up
