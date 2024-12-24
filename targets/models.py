@@ -34,7 +34,7 @@ class Target(models.Model):
                         default=uuid.uuid4,
                         editable=False)
     targetName      = models.CharField(max_length=255)
-    targetClass     = models.CharField(max_length=2,choices=TARGET_CLASSES,default="DS")
+    targetClass     = models.CharField(max_length=255,choices=TARGET_CLASSES,default="DS")
     targetType      = models.CharField(max_length=255)
     targetRA2000    = models.CharField(max_length=255)
     targetDec2000   = models.CharField(max_length=255)
