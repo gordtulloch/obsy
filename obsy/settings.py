@@ -75,6 +75,11 @@ WSGI_APPLICATION = 'obsy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# Load environment variables from .env file if not running in Docker
+if not os.getenv('DOCKER_CONTAINER'):
+    from dotenv import load_dotenv
+    load_dotenv()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

@@ -35,6 +35,7 @@ services:
       - DATABASE_PASSWORD=obsy
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
+      - DOCKER_CONTAINER=true
 
 volumes:
   postgres_data:
