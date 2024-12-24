@@ -2,8 +2,8 @@
 FROM python:3.11-bullseye
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 ENV DOCKER_CONTAINER=true
 
 # Install dependencies
@@ -27,6 +27,10 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose the port the app runs on
 EXPOSE 8000
+
+# Migrate database
+RUN python manage.py collectstatic --noinput
+RUN python manage.py migrate
 
 # Run supervisord
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

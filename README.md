@@ -70,8 +70,13 @@ While the software is not complete and still has significant code to be develope
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update
 
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    sudo docker run hello-world
+    # Install and test Docker
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    docker run hello-world
+
+    Hello world should run without a permission error, otherwise you missed something after the docker install.
 
 2. In Docker desktop or Ubuntu open a terminal window, cd to where you want obsy to reside, and run:
 
@@ -82,3 +87,9 @@ While the software is not complete and still has significant code to be develope
 
     Connect to http://localhost:8000
 
+## Update
+To update Obsy you need to pull the new version from Github then rebuild your docker containers.
+
+    cd obsy
+    git pull origin main
+    
