@@ -122,7 +122,7 @@ class Target(models.Model):
     ##############################################################################################
     # On delete, remove the thumbnail file                                                      ##       
     def delete(self, *args, **kwargs):
-        relative_path = './media/images/thumbnails', f"{self.targetName}"
+        relative_path = os.path.join('./media/images/thumbnails', f"{self.targetName}") 
         jpg_filename = relative_path+'.jpg'
         logger.debug("Deleting thumbnail file "+jpg_filename)
         if self.targetDefaultThumbnail:
