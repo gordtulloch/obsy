@@ -92,7 +92,7 @@ While the software is not complete and still has significant code to be develope
 
     Connect to http://localhost:8000 and enter superuser credentials
 
-## Update
+## Update Obsy
 To update Obsy you need to pull the new version from Github then rebuild your docker containers.
 
     cd obsy
@@ -101,3 +101,9 @@ To update Obsy you need to pull the new version from Github then rebuild your do
     docker-compose build
     docker-compose run web python3 manage.py migrate
     docker-compose up
+
+If you run into issues try
+
+    docker-compose build --no-cache
+
+Which takes longer but builds everything from scratch.
