@@ -51,10 +51,10 @@ class Target(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         # Check if the thumbnail folder exists
-        if not os.path.exists('./media/images/thumbnails'):
-            os.makedirs('./images/thumbnails')
+        if not os.path.exists('media/images/thumbnails'):
+            os.makedirs('media/images/thumbnails')
         # Create relative path with no extension (used for fits and jpg)
-        relative_path = os.path.join('./media/images/thumbnails', f"{self.targetName}") 
+        relative_path = os.path.join('media/images/thumbnails', f"{self.targetName}") 
         if self.targetDefaultThumbnail:
             try:
                 os.remove(relative_path+'.jpg')
@@ -122,7 +122,7 @@ class Target(models.Model):
     ##############################################################################################
     # On delete, remove the thumbnail file                                                      ##       
     def delete(self, *args, **kwargs):
-        relative_path = os.path.join('./media/images/thumbnails', f"{self.targetName}") 
+        relative_path = os.path.join('media/images/thumbnails', f"{self.targetName}") 
         jpg_filename = relative_path+'.jpg'
         logger.debug("Deleting thumbnail file "+jpg_filename)
         if self.targetDefaultThumbnail:
