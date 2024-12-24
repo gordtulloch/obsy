@@ -74,9 +74,12 @@ While the software is not complete and still has significant code to be develope
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
     sudo groupadd docker
     sudo usermod -aG docker $USER
+    
     docker run hello-world
 
     Hello world should run without a permission error, otherwise you missed something after the docker install.
+
+    Total size in Docker is about 2.5GB.
 
 2. In Docker desktop or Ubuntu open a terminal window, cd to where you want obsy to reside, and run:
 
@@ -84,8 +87,10 @@ While the software is not complete and still has significant code to be develope
     cd obsy
     docker-compose build
     docker-compose up
+    docker-compose run web python3 manage.py migrate
+    docker-compose run web python3 manage.py createsuperuser    (follow the prompts to create an initial superuser account)
 
-    Connect to http://localhost:8000
+    Connect to http://localhost:8000 and enter superuser credentials
 
 ## Update
 To update Obsy you need to pull the new version from Github then rebuild your docker containers.
@@ -94,4 +99,5 @@ To update Obsy you need to pull the new version from Github then rebuild your do
     docker-compose down
     git pull
     docker-compose build
+    docker-compose run web python3 manage.py migrate
     docker-compose up
