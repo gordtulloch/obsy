@@ -49,3 +49,36 @@ Currently working on sub-projects as follows:
 ## Other contributors
 I stand on the shoulders of:
 * **Aaron Morris** (decep on CN) - Aaron's indi-allsky has a lot of functions similar to those needed in oMCP.py so many thanks for allowing me to modify some of the code for my purposes https://github.com/aaronwmorris/indi-allsky
+
+## Installation
+While the software is not complete and still has significant code to be developed if you insist on trying it out here's how to install it.
+
+1. Download Docker Desktop on Windows or on Ubuntu:
+    
+    for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo docker run hello-world
+
+2. In Docker desktop or Ubuntu open a terminal window, cd to where you want obsy to reside, and run:
+
+    git clone https://www.github.com/gordtulloch/obsy.git
+    cd obsy
+    docker-compose build
+    docker-compose up
+
+    Connect to http://localhost:8000
+

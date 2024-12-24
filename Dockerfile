@@ -8,7 +8,7 @@ ENV DOCKER_CONTAINER=true
 
 # Install dependencies
 RUN apt-get update \
-    && apt-get install -y gcc libffi-dev libpq-dev g++ python3-dev libopenblas-dev \
+    && apt-get install -y gcc libffi-dev libpq-dev g++ python3-dev libopenblas-dev  \
     && rm -rf /var/lib/apt/lists/*
  
 # Set the working directory
