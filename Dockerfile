@@ -15,8 +15,6 @@ RUN apt-get update \
 WORKDIR /app
 RUN pip install --upgrade pip 
 
-# Switch to a non-root user
-USER 1001:1001
 # Install dependencies
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt
@@ -29,6 +27,9 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose the port the app runs on
 EXPOSE 8000
+
+# Switch to a non-root user
+USER 1001:1001
 
 # Run supervisord
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
