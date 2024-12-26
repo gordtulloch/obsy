@@ -11,16 +11,15 @@ RUN apt-get update \
     && apt-get install -y gcc libffi-dev libpq-dev g++ python3-dev libopenblas-dev  \
     && rm -rf /var/lib/apt/lists/*
 
-# Switch to a non-root user
-USER 1001:1001
-
 # Set the working directory
 WORKDIR /app
+RUN pip install --upgrade pip 
 
+# Switch to a non-root user
+USER 1001:1001
 # Install dependencies
 COPY requirements.txt /app/
-RUN pip install --upgrade pip \
-    && pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copy the project
 COPY . /app/
