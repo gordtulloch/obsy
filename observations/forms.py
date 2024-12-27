@@ -64,7 +64,7 @@ class ObservationForm(forms.ModelForm):
 ################################################################################################################################
 ##  ObservationDSForm - form for adding a DeepSKy object Observation                                                          ##
 ################################################################################################################################
-class ObservationDSForm(forms.ModelForm):
+class ObservationDSForm(ObservationForm):
     class Meta:
         model = ObservationDS
         fields = '__all__'
@@ -72,7 +72,7 @@ class ObservationDSForm(forms.ModelForm):
 ################################################################################################################################
 ##  ObservationEXForm - form for adding an Exoplanet Observation                                                              ##
 ################################################################################################################################
-class ObservationEXForm(forms.ModelForm):
+class ObservationEXForm(ObservationForm):
     class Meta:
         model = ObservationEX
         fields = '__all__'
@@ -80,7 +80,7 @@ class ObservationEXForm(forms.ModelForm):
 ################################################################################################################################
 ##  ObservationVSForm - form for adding a Variable Star Observation                                                           ##
 ################################################################################################################################
-class ObservationVSForm(forms.ModelForm):
+class ObservationVSForm(ObservationForm):
     class Meta:
         model = ObservationVS
         fields = '__all__'

@@ -114,8 +114,8 @@ class observation_delete(DeleteView):
 ##################################################################################################
 ## Observation create     -  Use the class to edit Observation records                          ##
 ################################################################################################## 
-def observation_create(request, target_id):
-    target = get_object_or_404(Target, targetId=target_id)
+def observation_create(request, target_uuid):
+    target = get_object_or_404(Target, targetId=target_uuid)
     if target.targetClass == 'DS':
         form = ObservationDSForm(request.POST or None)
         template = 'observations/observation_form_ds.html'
