@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<oal:observations xmlns:oal="http://observation.sourceforge.net/openastronomylog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:schemaLocation="http://observation.sourceforge.net/openastronomylog oal20.xsd" version="2.0">
+<oal:observations xmlns:oal="http://Observation.sourceforge.net/openastronomylog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:schemaLocation="http://Observation.sourceforge.net/openastronomylog oal20.xsd" version="2.0">
     <observers/>
     <sites/>
     <sessions/>

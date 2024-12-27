@@ -1,5 +1,5 @@
 from django import forms
-from .models import Target
+from .models import Target,TargetDS, TargetEX, TargetVS
 import datetime
 
 class TargetUpdateForm(forms.ModelForm):
@@ -10,3 +10,4 @@ class TargetUpdateForm(forms.ModelForm):
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
+

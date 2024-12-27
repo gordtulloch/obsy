@@ -1,23 +1,23 @@
 {% extends "_base.html" %}
 {% block title %}All Observations List{% endblock title %}
 {% block content %}
-<div class="observation-detail"> 
+<div class="Observation-detail"> 
     <div class="container">
     <br><br>
-    <H2>Observation Detail for {{ observation.targetId }}</H2>
+    <H2>Observation Detail for {{ Observation.targetId }}</H2>
     <table class="table table-dark">
-        <tr><td>Target Name:</td><td>{{ observation.targetId }}</td></tr>
-        <tr><td>Observation Date</td><td>{{ observation.observationDate }}</td></tr>
-        <tr><td>Do Not Schedule</td><td>{{ observation.targetInactive }}</td></tr>
-        <tr><td>Schedule Once</td><td>{{ observation.observeOnce }}</td></tr>
-        <tr><td>Observatory</td><td>{{ observation.observatoryId}}</td></tr>
-        <tr><td>Telescope</td><td>{{ observation.telescopeId}}</td></tr>
-        <tr><td>Imager</td><td>{{ observation.imagerId }}</td></tr>
-        <tr><td>Sequence File</td><td>{{ observation.sequenceFileId }}</td></tr>
+        <tr><td>Target Name:</td><td>{{ Observation.targetId }}</td></tr>
+        <tr><td>Observation Date</td><td>{{ Observation.observationDate }}</td></tr>
+        <tr><td>Do Not Schedule</td><td>{{ Observation.targetInactive }}</td></tr>
+        <tr><td>Schedule Once</td><td>{{ Observation.observeOnce }}</td></tr>
+        <tr><td>Observatory</td><td>{{ Observation.observatoryId}}</td></tr>
+        <tr><td>Telescope</td><td>{{ Observation.telescopeId}}</td></tr>
+        <tr><td>Imager</td><td>{{ Observation.imagerId }}</td></tr>
+        <tr><td>Sequence File</td><td>{{ Observation.sequenceFileId }}</td></tr>
     </table>
     <button type="button" class="btn btn-primary">< </button>
-    <A HREF="edit/{{ observation.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
-    <A HREF="delete/{{ observation.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
+    <A HREF="edit/{{ Observation.uuid }}"><button type="button" class="btn btn-success">Edit</button></A>
+    <A HREF="delete/{{ Observation.uuid }}"><button type="button" class="btn btn-danger">Delete</button></A>
     <button type="button" class="btn btn-primary"> ></button>
     </div>
 </div>

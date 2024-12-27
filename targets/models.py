@@ -16,7 +16,7 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 ##################################################################################################
-## Target - an object for which we may wish to create an observation                           ##
+## Target - an object for which we may wish to create an Observation                           ##
 ################################################################################################## 
 class Target(models.Model):
     TARGET_CLASSES=(
@@ -131,7 +131,8 @@ class Target(models.Model):
             except:
                 logger.warning("Failed to remove thumbnail file "+jpg_filename)
         super().delete(*args, **kwargs)
-
+        return
+    
 ##################################################################################################
 ## simbadType - this model allows mapping between SIMBAD object types and obsy object classes   ##
 ##################################################################################################

@@ -93,7 +93,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='observation',
+            name='Observation',
             fields=[
                 ('observationId', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('observationDate', models.DateField(blank=True, null=True)),

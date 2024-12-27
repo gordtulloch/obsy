@@ -1,0 +1,3 @@
+TODO:
+
+- Refactor rise/transit/set times so next times are in the model, and add a method to set them. Update daily with task vs live update in Target view (very slow) 
