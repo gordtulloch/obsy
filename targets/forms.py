@@ -1,5 +1,5 @@
 from django import forms
-from .models import Target,TargetDS, TargetEX, TargetVS
+from .models import Target
 import datetime
 
 class TargetUpdateForm(forms.ModelForm):
