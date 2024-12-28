@@ -26,8 +26,6 @@ kombu
 blueskyapi
 twilio
 setuptools
-xmltodict
-
 supervisor
 ephem
 plotly
