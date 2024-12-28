@@ -10,3 +10,4 @@ class TargetUpdateForm(forms.ModelForm):
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
+

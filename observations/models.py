@@ -24,9 +24,9 @@ class sequenceFile(models.Model):
         return reverse("sequence_detail", args=[str(self.sequenceId)])
 
 ##################################################################################################
-## observation - a request and subsequent updates on the observations required of a Target      ##
+## Observation - a request and subsequent updates on the observations required of a Target      ##
 ##################################################################################################    
-class observation(models.Model):
+class Observation(models.Model):
     observationId       = models.UUIDField( 
                         primary_key=True,
                         default=uuid.uuid4,
@@ -56,11 +56,21 @@ class observation(models.Model):
     def get_absolute_url(self):
         return reverse("observation_detail", args=[str(self.observationId)])
     
+class ObservationDS(Observation):
+    # fields specific to Deep Sky observations
+    pass
 
+class ObservationEX(Observation):
+    # fields specific to Exoplanet observations
+    pass
+
+class ObservationVS(Observation):
+    # fields specific to Variable Star observations
+    pass
 
 ##################################################################################################
 ## scheduleDetail - this model contains child records for schedule masters that contain         ##
-##                  targets and associated observation strategy information                     ##
+##                  targets and associated Observation strategy information                     ##
 ##################################################################################################
 class scheduleDetail(models.Model):
     scheduleDetailId        = models.UUIDField( 
@@ -89,7 +99,7 @@ class scheduleDetail(models.Model):
     
 ##################################################################################################
 ## scheduleMaster -   this model is the master record for a schedule and has n children         ##
-##              consisting of targets and associated observation strategy information           ##
+##              consisting of targets and associated Observation strategy information           ##
 ##################################################################################################
 class scheduleMaster(models.Model):
     scheduleMasterId    = models.UUIDField( 

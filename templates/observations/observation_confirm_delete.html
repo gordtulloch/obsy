@@ -5,7 +5,7 @@
 <div class="container">
     <br><br>
     <h1>Confirm Delete</h1>
-    <p>Are you sure you want to delete the observation "{{ observation.targetName }} on {{ observation.observationDate }}"?</p>
+    <p>Are you sure you want to delete the Observation "{{ Observation.targetName }} on {{ Observation.observationDate }}"?</p>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

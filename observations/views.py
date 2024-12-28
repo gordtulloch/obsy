@@ -7,11 +7,11 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponse
 
-from .forms import ObservationForm,ObservationFormDS,SequenceFileForm,ScheduleMasterForm
-from .models import observation, scheduleMaster,fitsFile,scheduleDetail,sequenceFile,fitsSequence
+from .forms import ObservationForm, ObservationDSForm, ObservationEXForm, ObservationVSForm, SequenceFileForm, ScheduleMasterForm
+from .models import Observation, scheduleMaster,fitsFile,scheduleDetail,sequenceFile,fitsSequence,ObservationDS, ObservationEX, ObservationVS
 from targets.models import Target
 from setup.models import observatory,telescope,imager
-from observations.models import observation
+from observations.models import Observation
 from observations.postProcess import PostProcess
 
 import base64
@@ -29,11 +29,11 @@ import logging
 logger = logging.getLogger("observations.views")
 
 ##################################################################################################
-## observationDetailView - List observation detail with DetailView template                     ## 
+## observationDetailView - List Observation detail with DetailView template                     ## 
 ##################################################################################################
 class observation_detail_view(DetailView):
-    model = observation
-    context_object_name = "observation"
+    model = Observation
+    context_object_name = "Observation"
     template_name = "observations/observation_detail.html"
     login_url = "account_login"
      
@@ -41,71 +41,100 @@ class observation_detail_view(DetailView):
 ## observationAllList - List all observations                                                   ## 
 ##################################################################################################
 class observation_all_list(ListView):
-    model=observation
+    model=Observation
     context_object_name="observation_list"
     template_name="observations/observation_all_list.html"
     login_url = "account_login"
 
 def get_queryset(self):
-        return observation.objects.select_related('sequenceFileId').all()
+        return Observation.objects.select_related('sequenceFileId').all()
 
 ##################################################################################################
-## Observation Update     -  Use the UpdateView class to edit observation records               ##
+## Observation Update     -  Use the UpdateView class to edit Observation records               ##
 ##################################################################################################
 def observation_update(request, pk):
-    observationObj = get_object_or_404(observation, pk=pk)
+    observationObj = get_object_or_404(Observation, pk=pk)
     # Get the target object
     targetObj = get_object_or_404(Target, targetId=observationObj.targetId)
     if targetObj.targetClass == 'DS':
-        form = ObservationFormDS(request.POST, target_uuid=targetObj.targetId)
-        formTemplate="observations/observation_form_ds.html"
+        form = ObservationDSForm(request.POST or None)
+        template = 'observations/observation_form_ds.html'
+    elif targetObj.targetClass == 'EX':
+        form = ObservationEXForm(request.POST or None)
+        template = 'observations/observation_form_ex.html'
+    elif targetObj.targetClass == 'VS':
+        form = ObservationVSForm(request.POST or None)
+        template = 'observations/observation_form_vs.html'
     else:
-        form = ObservationForm(request.POST, target_uuid=observationObj.targetId)
-        formTemplate="observations/observation_form.html"
-                
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('observation_all_list')
+        return HttpResponse("Invalid target class", status=400)
 
-    return render(request, formTemplate, {'form': form})
+    if request.method == 'POST' and form.is_valid():
+        observationObj = form.save(commit=False)
+        observationObj.target = targetObj
+        observationObj.save()
+        return redirect('observation_all_list')
+
+    return render(request, template, {'form': form})
     
 ####################################################################################################
-## Observation UpdateDS     -  Use the UpdateView class to edit observation records for DSO class ##
+## Observation UpdateDS     -  Use the UpdateView class to edit Observation records for DSO class ##
 ####################################################################################################
 class observation_updateDS(UpdateView):
-    model = observation
-    form_class = ObservationFormDS
+    model = Observation
+    form_class = ObservationDSForm
     template_name = "observations/observation_form_ds.html"
     success_url = reverse_lazy('observation_all_list')
-    
+
+####################################################################################################
+## Observation UpdateEX     -  Use the UpdateView class to edit Observation records for ex class  ##
+####################################################################################################
+class observation_updateDS(UpdateView):
+    model = Observation
+    form_class = ObservationDSForm
+    template_name = "observations/observation_form_ds.html"
+    success_url = reverse_lazy('observation_all_list')
+
+####################################################################################################
+## Observation UpdateVS     -  Use the UpdateView class to edit Observation records for VS class  ##
+####################################################################################################
+class observation_updateDS(UpdateView):
+    model = Observation
+    form_class = ObservationDSForm
+    template_name = "observations/observation_form_ds.html"
+    success_url = reverse_lazy('observation_all_list')
+
 ##################################################################################################
-## Observation Delete     -  Use the DeleteView class to edit observation records               ##
+## Observation Delete     -  Use the DeleteView class to edit Observation records               ##
 ##################################################################################################    
 class observation_delete(DeleteView):
-    model = observation
+    model = Observation
     template_name = "observations/observation_confirm_delete.html"
     success_url = reverse_lazy('observation_all_list')
 
 ##################################################################################################
-## Observation create     -  Use the class to edit observation records                          ##
+## Observation create     -  Use the class to edit Observation records                          ##
 ################################################################################################## 
 def observation_create(request, target_uuid):
-    # Get the target object
-    targetObj = get_object_or_404(Target, uuid=target_uuid)
-    if targetObj.targetClass == 'DS':
-        form = ObservationFormDS(request.POST, target_uuid=target_uuid)
-        formTemplate="observations/observation_form_ds.html"
+    target = get_object_or_404(Target, targetId=target_uuid)
+    if target.targetClass == 'DS':
+        form = ObservationDSForm(request.POST or None)
+        template = 'observations/observation_form_ds.html'
+    elif target.targetClass == 'EX':
+        form = ObservationEXForm(request.POST or None)
+        template = 'observations/observation_form_ex.html'
+    elif target.targetClass == 'VS':
+        form = ObservationVSForm(request.POST or None)
+        template = 'observations/observation_form_vs.html'
     else:
-        form = ObservationForm(request.POST, target_uuid=target_uuid)
-        formTemplate="observations/observation_form.html"
-                
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('observation_all_list')
+        return HttpResponse("Invalid target class", status=400)
 
-    return render(request, formTemplate, {'form': form})
+    if request.method == 'POST' and form.is_valid():
+        observation = form.save(commit=False)
+        observation.target = target
+        observation.save()
+        return redirect('observation_all_list')
+
+    return render(request, template, {'form': form})
 
 ##################################################################################################
 ## ScheduleCreateView -  Use the CreateView class to create a schedule of targets               ##
@@ -194,7 +223,7 @@ class ScheduleRegenView(DetailView):
 
         # Query the database and add observations to scheduleDetail records
         for twilight_evening, twilight_morning in times:
-            observations = observation.objects.filter(
+            observations = Observation.objects.filter(
                 observatory=self.observatoryId,
                 telescope=telescope_id,
                 imager=imager_id,

@@ -13,7 +13,7 @@
             {% if forloop.first %}
                 <tr><th>Thumbnail</th><th>Object</th><th>Details</th><th>Actions</th></tr>
                 {% endif %}    
-            <tr><td><img src="{% static data.Target.targetDefaultThumbnail %}" alt="Thumbnail for {{ Target.targetName }}" /></td>
+            <tr><td><img src="{{ data.Target.targetDefaultThumbnail.url }}" alt="Thumbnail for {{ data.Target.targetName }}" /></td>
                 <td><b>{{ data.Target.targetName }}</b></td>
                 <td><table class="table table-dark">
                     <tr>
@@ -42,6 +42,7 @@
             <p><i>No results found.</i></p>
         {% endfor %}
     </table>
-    </div>
     <p>Note: STSCI images are for a 15arcmin x 15arcmin field of view for all targets.</p>
+    </div>
+
 {% endblock content %}

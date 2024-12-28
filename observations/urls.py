@@ -27,7 +27,7 @@ urlpatterns = [
     path('schedule/delete/<uuid:pk>/',      ScheduleDeleteView.as_view(), name='schedule_delete'),
     path('schedule/regen/<uuid:pk>/',       ScheduleRegenView.as_view(), name='schedule_regen'),
     # Fits Files
-    path('fits-files/',                     list_fits_files, name='list_fits_files'),
+    path('list_fits_files/',                list_fits_files, name='list_fits_files'),
     path('fitsfile/<uuid:pk>/',             fitsfile_detail, name='fits_file_detail'),
     # Sequence Files
     path('sequenceFiles/',                  sequence_file_list, name='sequence_file_list'),

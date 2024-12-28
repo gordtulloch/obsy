@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container">
     <br><br><h2>Upload Targets</h2>
-    <p>This function allows you to upload a Observation List in .OAL format from the KStars observation planner. Click on Choose File, select a file from disk, and click Upload.</p> <p>NOTE: For large observing lists this operation may take some time!</p>
+    <p>This function allows you to upload a Observation List in .OAL format from the KStars Observation planner. Click on Choose File, select a file from disk, and click Upload.</p> <p>NOTE: For large observing lists this operation may take some time!</p>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}

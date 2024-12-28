@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import observation,scheduleMaster,scheduleDetail,sequenceFile,fitsFile
+from .models import Observation,scheduleMaster,scheduleDetail,sequenceFile,fitsFile
 
 class observationAdmin(admin.ModelAdmin):
     list_display = ("targetId","observationDate")
@@ -15,6 +15,6 @@ class fitsFileAdmin(admin.ModelAdmin):
 
 admin.site.register(scheduleMaster, scheduleMasterAdmin) 
 admin.site.register(scheduleDetail, scheduleDetailAdmin)
-admin.site.register(observation, observationAdmin)
+admin.site.register(Observation, observationAdmin)
 admin.site.register(fitsFile, fitsFileAdmin)
 

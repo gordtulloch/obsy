@@ -278,6 +278,9 @@ class target_delete(DeleteView):
     template_name = "targets/target_confirm_delete.html"
     success_url = reverse_lazy('target_all_list')
 
+##################################################################################################
+## parse_xml -  A helper function that parses an XML file and returns a list of targets         ##
+##################################################################################################
 def parse_xml(file):
     tree = ET.parse(file)
     root = tree.getroot()

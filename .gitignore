@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # Thumbnails
-static/images/thumbnails
+media/images/thumbnails/
 
 # C extensions
 *.so
@@ -14,6 +14,7 @@ static/images/thumbnails
 
 # Init files
 *.ini
+.env
 
 # Sample data for testing
 sample_data/Processing
