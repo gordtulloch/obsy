@@ -2,7 +2,7 @@
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Target,simbadType
+from .models import Target,SimbadType
 from .forms import TargetUpdateForm,UploadFileForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
@@ -201,8 +201,8 @@ def target_all_list(request):
 ##                      from SIMBAD                                                             ##
 ##################################################################################################
 def assignTargetClass(targetType):
-    allwithTT=simbadType.objects.filter(label=targetType)
-    firstentry= simbadType.objects.first()
+    allwithTT=SimbadType.objects.filter(label=targetType)
+    firstentry= SimbadType.objects.first()
     if firstentry != None: 
         return firstentry.category
     else:
