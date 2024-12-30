@@ -144,7 +144,7 @@ class SimbadType(models.Model):
     def __str__(self):
         return f"{self.label}"
     def populate_db():
-        with open('standard)_data/targets_simbadtype.csv') as f:
+        with open('standard_data/targets_simbadtype.csv') as f:
             reader = csv.reader(f)
             for row in reader:
                 _, created = SimbadType.objects.get_or_create(
