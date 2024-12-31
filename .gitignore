@@ -16,6 +16,9 @@ media/images/thumbnails/
 *.ini
 .env
 
+# Celery data files
+*.db
+
 # Sample data for testing
 sample_data/Processing
 
