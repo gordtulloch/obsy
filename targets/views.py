@@ -2,8 +2,8 @@
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Target,SimbadType
-from .forms import TargetUpdateForm,UploadFileForm
+from .models import Target,SimbadType,GCVS
+from .forms import TargetUpdateForm,UploadFileForm,VSFilterForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from setup.models import observatory
@@ -365,3 +365,21 @@ def upload_targets_view(request):
         
     return render(request, 'targets/upload_targets.html', {'form': form})
 
+##################################################################################################
+## VS List -  List all VS records                                                               ##
+##################################################################################################
+def vs_all_list(request):
+    form = VSFilterForm(request.GET or None)
+
+    vs_records = GCVS.objects.all().order_by('name')
+    if form.is_valid():
+        if form.cleaned_data['constellation'] and form.cleaned_data['constellation'] != 'All':
+            vs_records = vs_records.filter(constellation=form.cleaned_data['constellation'])
+        if form.cleaned_data['variable_type']:
+            vs_records = vs_records.filter(variable_type__icontains=form.cleaned_data['variable_type'])
+        if form.cleaned_data['max_magnitude']:
+            vs_records = vs_records.filter(max_magnitude__lte=form.cleaned_data['max_magnitude'])
+        if form.cleaned_data['min_magnitude']:
+            vs_records = vs_records.filter(min_magnitude__gte=form.cleaned_data['min_magnitude'])
+
+    return render(request, 'targets/vs_all_list.html', {'vs_records': vs_records, 'form': form})

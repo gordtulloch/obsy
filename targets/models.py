@@ -158,6 +158,7 @@ class SimbadType(models.Model):
 ## NasaExplanetArchive - this model is used to store the NASA Exoplanet Archive data            ##
 ##################################################################################################
 class NasaExplanetArchive(models.Model):
+    targetId            = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     kepid               = models.CharField(max_length=255, null=True, blank=True)   # KepID
     kepoi_name          = models.CharField(max_length=255, null=True, blank=True)   # KOI Name
     kepler_name         = models.CharField(max_length=255, null=True, blank=True)   # Kepler Name
@@ -207,6 +208,7 @@ class NasaExplanetArchive(models.Model):
     ra                  = models.FloatField(max_length=255, null=True, blank=True)  # RA [decimal degrees]
     dec                 = models.FloatField(max_length=255, null=True, blank=True)  # Dec [decimal degrees]
     koi_kepmag          = models.FloatField(max_length=255, null=True, blank=True)  # Kepler-band [mag]
+    targetClass         = models.CharField(max_length=255,default="EX")
 
     def __str__(self):
         return f"{self.kepoi_name}"
@@ -404,17 +406,109 @@ class GCVS(models.Model):
     '87': 'VOL',
     '88': 'VUL',
     }
+    CONSTELLATION_SHORT = [
+        ('All', 'All'),
+        ('AND', 'Andromeda'),
+        ('ANT', 'Antlia'),
+        ('APS', 'Apus'),
+        ('AQR', 'Aquarius'),
+        ('AQL', 'Aquila'),
+        ('ARA', 'Ara'),
+        ('ARI', 'Aries'),
+        ('AUR', 'Auriga'),
+        ('BOO', 'Boötes'),
+        ('CAE', 'Caelum'),
+        ('CAM', 'Camelopardalis'),
+        ('CNC', 'Cancer'),
+        ('CVN', 'Canes Venatici'),
+        ('CMA', 'Canis Major'),
+        ('CMI', 'Canis Minor'),
+        ('CAP', 'Capricornus'),
+        ('CAR', 'Carina'),
+        ('CAS', 'Cassiopeia'),
+        ('CEN', 'Centaurus'),
+        ('CEP', 'Cepheus'),
+        ('CET', 'Cetus'),
+        ('CHA', 'Chamaeleon'),
+        ('CIR', 'Circinus'),
+        ('COL', 'Columba'),
+        ('COM', 'Coma Berenices'),
+        ('CRA', 'Corona Australis'),
+        ('CRB', 'Corona Borealis'),
+        ('CRV', 'Corvus'),
+        ('CRT', 'Crater'),
+        ('CRU', 'Crux'),
+        ('CYG', 'Cygnus'),
+        ('DEL', 'Delphinus'),
+        ('DOR', 'Dorado'),
+        ('DRA', 'Draco'),
+        ('EQU', 'Equuleus'),
+        ('ERI', 'Eridanus'),
+        ('FOR', 'Fornax'),
+        ('GEM', 'Gemini'),
+        ('GRU', 'Grus'),
+        ('HER', 'Hercules'),
+        ('HOR', 'Horologium'),
+        ('HYA', 'Hydra'),
+        ('HYI', 'Hydrus'),
+        ('IND', 'Indus'),
+        ('LAC', 'Lacerta'),
+        ('LEO', 'Leo'),
+        ('LMI', 'Leo Minor'),
+        ('LEP', 'Lepus'),
+        ('LIB', 'Libra'),
+        ('LUP', 'Lupus'),
+        ('LYN', 'Lynx'),
+        ('LYR', 'Lyra'),
+        ('MEN', 'Mensa'),
+        ('MIC', 'Microscopium'),
+        ('MON', 'Monoceros'),
+        ('MUS', 'Musca'),
+        ('NOR', 'Norma'),
+        ('OCT', 'Octans'),
+        ('OPH', 'Ophiuchus'),
+        ('ORI', 'Orion'),
+        ('PAV', 'Pavo'),
+        ('PEG', 'Pegasus'),
+        ('PER', 'Perseus'),
+        ('PHE', 'Phoenix'),
+        ('PIC', 'Pictor'),
+        ('PSC', 'Pisces'),
+        ('PSA', 'Piscis Austrinus'),
+        ('PUP', 'Puppis'),
+        ('PYX', 'Pyxis'),
+        ('RET', 'Reticulum'),
+        ('SGE', 'Sagitta'),
+        ('SGR', 'Sagittarius'),
+        ('SCO', 'Scorpius'),
+        ('SCL', 'Sculptor'),
+        ('SCT', 'Scutum'),
+        ('SER', 'Serpens'),
+        ('SEX', 'Sextans'),
+        ('TAU', 'Taurus'),
+        ('TEL', 'Telescopium'),
+        ('TRI', 'Triangulum'),
+        ('TRA', 'Triangulum Australe'),
+        ('TUC', 'Tucana'),
+        ('UMA', 'Ursa Major'),
+        ('UMI', 'Ursa Minor'),
+        ('VEL', 'Vela'),
+        ('VIR', 'Virgo'),
+        ('VOL', 'Volans'),
+        ('VUL', 'Vulpecula'),
+    ]
     TRANSLATION_MAP = {ord(ch): None for ch in '():/'}
-
-    constellation = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    ra = models.FloatField(null=True)
-    dec = models.FloatField(null=True)
-    variable_type = models.CharField(max_length=255,null=True)
-    max_magnitude = models.CharField(max_length=255,null=True)
-    min_magnitude = models.CharField(max_length=255,null=True)
-    epoch = models.CharField(max_length=255,null=True)
-    period = models.FloatField(null=True)
+    targetId            = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    constellation       = models.CharField(max_length=255, choices=CONSTELLATION_SHORT)
+    name                = models.CharField(max_length=255)
+    ra                  = models.FloatField(null=True)
+    dec                 = models.FloatField(null=True)
+    variable_type       = models.CharField(max_length=255,null=True)
+    max_magnitude       = models.CharField(max_length=255,null=True)
+    min_magnitude       = models.CharField(max_length=255,null=True)
+    epoch               = models.CharField(max_length=255,null=True)
+    period              = models.FloatField(null=True)
+    targetClass         = models.CharField(max_length=255,default="VS")
 
     def __str__(self):
         return f"{self.name}"
@@ -488,6 +582,9 @@ class GCVS(models.Model):
         ``None`` if there is no epoch in GCVS record.
         """
         epoch = epoch_str.translate(self.TRANSLATION_MAP)[:10].strip()
+        # remove any non-numeric characters
+        import re
+        epoch=re.sub("[^\d\.]", "", epoch)
         return 2400000.0 + float(epoch) if epoch else None
 
     def parse_period(self, period_str):
