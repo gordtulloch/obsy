@@ -155,69 +155,41 @@ class SimbadType(models.Model):
         return
     
 ##################################################################################################
-## NasaExplanetArchive - this model is used to store the NASA Exoplanet Archive data            ##
+## Exoplanet - this model is used to store the CalTech Exoplanet Archive data                   ##
 ##################################################################################################
-class NasaExplanetArchive(models.Model):
+class Exoplanet(models.Model):
     targetId            = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    kepid               = models.CharField(max_length=255, null=True, blank=True)   # KepID
-    kepoi_name          = models.CharField(max_length=255, null=True, blank=True)   # KOI Name
-    kepler_name         = models.CharField(max_length=255, null=True, blank=True)   # Kepler Name
-    koi_disposition     = models.CharField(max_length=255, null=True, blank=True)   # Exoplanet Archive Disposition
-    koi_pdisposition    = models.CharField(max_length=255, null=True, blank=True)   # Disposition Using Kepler Data
-    koi_score           = models.FloatField(max_length=255, null=True, blank=True)   # Disposition Score
-    koi_fpflag_nt       = models.BooleanField(max_length=255, null=True, blank=True)   # Not Transit-Like False Positive Flag
-    koi_fpflag_ss       = models.BooleanField(max_length=255, null=True, blank=True)   # Stellar Eclipse False Positive Flag
-    koi_fpflag_co       = models.BooleanField(max_length=255, null=True, blank=True)   # Centroid Offset False Positive Flag
-    koi_fpflag_ec       = models.BooleanField(max_length=255, null=True, blank=True)   # Ephemeris Match Indicates Contamination False Positive Flag
-    koi_period          = models.FloatField(max_length=255, null=True, blank=True)   # Orbital Period [days]
-    koi_period_err1     = models.FloatField(max_length=255, null=True, blank=True)   # Orbital Period Upper Unc. [days]
-    koi_period_err2     = models.FloatField(max_length=255, null=True, blank=True)  # Orbital Period Lower Unc. [days]
-    koi_time0bk         = models.FloatField(max_length=255, null=True, blank=True)  # Transit Epoch [BKJD]
-    koi_time0bk_err1    = models.FloatField(max_length=255, null=True, blank=True)  # Transit Epoch Upper Unc. [BKJD]
-    koi_time0bk_err2    = models.FloatField(max_length=255, null=True, blank=True)  #  Transit Epoch Lower Unc. [BKJD]
-    koi_impact          = models.FloatField(max_length=255, null=True, blank=True)  #      Impact Parameter
-    koi_impact_err1     = models.FloatField(max_length=255, null=True, blank=True)  #  Impact Parameter Upper Unc.
-    koi_impact_err2     = models.FloatField(max_length=255, null=True, blank=True)  #  Impact Parameter Lower Unc.
-    koi_duration        = models.FloatField(max_length=255, null=True, blank=True)  #    Transit Duration [hrs]
-    koi_duration_err1   = models.FloatField(max_length=255, null=True, blank=True)  # Transit Duration Upper Unc. [hrs]
-    koi_duration_err2   = models.FloatField(max_length=255, null=True, blank=True)  # Transit Duration Lower Unc. [hrs]
-    koi_depth           = models.FloatField(max_length=255, null=True, blank=True)  #       Transit Depth [ppm]
-    koi_depth_err1      = models.FloatField(max_length=255, null=True, blank=True)  # Transit Depth Upper Unc. [ppm]
-    koi_depth_err2      = models.FloatField(max_length=255, null=True, blank=True)  # Transit Depth Lower Unc. [ppm]
-    koi_prad            = models.FloatField(max_length=255, null=True, blank=True)  # Planetary Radius [Earth radii]
-    koi_prad_err1       = models.FloatField(max_length=255, null=True, blank=True)  # Planetary Radius Upper Unc. [Earth radii]
-    koi_prad_err2       = models.FloatField(max_length=255, null=True, blank=True)  # Planetary Radius Lower Unc. [Earth radii]
-    koi_teq             = models.FloatField(max_length=255, null=True, blank=True)  # Equilibrium Temperature [K]
-    koi_teq_err1        = models.FloatField(max_length=255, null=True, blank=True)  # Equilibrium Temperature Upper Unc. [K]
-    koi_teq_err2        = models.FloatField(max_length=255, null=True, blank=True)  # Equilibrium Temperature Lower Unc. [K]
-    koi_insol           = models.FloatField(max_length=255, null=True, blank=True)  # Insolation Flux [Earth flux]
-    koi_insol_err1      = models.FloatField(max_length=255, null=True, blank=True)  # Insolation Flux Upper Unc. [Earth flux]
-    koi_insol_err2      = models.FloatField(max_length=255, null=True, blank=True)  # Insolation Flux Lower Unc. [Earth flux]
-    koi_model_snr       = models.FloatField(max_length=255, null=True, blank=True)  # Transit Signal-to-Noise
-    koi_tce_plnt_num    = models.FloatField(max_length=255, null=True, blank=True)  # TCE Planet Number
-    koi_tce_delivname   = models.CharField(max_length=255, null=True, blank=True)   # TCE Delivery
-    koi_steff           = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Effective Temperature [K]
-    koi_steff_err1      = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Effective Temperature Upper Unc. [K]
-    koi_steff_err2      = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Effective Temperature Lower Unc. [K]
-    koi_slogg           = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Surface Gravity [log10(cm/s**2)]
-    koi_slogg_err1      = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Surface Gravity Upper Unc. [log10(cm/s**2)]
-    koi_slogg_err2      = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Surface Gravity Lower Unc. [log10(cm/s**2)]
-    koi_srad            = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Radius [Solar radii]
-    koi_srad_err1       = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Radius Upper Unc. [Solar radii]
-    koi_srad_err2       = models.FloatField(max_length=255, null=True, blank=True)  # Stellar Radius Lower Unc. [Solar radii]
-    ra                  = models.FloatField(max_length=255, null=True, blank=True)  # RA [decimal degrees]
-    dec                 = models.FloatField(max_length=255, null=True, blank=True)  # Dec [decimal degrees]
-    koi_kepmag          = models.FloatField(max_length=255, null=True, blank=True)  # Kepler-band [mag]
     targetClass         = models.CharField(max_length=255,default="EX")
+    targetName          = models.CharField(max_length=255) # pl_name,
+    targetOrbPer        = models.FloatField(null=True) # pl_orbper,  	Orbital Period 
+    targetOrbPerErr1    = models.FloatField(null=True) # pl_orbpererr1, 
+    targetOrbPerErr2    = models.FloatField(null=True) # pl_orbpererr2,
+    targetOrbSMAxis     = models.FloatField(null=True) # pl_orbsmax,  	Orbit Semi-Major Axis [au]
+    targetOrbIncl       = models.FloatField(null=True) # pl_orbincl,     Inclination [deg]
+    targetRAStr         = models.CharField(max_length=255,null=True) # rastr,          Right Ascension of the planetary system in sexagesimal format
+    targetDecStr        = models.CharField(max_length=255,null=True) # decstr,         Declination of the planetary system in sexagesimal notation
+    targetRA2000        = models.FloatField(null=True) # ra,             Right Ascension of the planetary system in decimal degrees
+    targetDec2000       = models.FloatField(null=True) # dec,            Declination of the planetary system in decimal degrees
+    targetStelRadius    = models.FloatField(null=True) # st_rad,         Stellar Radius [Solar Radius]
+    targetPlRadius      = models.FloatField(null=True) # pl_radj,        Planet Radius [Jupiter Radius]
+    targetTrDepth       = models.FloatField(null=True) # pl_trandep,     Transit Depth [ppm]
+    targetTrDur         = models.FloatField(null=True) # pl_trandur,     Transit Duration [hours]
+    targetTrDurErr1     = models.FloatField(null=True) # pl_trandurerr1, 
+    targetTrDurErr2     = models.FloatField(null=True) # pl_trandurerr2,
+    targetTrMid         = models.FloatField(null=True) # pl_tranmid,     Transit Midpoint [BJD]
+    targetTrMidErr1     = models.FloatField(null=True) # pl_tranmiderr1,
+    targetTrMidErr2     = models.FloatField(null=True) # pl_tranmiderr2,
+    targetImpPar        = models.FloatField(null=True) # pl_imppar,      Impact Parameter
+    targetRatDor        = models.FloatField(null=True) # pl_ratdor,      Ratio of Distance to Stellar Radius
+    targetRarRor        = models.FloatField(null=True) # pl_ratror,      Ratio of Planet to Stellar Radius
+    targetVMag          = models.FloatField(null=True) # sy_vmag,        V-band Magnitude
+    targetGaiaMag       = models.FloatField(null=True) # sy_gaiamag      Gaia Magnitude
 
     def __str__(self):
-        return f"{self.kepoi_name}"
-    
-    def get_absolute_url(self):
-        return reverse("nasa_exoplanet_archive_detail", kwargs={'pk': self.pk}) 
+        return f"{self.targetName}"
     
     ##################################################################################################
-    ## Refresh NASA Exoplanet Archive - this manager class is used to refresh the NASA Exoplanet db ##
+    ## Refresh Exoplanet Archive - this manager class is used to refresh the NASA Exoplanet db      ##
     ##################################################################################################
     import requests
     import csv
@@ -225,10 +197,13 @@ class NasaExplanetArchive(models.Model):
 
     @classmethod
     def refresh_exoplanet_db(self):
-        url = 'https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?table=cumulative&format=csv'
+        logger.info("Refreshing Exoplanet data")
+        logger.info("Requesting data from NASA Exoplanet Archive")
+        url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_orbper,pl_orbpererr1,pl_orbpererr2,pl_orbsmax,pl_orbincl,rastr,decstr,ra,dec,st_rad,pl_radj,pl_trandep,pl_trandur,pl_trandurerr1,pl_trandurerr2,pl_tranmid,pl_tranmiderr1,pl_tranmiderr2,pl_imppar,pl_ratdor,pl_ratror,sy_vmag,sy_gaiamag+from+ps+where+tran_flag=1&format=csv'
         response = requests.get(url)
         response.raise_for_status()  # Check if the request was successful
-
+        logger.info("Response code "+str(response.status_code))
+        logger.info("Processing data from NASA Exoplanet Archive")
         from io import StringIO
         csv_data = response.text
         csv_reader = csv.DictReader(StringIO(csv_data))
@@ -236,57 +211,32 @@ class NasaExplanetArchive(models.Model):
         for row in csv_reader:
             # Map CSV columns to model fields
             data = {
-                'kepid': row['kepid'] ,
-                'kepoi_name': row['kepoi_name'],
-                'kepler_name': row['kepler_name'],
-                'koi_disposition': row['koi_disposition'],
-                'koi_pdisposition': row['koi_pdisposition'],
-                'koi_score': row['koi_score'] if row['koi_score'] else None,
-                'koi_fpflag_nt': self.str_to_bool(self,row['koi_fpflag_nt']),
-                'koi_fpflag_ss': self.str_to_bool(self,row['koi_fpflag_ss']),
-                'koi_fpflag_co': self.str_to_bool(self,row['koi_fpflag_co']),
-                'koi_fpflag_ec': self.str_to_bool(self,row['koi_fpflag_ec']),
-                'koi_period': float(row['koi_period']) if row['koi_period'] else None,
-                'koi_period_err1': float(row['koi_period_err1']) if row['koi_period_err1'] else None,
-                'koi_period_err2': float(row['koi_period_err2']) if row['koi_period_err2'] else None,
-                'koi_time0bk': float(row['koi_time0bk']) if row['koi_time0bk'] else None,
-                'koi_time0bk_err1': float(row['koi_time0bk_err1']) if row['koi_time0bk_err1'] else None,
-                'koi_time0bk_err2': float(row['koi_time0bk_err2']) if row['koi_time0bk_err2'] else None,
-                'koi_impact': float(row['koi_impact']) if row['koi_impact'] else None,
-                'koi_impact_err1': float(row['koi_impact_err1']) if row['koi_impact_err1'] else None,
-                'koi_impact_err2': float(row['koi_impact_err2']) if row['koi_impact_err2'] else None,
-                'koi_duration': float(row['koi_duration']) if row['koi_duration'] else None,
-                'koi_duration_err1': float(row['koi_duration_err1']) if row['koi_duration_err1'] else None,
-                'koi_duration_err2': float(row['koi_duration_err2']) if row['koi_duration_err2'] else None,
-                'koi_depth': float(row['koi_depth']) if row['koi_depth'] else None,
-                'koi_depth_err1': float(row['koi_depth_err1']) if row['koi_depth_err1'] else None,
-                'koi_depth_err2': float(row['koi_depth_err2']) if row['koi_depth_err2'] else None,
-                'koi_prad': float(row['koi_prad']) if row['koi_prad'] else None,
-                'koi_prad_err1': float(row['koi_prad_err1']) if row['koi_prad_err1'] else None,
-                'koi_prad_err2': float(row['koi_prad_err2']) if row['koi_prad_err2'] else None,
-                'koi_teq': float(row['koi_teq']) if row['koi_teq'] else None,
-                'koi_teq_err1': float(row['koi_teq_err1']) if row['koi_teq_err1'] else None,
-                'koi_teq_err2': float(row['koi_teq_err2']) if row['koi_teq_err2'] else None,
-                'koi_insol': float(row['koi_insol']) if row['koi_insol'] else None,
-                'koi_insol_err1': float(row['koi_insol_err1']) if row['koi_insol_err1'] else None,
-                'koi_insol_err2': float(row['koi_insol_err2']) if row['koi_insol_err2'] else None,
-                'koi_model_snr': float(row['koi_model_snr']) if row['koi_model_snr'] else None,
-                'koi_tce_plnt_num': float(row['koi_tce_plnt_num']) if row['koi_tce_plnt_num'] else None,
-                'koi_tce_delivname': row['koi_tce_delivname'],
-                'koi_steff': float(row['koi_steff']) if row['koi_steff'] else None,
-                'koi_steff_err1': float(row['koi_steff_err1']) if row['koi_steff_err1'] else None,
-                'koi_steff_err2': float(row['koi_steff_err2']) if row['koi_steff_err2'] else None,
-                'koi_slogg': float(row['koi_slogg']) if row['koi_slogg'] else None,
-                'koi_slogg_err1': float(row['koi_slogg_err1']) if row['koi_slogg_err1'] else None,
-                'koi_slogg_err2': float(row['koi_slogg_err2']) if row['koi_slogg_err2'] else None,
-                'koi_srad': float(row['koi_srad']) if row['koi_srad'] else None,
-                'koi_srad_err1': float(row['koi_srad_err1']) if row['koi_srad_err1'] else None,
-                'koi_srad_err2': float(row['koi_srad_err2']) if row['koi_srad_err2'] else None,
-                'ra': self.ra_to_decimal_hours(self,row['ra_str']) if row['ra_str'] else None,
-                'dec':self.dec_to_decimal_degrees(self,row['dec_str']) if row['dec_str'] else None,
-                'koi_kepmag': float(row['koi_kepmag']) if row['koi_kepmag'] else None,
+                'targetName'        :   row['pl_name']                  if row['pl_name'] else None,
+                'targetOrbPer'      :   float(row['pl_orbper'])         if row['pl_orbper'] else None,
+                'targetOrbPerErr1'  :   float(row['pl_orbpererr1'])     if row['pl_orbpererr1'] else None,
+                'targetOrbPerErr2'  :   float(row['pl_orbpererr2'])     if row['pl_orbpererr2'] else None,
+                'targetOrbSMAxis'   :   float(row['pl_orbsmax'])        if row['pl_orbsmax'] else None,
+                'targetOrbIncl'     :   float(row['pl_orbincl'])        if row['pl_orbincl'] else None,
+                'targetRAStr'       :   row['rastr']                    if row['rastr'] else None,
+                'targetDecStr'      :   row['decstr']                   if row['decstr'] else None,
+                'targetRA2000'      :   float(row['ra'])                if row['ra'] else None,
+                'targetDec2000'     :   float(row['dec'])               if row['dec'] else None,
+                'targetStelRadius'  :   float(row['st_rad'])            if row['st_rad'] else None,
+                'targetPlRadius'    :   float(row['pl_radj'])           if row['pl_radj'] else None,
+                'targetTrDepth'     :   float(row['pl_trandep'])        if row['pl_trandep'] else None,
+                'targetTrDur'       :   float(row['pl_trandur'])        if row['pl_trandur'] else None,
+                'targetTrDurErr1'   :   float(row['pl_trandurerr1'])    if row['pl_trandurerr1'] else None,
+                'targetTrDurErr2'   :   float(row['pl_trandurerr2'])    if row['pl_trandurerr2'] else None,
+                'targetTrMid'       :   float(row['pl_tranmid'])        if row['pl_tranmid'] else None,
+                'targetTrMidErr1'   :   float(row['pl_tranmiderr1'])    if row['pl_tranmiderr1'] else None,
+                'targetTrMidErr2'   :   float(row['pl_tranmiderr2'])    if row['pl_tranmiderr2'] else None,
+                'targetImpPar'      :   float(row['pl_imppar'])         if row['pl_imppar'] else None,
+                'targetRatDor'      :   float(row['pl_ratdor'])         if row['pl_ratdor'] else None,
+                'targetRarRor'      :   float(row['pl_ratror'])         if row['pl_ratror'] else None,
+                'targetVMag'        :   float(row['sy_vmag'])           if row['sy_vmag'] else None,
+                'targetGaiaMag'     :   float(row['sy_gaiamag'])        if row['sy_gaiamag'] else None         
             }
-            NasaExplanetArchive.objects.create(**data)
+            Exoplanet.objects.create(**data)
     
     def str_to_bool(self,value):
         return value.lower() in ('true', '1', 't', 'y', 'yes')

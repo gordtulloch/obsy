@@ -2,7 +2,7 @@
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Target,SimbadType,GCVS
+from .models import Target,SimbadType,GCVS,Exoplanet
 from .forms import TargetUpdateForm,UploadFileForm,VSFilterForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
@@ -383,3 +383,4 @@ def vs_all_list(request):
             vs_records = vs_records.filter(min_magnitude__gte=form.cleaned_data['min_magnitude'])
 
     return render(request, 'targets/vs_all_list.html', {'vs_records': vs_records, 'form': form})
+

@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path,include
 from . import views
-from .views import target_all_list,target_query,target_detail_view, upload_targets_view, vs_all_list
+from .views import target_all_list,target_query,target_detail_view, upload_targets_view, vs_all_list # , ex_all_list
 from django.conf.urls.static import static
 urlpatterns = [
     path("", target_all_list, name="target_all_list"),
@@ -14,4 +14,5 @@ urlpatterns = [
     path("create/", views.target_query, name="target_search"),
     path('upload/', upload_targets_view, name='upload_targets'),
     path('vs/', vs_all_list, name='vs_all_list'),
+    #path('ex/', ex_all_list, name='ex_all_list'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
