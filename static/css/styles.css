@@ -39,3 +39,8 @@ body {
     max-height: calc(100vh - 100px);
     width: auto;
 }
+
+.container.h2
+{
+    color: #fff;
+}

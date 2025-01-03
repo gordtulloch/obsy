@@ -571,4 +571,17 @@ class GCVS(models.Model):
             logger.error("Error reading GCVS file: %s", e)
         return
 
+##################################################################################################
+## ExoplanetFilter - this model is used to store the filter settings for the Exoplanet db       ##
+##################################################################################################
+class ExoplanetFilter(models.Model):
+    configId                = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    min_transit_duration    = models.FloatField(null=True, blank=True)
+    max_transit_duration    = models.FloatField(null=True, blank=True)
+    min_depth               = models.FloatField(null=True, blank=True)
+    max_depth               = models.FloatField(null=True, blank=True)
+    min_altitude            = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Exoplanet Filter {self.configId}"
     

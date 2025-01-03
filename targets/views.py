@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from .models import Target,SimbadType,GCVS,Exoplanet
-from .forms import TargetUpdateForm,UploadFileForm,VSFilterForm
+from .forms import TargetUpdateForm,UploadFileForm,VSFilterForm,ExoplanetFilterForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from setup.models import observatory
@@ -34,6 +34,7 @@ def target_detail_view(request, pk):
     targetObj = get_object_or_404(Target, targetId=pk) 
     
     local_tz = pytz.timezone(settings.TIME_ZONE)
+
     # Define the location (replace with actual location)
     logger.debug("Latitude: "+str(settings.LATITUDE)+" Longitude: "+str(settings.LONGITUDE)+" Elevation: "+str(settings.ELEVATION))
     observer = ephem.Observer()
@@ -41,6 +42,7 @@ def target_detail_view(request, pk):
     observer.lon = settings.LONGITUDE  # Default longitude
     observer.elevation = float(settings.ELEVATION)  # Default elevation
     observer.date = datetime.now(pytz.UTC)  # Current date and time in UTC
+
     # Set the horizon to 18 degrees below the horizon for astronomical twilight
     observer.horizon = '-18'
     logger.debug("Observer: "+str(observer)) 
@@ -378,9 +380,23 @@ def vs_all_list(request):
         if form.cleaned_data['variable_type']:
             vs_records = vs_records.filter(variable_type__icontains=form.cleaned_data['variable_type'])
         if form.cleaned_data['max_magnitude']:
-            vs_records = vs_records.filter(max_magnitude__lte=form.cleaned_data['max_magnitude'])
+            vs_records = vs_records.filter(max_magnitude__gte=form.cleaned_data['max_magnitude'])
         if form.cleaned_data['min_magnitude']:
-            vs_records = vs_records.filter(min_magnitude__gte=form.cleaned_data['min_magnitude'])
+            vs_records = vs_records.filter(min_magnitude__lte=form.cleaned_data['min_magnitude'])
 
     return render(request, 'targets/vs_all_list.html', {'vs_records': vs_records, 'form': form})
+
+
+##################################################################################################
+## create_exoplanet_filter -  Create a new EX Filter                                                      ##
+##################################################################################################
+def create_exoplanet_filter(request):
+    if request.method == 'POST':
+        form = ExoplanetFilterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('exoplanet_filter_success')
+    else:
+        form = ExoplanetFilterForm()
+    return render(request, 'targets/vs_all_list.html')
 
