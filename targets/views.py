@@ -34,7 +34,7 @@ def target_detail_view(request, pk):
     targetObj = get_object_or_404(Target, targetId=pk) 
     
     local_tz = pytz.timezone(settings.TIME_ZONE)
-
+    
     # Define the location (replace with actual location)
     logger.debug("Latitude: "+str(settings.LATITUDE)+" Longitude: "+str(settings.LONGITUDE)+" Elevation: "+str(settings.ELEVATION))
     observer = ephem.Observer()
@@ -386,6 +386,12 @@ def vs_all_list(request):
 
     return render(request, 'targets/vs_all_list.html', {'vs_records': vs_records, 'form': form})
 
+##################################################################################################
+## ex_all_list -  List all Exoplanets                                                           ##
+##################################################################################################
+def ex_all_list(request):
+    exoplanets = Exoplanet.objects.all()
+    return render(request, 'targets/ex_all_list.html', {'exoplanets': exoplanets})
 
 ##################################################################################################
 ## create_exoplanet_filter -  Create a new EX Filter                                                      ##
@@ -395,8 +401,8 @@ def create_exoplanet_filter(request):
         form = ExoplanetFilterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('exoplanet_filter_success')
+            return redirect('targets/ex_all_list.html')
     else:
         form = ExoplanetFilterForm()
-    return render(request, 'targets/vs_all_list.html')
+    return render(request, 'targets/create_exoplanet_filter.html', {'form': form})
 
