@@ -372,10 +372,10 @@ def upload_targets_view(request):
 ##################################################################################################
 def vs_all_list(request):
     form = VSFilterForm(request.GET or None)
-
     vs_records = GCVS.objects.all().order_by('name')
+
     if form.is_valid():
-        if form.cleaned_data['constellation'] and form.cleaned_data['constellation'] != 'All':
+        if form.cleaned_data['constellation']:
             vs_records = vs_records.filter(constellation=form.cleaned_data['constellation'])
         if form.cleaned_data['variable_type']:
             vs_records = vs_records.filter(variable_type__icontains=form.cleaned_data['variable_type'])

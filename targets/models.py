@@ -357,7 +357,6 @@ class GCVS(models.Model):
     '88': 'VUL',
     }
     CONSTELLATION_SHORT = [
-        ('All', 'All'),
         ('AND', 'Andromeda'),
         ('ANT', 'Antlia'),
         ('APS', 'Apus'),
