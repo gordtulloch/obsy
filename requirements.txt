@@ -32,3 +32,4 @@ plotly
 astroplan
 python-dotenv
 django-admin-dracula
+xmltodict
