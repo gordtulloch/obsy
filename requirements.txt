@@ -2,7 +2,7 @@ numpy==1.26
 importlib_metadata
 astropy
 astropy-iers-data
-astroquery
+astroquery==0.4.7
 crispy-bootstrap5
 Django
 django-crispy-forms
