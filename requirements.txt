@@ -16,17 +16,7 @@ tzdata
 celery
 matplotlib
 paramiko
-celery 
-django-celery-beat
-django_celery_results
-kombu
-flower
-pika
-kombu
-blueskyapi
-twilio
 setuptools
-supervisor
 ephem
 plotly
 astroplan

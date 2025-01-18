@@ -19,7 +19,6 @@ import os
 from math import cos,sin 
 from astropy.io import fits
 import shutil
-import pika
 
 import logging
 logging=logging.getLogger('observations')
@@ -34,22 +33,6 @@ class PostProcess(object):
         self.sourceFolder=settings.SOURCEPATH
         self.repoFolder=settings.REPOPATH
         logging.info("Post Processing object initialized")
-
-    #################################################################################################################
-    ## send_to_rabbitmq - this function sends a message to the RabbitMQ server                                     ##
-    #################################################################################################################
-    def send_to_rabbitmq(self, message, queue='fits_files'):
-        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-        channel = connection.channel()
-        channel.queue_declare(queue=queue, durable=True)
-        channel.basic_publish(
-            exchange='',
-            routing_key=queue,
-            body=message,
-            properties=pika.BasicProperties(
-                delivery_mode=2,  # make message persistent
-            ))
-        connection.close()
 
     #################################################################################################################
     ## submitFileToDB - this function submits a fits file to the database                                          ##

@@ -2,11 +2,9 @@
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Target,SimbadType,GCVS,Exoplanet
-from .forms import TargetUpdateForm,UploadFileForm,VSFilterForm,ExoplanetFilterForm
+from .models import Target,SimbadType
+from .forms import TargetUpdateForm,UploadFileForm
 from django.urls import reverse_lazy
-from django.http import JsonResponse
-from setup.models import observatory
 
 import plotly.graph_objs as go
 import plotly.io as pio
@@ -18,8 +16,6 @@ from astroquery.simbad import Simbad
 from astropy.coordinates import SkyCoord, get_constellation
 from astropy import units as u
 from datetime import datetime, timedelta
-import xmltodict
-from django.utils import timezone
 import ephem
 import math
 import pytz
@@ -366,43 +362,4 @@ def upload_targets_view(request):
         form = UploadFileForm()
         
     return render(request, 'targets/upload_targets.html', {'form': form})
-
-##################################################################################################
-## VS List -  List all VS records                                                               ##
-##################################################################################################
-def vs_all_list(request):
-    form = VSFilterForm(request.GET or None)
-    vs_records = GCVS.objects.all().order_by('name')
-
-    if form.is_valid():
-        if form.cleaned_data['constellation']:
-            vs_records = vs_records.filter(constellation=form.cleaned_data['constellation'])
-        if form.cleaned_data['variable_type']:
-            vs_records = vs_records.filter(variable_type__icontains=form.cleaned_data['variable_type'])
-        if form.cleaned_data['max_magnitude']:
-            vs_records = vs_records.filter(max_magnitude__gte=form.cleaned_data['max_magnitude'])
-        if form.cleaned_data['min_magnitude']:
-            vs_records = vs_records.filter(min_magnitude__lte=form.cleaned_data['min_magnitude'])
-
-    return render(request, 'targets/vs_all_list.html', {'vs_records': vs_records, 'form': form})
-
-##################################################################################################
-## ex_all_list -  List all Exoplanets                                                           ##
-##################################################################################################
-def ex_all_list(request):
-    exoplanets = Exoplanet.objects.all()
-    return render(request, 'targets/ex_all_list.html', {'exoplanets': exoplanets})
-
-##################################################################################################
-## create_exoplanet_filter -  Create a new EX Filter                                                      ##
-##################################################################################################
-def create_exoplanet_filter(request):
-    if request.method == 'POST':
-        form = ExoplanetFilterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('targets/ex_all_list.html')
-    else:
-        form = ExoplanetFilterForm()
-    return render(request, 'targets/create_exoplanet_filter.html', {'form': form})
 

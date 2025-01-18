@@ -32,9 +32,6 @@ INSTALLED_APPS = [
     # Third-party
     "crispy_forms", 
     "crispy_bootstrap5", 
-    'celery',    
-    'django_celery_results',
-    'django_celery_beat',
     # Local
     "pages.apps.PagesConfig",
     "accounts.apps.AccountsConfig",
@@ -76,28 +73,13 @@ WSGI_APPLICATION = 'obsy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# Load environment variables from .env file if not running in Docker (i.e. dev environment) and use SQLite3
-if not os.getenv('DOCKER_CONTAINER'):
-    from dotenv import load_dotenv
-    load_dotenv()
-    
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DATABASE_NAME'),
-            'USER': os.getenv('DATABASE_USER'),
-            'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-            'HOST': os.getenv('DATABASE_HOST'),
-            'PORT': os.getenv('DATABASE_PORT'),
-        }
-    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -223,29 +205,6 @@ LOGGING = {
 # These should eventually be in the database with a UI for the user to change them
 from obsy.config import Config
 config = Config()
-
-###########################################################################################
-## Task Scheduling and Integration                                                       ##
-###########################################################################################
-# Celery Configuration Options
-# Celery settings
-CELERY_BROKER_URL = 'pyamqp://guest@rabbitmq//'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_ACCEPT_CONTENT = ['json']  # Ignore other content
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-CELERY_ENABLE_UTC = True
-
-from celery.schedules import solar
-
-CELERY_BEAT_SCHEDULE = {
-    # Executes at local sunrise
-    'daily-observations-task': {
-        'task': 'observations.tasks.daily_observations_task',
-        'schedule': solar('sunrise', float(config.get("LATITUDE")), float(config.get("LONGITUDE"))),
-    },
-}
 
 
 ###########################################################################################

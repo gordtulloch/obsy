@@ -9,61 +9,27 @@ git clone https://github.com/gordtulloch/obsy.git
 
 Create a new virtual environment for Obsy
 
-python -m venv .venv
-.venv\scripts\activate.bat  (in Windows)
-source ./venv/bin/activate  (Linux)
+    python -m venv .venv
+    .venv\scripts\activate.bat  (in Windows)
+    source ./venv/bin/activate  (Linux)
 
 Next install all of the required dependencies with pip:
 
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
 Create the database server structure and load all of the core Obsy tables:
 
-$ python manage.py migrate
-$ python manage.py loaddata obsy.json
+    python manage.py migrate
+
+Create a superuser account so you can log in
+
+    python manage.py createsuperuser
 
 Finally run the server 
 
-python manage.py runserver
-
-# Asynchronous Tasks
-Obsy uses Celery and Beat to schedule tasks, and RabbitMQ.for message passing. 
-
-Celery is a distributed task queue library that allows you to execute time-consuming or resource-intensive tasks asynchronously. It allows you to scale processing in a distributed system by adding more worker processes to existing workers or by adding workers to more servers. Celery beat is a scheduler; It kicks off tasks at regular intervals, that are then executed by available worker nodes in the cluster. Celery requires a message broker to operate, in this case RabbitMQ.
-
-sudo apt install rabbitmq-server
-sudo service rabbitmq-server start
-
-# Start the Celery worker
-celery -A obsy worker --loglevel=info
-
-# Start the Celery Beat scheduler
-celery -A obsy beat --loglevel=info
+    python manage.py runserver 0.0.0.0:8000
 
 # Private settings
 Some settings are used for testing but can't be added to the repository. These are stored in a file named obsy/private.ini. 
-This file is not included in the repository and must be created the first time the program is run. It will be created with default settings 
+This file is not included in the repository and is created the first time the program is run. It will be created with default settings 
 so please edit this file appropriately.
-
-Yes, Celery provides a monitoring tool called Flower, which is a real-time web-based monitoring tool for Celery. Flower provides a dashboard to monitor task progress, inspect task and worker status, and manage Celery tasks.
-
-To install Flower, use the following command:
-```bash
-pip install flower
-```
-
-To start Flower, run the following command:
-```bash
-celery -A obsy flower
-```
-
-This will start the Flower web server, and you can access the Flower dashboard by navigating to `http://localhost:5555` in your web browser.
-
-Flower provides a comprehensive interface to monitor and manage your Celery tasks and workers, including the ability to:
-- View task progress and history
-- Monitor worker status and performance
-- Inspect scheduled tasks
-- Manage task queues
-
-This should help you manage your Celery and beat processes more effectively.
-
