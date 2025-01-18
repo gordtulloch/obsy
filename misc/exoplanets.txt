@@ -1,5 +1,0 @@
-Download the current CSV for exoplanets
-
-http://exoplanets.org/csv-files/exoplanets.csv
-
-Need to calculate when a transit will occur
