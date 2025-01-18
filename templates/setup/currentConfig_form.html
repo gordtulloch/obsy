@@ -1,11 +1,12 @@
 {% extends "_base.html" %}
+{% load crispy_forms_tags %}
 {% block title %}Add/Edit Configuration{% endblock title %}
 {% block content %}
 <div class="container">
     <h2>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Configuration</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy }}
         <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}Add{% endif %}</button>
     </form>
 </div>

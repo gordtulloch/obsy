@@ -32,7 +32,8 @@ class Observation(models.Model):
                         default=uuid.uuid4,
                         editable=False)
     observationDate     = models.DateField(null=True, blank=True)
-    targetId        = models.ForeignKey(Target, on_delete=models.CASCADE,null=True, blank=True)
+    targetId        = models.UUIDField()
+    targetName      = models.CharField(max_length=255)
     targetClass     = models.CharField(max_length=255,null=True, blank=True)
     userId          = models.CharField(max_length=255)
     targetPA        = models.DecimalField(default=0.0,max_digits=6, decimal_places=2,null=True, blank=True)
@@ -53,6 +54,7 @@ class Observation(models.Model):
     
     def __str__(self):
         return f"{self.targetId}"
+    
     def get_absolute_url(self):
         return reverse("observation_detail", args=[str(self.observationId)])
     

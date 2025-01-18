@@ -2,7 +2,7 @@
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
-from .models import Target,SimbadType
+from .models import Target
 from .forms import TargetUpdateForm,UploadFileForm
 from django.urls import reverse_lazy
 
@@ -243,7 +243,7 @@ def target_query(request):
                     targetId = uuid.uuid4(),     
                     targetName = row["MAIN_ID"].replace(' ',''),
                     targetType  =row["OTYPE_main"],
-                    targetClass=assignTargetClass(row["OTYPE_main"]),
+                    targetClass="DS",
                     targetRA2000 = row["RA"],
                     targetDec2000 = row["DEC"],
                     targetConst = get_constellation(c),

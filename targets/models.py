@@ -19,30 +19,21 @@ logger = logging.getLogger(__name__)
 ## Target - an object for which we may wish to create an Observation                           ##
 ################################################################################################## 
 class Target(models.Model):
-    TARGET_CLASSES=(
-    ("VS", "Variable Star"),
-    ("EX", "Exoplanet"),
-    ("DS", "Deep Sky Object"),
-    ("PL", "Planet"),
-    ("LU", "Luna"),
-    ("SU", "Sun"),
-    ("SA", "Satellite"),
-    ("OT", "Other")
-    )
     targetId        = models.UUIDField( 
                         primary_key=True,
                         default=uuid.uuid4,
                         editable=False)
     targetName      = models.CharField(max_length=255)
-    targetClass     = models.CharField(max_length=255,choices=TARGET_CLASSES,default="DS")
+    targetClass     = models.CharField(max_length=255,default="DS")
     targetType      = models.CharField(max_length=255)
     targetRA2000    = models.CharField(max_length=255)
     targetDec2000   = models.CharField(max_length=255)
     targetConst     = models.CharField(max_length=200)
     targetMag       = models.CharField(max_length=200)
     targetDefaultThumbnail = models.ImageField(upload_to='thumbnails/')
+
     def __str__(self):
-        return f"{self.targetId}"
+        return f"{self.targetName}"
     
     def get_absolute_url(self):
         return reverse("target_detail", args=[str(self.targetId)])
@@ -131,26 +122,4 @@ class Target(models.Model):
             except:
                 logger.warning("Failed to remove thumbnail file "+jpg_filename)
         super().delete(*args, **kwargs)
-        return
-    
-##################################################################################################
-## SimbadType - this model allows mapping between SIMBAD object types and obsy object classes   ##
-##################################################################################################
-class SimbadType(models.Model):
-    label       = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    targetClass = models.CharField(max_length=2)
-    
-    def __str__(self):
-        return f"{self.label}"
-    def populate_db():
-        with open('standard_data/targets_simbadtype.csv') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                _, created = SimbadType.objects.get_or_create(
-                label=row[1],
-                description=row[2],
-                targetClass=row[3],
-                )
-        return
- 
+        return 

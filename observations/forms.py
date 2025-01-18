@@ -1,26 +1,38 @@
 from django import forms
-from .models import Observation, scheduleMaster, scheduleDetail,sequenceFile,ObservationDS, ObservationEX, ObservationVS
-from targets.models import Target
+from .models import Observation, scheduleMaster,sequenceFile
 from setup.models import observatory,telescope,imager 
 import datetime
 
 ################################################################################################################################
 ##  ObservationForm - form for adding an Observation (allows targetId to be passed to it)                                     ##  
 ################################################################################################################################
-class ObservationForm(forms.ModelForm):
-    target_uuid = forms.UUIDField(widget=forms.HiddenInput(), required=False)
-
+class ObservationDSForm(forms.ModelForm):
     class Meta:
         model = Observation
-        fields = ['targetId','observationDate', 'targetPA','targetInactive','observeOnce','observatoryId',
-                  'telescopeId','imagerId','sequenceFileId' ]
-
+        fields = ['targetId','targetName','observationDate','targetPA','targetInactive','observeOnce','observatoryId','telescopeId','imagerId','sequenceFileId']
+        labels = {
+            'targetName': 'Target Name',
+            'observationDate' : 'Requested Date YYYY-MM-DD HH:MM (or blank for any)',
+            'targetPA': 'Rotation for imaging Target', 
+            'targetInactive': 'Create Observation but do not schedule',
+            'observeOnce' : 'Do not include in repeated schedules',
+        }
+        widgets = {
+            'targetId': forms.HiddenInput(),
+            'observationDate': forms.TextInput(attrs={'class': 'form-control datetimepicker', 'placeholder': 'Enter Observation date'}),
+            'targetPA': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter rotation angle'}),
+            'targetInactive': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'observeOnce': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
 
     def __init__(self, *args, **kwargs):
         target_uuid = kwargs.pop('target_uuid', None)
+        target_name = kwargs.pop('target_name', None)
         super().__init__(*args, **kwargs)
         if target_uuid:
             self.fields['targetId'].initial = target_uuid
+        if target_name:
+            self.fields['targetName'].initial = target_name
 
     observatoryId = forms.ModelChoiceField(
         queryset=observatory.objects.all(),
@@ -44,47 +56,6 @@ class ObservationForm(forms.ModelForm):
         label='Requested Sequence File'
         )
     
-    class Meta:
-        model = Observation
-        #fields = '__all__'
-        fields = ['targetId','observationDate','targetPA','targetInactive','observeOnce','observatoryId','telescopeId','imagerId','sequenceFileId']
-        labels = {
-            'observationDate' : 'Requested Date YYYY-MM-DD HH:MM (or blank for any)',
-            'targetPA': 'Rotation for imaging Target', 
-            'targetInactive': 'Create Observation but do not schedule',
-            'observeOnce' : 'Do not include in repeated schedules',
-        }
-        widgets = {
-            'observationDate': forms.TextInput(attrs={'class': 'form-control datetimepicker', 'placeholder': 'Enter Observation date'}),
-            'targetPA': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter rotation angle'}),
-            'targetInactive': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'observeOnce': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
-
-################################################################################################################################
-##  ObservationDSForm - form for adding a DeepSKy object Observation                                                          ##
-################################################################################################################################
-class ObservationDSForm(ObservationForm):
-    class Meta:
-        model = ObservationDS
-        fields = '__all__'
-
-################################################################################################################################
-##  ObservationEXForm - form for adding an Exoplanet Observation                                                              ##
-################################################################################################################################
-class ObservationEXForm(ObservationForm):
-    class Meta:
-        model = ObservationEX
-        fields = '__all__'
-        
-################################################################################################################################
-##  ObservationVSForm - form for adding a Variable Star Observation                                                           ##
-################################################################################################################################
-class ObservationVSForm(ObservationForm):
-    class Meta:
-        model = ObservationVS
-        fields = '__all__'
-
 ################################################################################################################################
 ##  ScheduleMasterForm - form for adding a schedule                                                                           ##
 ################################################################################################################################

@@ -10,7 +10,7 @@
             {% if forloop.first %}
                 <tr><th>Target</th><th>Rotation</th><th>Do Not Schedule</th><th>Schedule Once</th><th>Observatory</th><th>Telescope</th><th>Imager</th><th>Sequence</th><th>Duration (s)</th><th>Actions</th></tr>
                 {% endif %}    
-            <tr><td><b>{{ Observation.targetId }}</b></td>
+            <tr><td><b>{{ Observation.targetName }}</b></td>
                 <td>{{ Observation.targetPA }}</td>
                 <td>{{ Observation.targetInactive }}</td>
                 <td>{{ Observation.observeOnce }}</td>

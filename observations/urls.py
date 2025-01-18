@@ -16,7 +16,7 @@ urlpatterns = [
     path("<uuid:pk>/edit/",                 observation_update, name="observation_update"),
     path("<uuid:pk>/delete/",               observation_delete.as_view(), name="observation_delete"),
     path('create/',                         observation_create, name='observation_create'),
-    path('create/<uuid:target_uuid>/',      observation_create, name='observation_create'),
+    path('create/<uuid:target_uuid>/<str:target_name>/',      observation_create, name='observation_create'),
     # Tasks
     path('daily_observations_task/',        daily_observations_task, name='daily_observations_task'),
     path('PostProcess/',                    taskPostProcessing, name='post_processing_task'),

@@ -37,7 +37,7 @@
                     <td>
                         <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'target_update' data.Target.targetId %}'">Edit</button><br>
                         <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'target_delete' data.Target.targetId %}'">Delete</button><br>
-                        <button type="button" class="btn btn-success" onclick="window.location.href='{% url 'observation_create' data.Target.targetId %}'">Observe</button>
+                        <button type="button" class="btn btn-success" onclick="window.location.href='{% url 'observation_create' data.Target.targetId data.Target.targetName %}'">Observe</button>
             {% empty %}
             <p><i>No results found.</i></p>
         {% endfor %}

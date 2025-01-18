@@ -18,7 +18,7 @@ class observatory(models.Model):
         return self.shortname
     
     def get_absolute_url(self):
-        return reverse("observatory_detail", args=[self.observatoryId])
+        return f"/observatory/{self.observatoryId}/"
     
  
 class telescope(models.Model):
