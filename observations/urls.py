@@ -4,8 +4,8 @@ from django.urls import path,include
 from . import views
 from .views import observation_detail_view, observation_all_list
 from .views import observation_create,observation_update,observation_delete,ScheduleUpdateView,ScheduleDeleteView, ScheduleRegenView,\
-    scheduleMasterList,ScheduleCreateView, daily_observations_task, list_fits_files, fitsfile_detail, sequence_file_list, \
-    sequence_file_create, sequence_file_edit, sequence_file_delete,taskPostProcessing,observation_updateDS
+    scheduleMasterList,ScheduleCreateView, list_fits_files, fitsfile_detail, sequence_file_list, \
+    sequence_file_create, sequence_file_edit, sequence_file_delete,observation_updateDS
 from targets.models import Target
 
 urlpatterns = [
@@ -17,9 +17,6 @@ urlpatterns = [
     path("<uuid:pk>/delete/",               observation_delete.as_view(), name="observation_delete"),
     path('create/',                         observation_create, name='observation_create'),
     path('create/<uuid:target_uuid>/<str:target_name>/',      observation_create, name='observation_create'),
-    # Tasks
-    path('daily_observations_task/',        daily_observations_task, name='daily_observations_task'),
-    path('PostProcess/',                    taskPostProcessing, name='post_processing_task'),
     # Schedules
     path('schedule/',                       scheduleMasterList.as_view(), name='schedule_list'),
     path('schedule/create/',                ScheduleCreateView.as_view(), name='schedule_create'),

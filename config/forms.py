@@ -35,3 +35,15 @@ class RepositoryConfigForm(forms.ModelForm):
             'ppsourcepath': 'Path to load data from to insert into the Repository',
             'pprepopath': 'Repository Path',
         }
+        
+    def clean_ppsourcepath(self):
+        ppsourcepath = self.cleaned_data.get('ppsourcepath')
+        if ppsourcepath and not ppsourcepath.endswith('/'):
+            ppsourcepath += '/'
+        return ppsourcepath
+
+    def clean_pprepopath(self):
+        pprepopath = self.cleaned_data.get('pprepopath')
+        if pprepopath and not pprepopath.endswith('/'):
+            pprepopath += '/'
+        return pprepopath

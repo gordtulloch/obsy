@@ -210,38 +210,6 @@ class ScheduleRegenView(DetailView):
         return
 
 ##################################################################################################
-## daily_observations_task -  this function will run the daily_observations task                ##
-##################################################################################################
-def daily_observations_task(request):
-    logging.info("Running daily_observations")
-    # Run the post-processing task
-    postProcess = PostProcess()
-    postProcess.registerFitsImages()
-
-    # Calculate the time 24 hours ago from now
-    time_threshold = timezone.now() - timezone.timedelta(hours=24)
-    
-    # Query the fitsFile objects with fitsFileDate less than 24 hours from now
-    fits_files = fitsFile.objects.filter(fitsFileDate__gte=time_threshold)
-    
-    # Create a list of file names or any other relevant information
-    fits_files_list = [f"{fits_file.fitsFileName} - {fits_file.fitsFileDate}" for fits_file in fits_files]
-    
-    # Format the list into a string
-    fits_files_str = "\n".join(fits_files_list)
-    
-    # Send the email
-    send_mail(
-        'Obsy: New FITS files processed last night',
-        fits_files_str,
-        config.get('SENDER_EMAIL'),  # Replace with your "from" email address
-        [config.get('RECIPIENT_EMAIL')],  # Pull recipient email from config
-        fail_silently=False,
-    )
-
-    return render(request, 'observations/email_sent.html')
-
-##################################################################################################
 # list_fits_files -  List all FITS files in the database                                        ##
 ##################################################################################################
 def list_fits_files(request):
@@ -375,40 +343,3 @@ def sequence_file_delete(request, pk):
         sequence_instance.delete()
         return redirect('observations/sequence_file_list')
     return render(request, 'observations/sequence_file_confirm_delete.html', {'sequence': sequence_instance})
-
-##################################################################################################
-## taskPostProcessing -  this function will run the post-processing task                         ##
-##################################################################################################
-def taskPostProcessing(request):
-    postProcess=    PostProcess()
-    registered=     postProcess.registerFitsImages()
-    lightSeqCreated=postProcess.createLightSequences()
-    calSeqCreated=  postProcess.createCalibrationSequences()
-    # calibrated=     postProcess.calibrateAllFitsImages()
-    
-    logger.info(f"Registered files: {registered}")
-    logger.info(f"Light sequences created: {lightSeqCreated}")
-    logger.info(f"Calibration sequences created: {calSeqCreated}")
-    # logger.info(f"Calibrated files: {calibrated}")
-    
-    # Query for fitsFile details
-    registered_files = fitsFile.objects.filter(fitsFileId__in=registered).order_by('fitsFileDate')
-    # calibrated_files = fitsFile.objects.filter(fitsFileId__in=calibrated)
-
-    # Query for fitsSequence details
-    light_sequences = fitsSequence.objects.filter(fitsSequenceId__in=lightSeqCreated).order_by('fitsSequenceDate')
-    cal_sequences = fitsSequence.objects.filter(fitsSequenceId__in=calSeqCreated).order_by('fitsSequenceDate')
-    
-    # Create a summary of all tasks performed
-    summary = {
-        'registered_files': registered_files,
-        'light_sequences': light_sequences,
-        'cal_sequences': cal_sequences,
-        # 'calibrated_files': calibrated_files,
-        'registered_count': len(registered),
-        'light_seq_count': len(lightSeqCreated),
-        'cal_seq_count': len(calSeqCreated),
-        # 'calibrated_count': len(calibrated)
-    }
- 
-    return render(request, 'observations/postProcessed.html', summary)

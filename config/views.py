@@ -20,15 +20,13 @@ def config_view(request):
             'email_host_password': 'secret',
             'sender_email': 'email@gmail.com',
             'recipient_email': 'email@gmail.com',
-            'twilio_sid': 'secret',
-            'twilio_token': 'secret'
         }
     )
     repository_config, created = RepositoryConfig.objects.get_or_create(
         id=1,
         defaults={
-            'ppsourcepath': '/home/stellarmate/Projects/obsy/sample_data/Processing/input',
-            'pprepopath': '/home/stellarmate/Projects/obsy/sample_data/Processing/repo'
+            'ppsourcepath': '/home/gtulloch/REPOSITORY.Incoming',
+            'pprepopath': '/home/gtulloch/REPOSITORY'
         }
     )
     general_form = GeneralConfigForm(request.POST, instance=general_config, prefix='general')
@@ -38,13 +36,11 @@ def config_view(request):
     if request.method == 'POST':
         if general_form.is_valid():
             general_form.save()
-            return redirect('config_view')
         if communications_form.is_valid():
             communications_form.save()
-            return redirect('config_view')
         if repository_form.is_valid():            
             repository_form.save()
-            return redirect('config_view')
+        return redirect('config_view')
     else:
         general_form = GeneralConfigForm(instance=general_config, prefix='general')
         communications_form = CommunicationsConfigForm(instance=communications_config, prefix='communications')

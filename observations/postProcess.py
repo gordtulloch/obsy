@@ -20,6 +20,8 @@ from math import cos,sin
 from astropy.io import fits
 import shutil
 
+from obsy.config import Config
+
 import logging
 logging=logging.getLogger('observations')
 
@@ -30,8 +32,9 @@ logging=logging.getLogger('observations')
 ################################################################################################################
 class PostProcess(object):
     def __init__(self):
-        self.sourceFolder=config.get('SOURCEPATH')
-        self.repoFolder=config.get('REPOPATH')
+        self.config = Config()
+        self.sourceFolder=self.config.get('ppsourcepath')
+        self.repoFolder=self.config.get('pprepopath')
         logging.info("Post Processing object initialized")
 
     #################################################################################################################
@@ -40,18 +43,17 @@ class PostProcess(object):
     def submitFileToDB(self,fileName,hdr):
         if "DATE-OBS" in hdr:
             # Create new fitsFile record
-
             if "OBJECT" in hdr:
                 newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["FRAME"],
                             fitsFileObject=hdr["OBJECT"],fitsFileExpTime=hdr["EXPTIME"],fitsFileXBinning=hdr["XBINNING"],
                             fitsFileYBinning=hdr["YBINNING"],fitsFileCCDTemp=hdr["CCD-TEMP"],fitsFileTelescop=hdr["TELESCOP"],
-                            fitsFileInstrument=hdr["INSTRUME"],fitsFileGain=hdr["GAIN"],fitsFileOffset=hdr["OFFSET"],
+                            fitsFileInstrument=hdr["INSTRUME"],
                             fitsFileSequence=None)
             else:
                 newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["FRAME"],
                             fitsFileExpTime=hdr["EXPTIME"],fitsFileXBinning=hdr["XBINNING"],
                             fitsFileYBinning=hdr["YBINNING"],fitsFileCCDTemp=hdr["CCD-TEMP"],fitsFileTelescop=hdr["TELESCOP"],
-                            fitsFileInstrument=hdr["INSTRUME"],fitsFileGain=hdr["GAIN"],fitsFileOffset=hdr["OFFSET"],
+                            fitsFileInstrument=hdr["INSTRUME"],
                             fitsFileSequence=None)
             newfile.save()
             return newfile.fitsFileId
@@ -66,6 +68,7 @@ class PostProcess(object):
     #################################################################################################################
     def registerFitsImage(self,root,file):
         moveFiles=True
+        newFitsFileId=None
 
         file_name, file_extension = os.path.splitext(os.path.join(root,file))
 
@@ -172,8 +175,6 @@ class PostProcess(object):
                     logging.info(moveInfo)
                     shutil.move(os.path.join(root, file),newPath+newName)
                     message = os.path.join(root, file)
-                    self.send_to_rabbitmq(message)
-                    logging.info("Queued file " + message + " in RabbitMQ")
             else:
                 logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
         else:
@@ -188,28 +189,15 @@ class PostProcess(object):
         moveFiles=True
         registeredFiles=[]
         newFitsFileId=None
-        sendFilesToRabbitMQ=False
         
         # Scan the pictures folder
         logging.info("Processing images in "+self.sourceFolder)
         for root, dirs, files in os.walk(os.path.abspath(self.sourceFolder)):
             for file in files:
                 logging.info("Processing file "+os.path.join(root, file))
-
                 if (newFitsFileId := self.registerFitsImage(root,file)):
                     # Add the file to the list of registered files
                     registeredFiles.append(newFitsFileId)
-                    if (newFitsFileId != None):
-                        if moveFiles:
-                            moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
-                            logging.info(moveInfo)
-                            shutil.move(os.path.join(root, file),newPath+newName)
-                        if sendFilesToRabbitMQ:
-                            message = os.path.join(root, file)
-                            self.send_to_rabbitmq(message)
-                            logging.info("Queued file " + message + " in RabbitMQ")
-                    else:
-                        logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
                 else:
                     logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
         return registeredFiles
@@ -236,7 +224,8 @@ class PostProcess(object):
         thumbnail_data = data[::10, ::10]
         
         # Save the thumbnail image as a JPG file
-        thumbnail_path = os.path.join(self.repoFolder, f'thumbnail_{fits_file.fitsFileId}.jpg')
+        thumbnail_path = os.path.join(self.repoFolder+'Thumbnails/', f'thumbnail_{fits_file.fitsFileId}.jpg')
+
         try:
             plt.imsave(thumbnail_path, thumbnail_data, cmap='gray')
             logging.info(f"Thumbnail image saved to: {thumbnail_path}")
