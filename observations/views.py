@@ -1,4 +1,5 @@
 from django.conf import settings
+from obsy import config
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView,CreateView
 from django.urls import reverse_lazy
@@ -172,9 +173,9 @@ class ScheduleRegenView(DetailView):
         # Load the telescope and imager objects from the currentConfig
         self.telescopeList = []
         self.imagerList = []
-        for config in currentConfig:
-            self.telescopeList.append(config.telescopeId)
-            self.imagerList.append(config.imagerId)
+        for thisConfig in currentConfig:
+            self.telescopeList.append(thisConfig.telescopeId)
+            self.imagerList.append(thisConfig.imagerId)
  
     def regenSchedule(self):
         # Calculate astronomical twilight and dawn using ephem
@@ -233,8 +234,8 @@ def daily_observations_task(request):
     send_mail(
         'Obsy: New FITS files processed last night',
         fits_files_str,
-        settings.SENDER_EMAIL,  # Replace with your "from" email address
-        [settings.RECIPIENT_EMAIL],  # Pull recipient email from settings
+        config.get('SENDER_EMAIL'),  # Replace with your "from" email address
+        [config.get('RECIPIENT_EMAIL')],  # Pull recipient email from config
         fail_silently=False,
     )
 

@@ -5,7 +5,7 @@
 # calibrate images, create thumbnails linked to test stacks, and send the user an email with a summary of 
 # the work done.
 #
-from django.conf import settings
+from obsy import config
 from observations.models import fitsFile,fitsSequence
 from django.utils import timezone
 from django.db import IntegrityError
@@ -30,8 +30,8 @@ logging=logging.getLogger('observations')
 ################################################################################################################
 class PostProcess(object):
     def __init__(self):
-        self.sourceFolder=settings.SOURCEPATH
-        self.repoFolder=settings.REPOPATH
+        self.sourceFolder=config.get('SOURCEPATH')
+        self.repoFolder=config.get('REPOPATH')
         logging.info("Post Processing object initialized")
 
     #################################################################################################################
