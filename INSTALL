@@ -25,7 +25,11 @@ Create a superuser account so you can log in
 
     python manage.py createsuperuser
 
-Finally run the server 
+Install the cron jobs required for regular operations by listing existing crontab and adding new entries
+
+    crontab -l -u $USER | cat - cronjobs.txt | crontab -u $USER -
+
+Finally run the server (0.0.0.0 means any other computer on your network can access, use 127.0.0.1:8000 if you only want it to be accessed locally)
 
     python manage.py runserver 0.0.0.0:8000
 

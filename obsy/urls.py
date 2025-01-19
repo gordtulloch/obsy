@@ -12,6 +12,7 @@ urlpatterns = [
     path("targets/", include("targets.urls")),
     path("observations/", include("observations.urls")),
     path("setup/", include("setup.urls")),
+    path('config/', include('config.urls')),
     ]
 
 if settings.DEBUG:

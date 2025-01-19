@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "setup.apps.SetupConfig",
     "targets.apps.TargetsConfig",
     "observations.apps.ObservationsConfig",
+    "config.apps.ConfigConfig",
 ]
 
 MIDDLEWARE = [

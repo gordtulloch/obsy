@@ -15,9 +15,10 @@
             <td>{{ sequence.sequenceData }}</td>
             <td>{{ sequence.sequenceDuration }}</td>
             <td>
-              <A HREF="edit/{{ sequenceFile.sequenceFileId }}"><button type="button" class="btn btn-success btn-sm">&nbsp;&nbsp;&nbsp;&nbsp;Edit&nbsp;&nbsp;&nbsp;&nbsp;</button></A>
+              <A HREF="edit/{{ sequenceFile.sequenceFileId }}">
+                <button type="button" class="btn btn-success btn-sm">&nbsp;&nbsp;&nbsp;&nbsp;Edit&nbsp;&nbsp;&nbsp;&nbsp;</button></A> 
               <A HREF="delete/{{ sequenceFile.sequenceFileId }}"><button type="button" class="btn btn-danger btn-sm">&nbsp;Delete&nbsp;</button></A>
-              <button type="button" class="btn btn-info btn-sm">Edit Seq</button></td>
+              <!-- <button type="button" class="btn btn-info btn-sm">Edit Seq</button></td>-->
             </tr>
     {% empty %}
         <p><i>No results found.</i></p>

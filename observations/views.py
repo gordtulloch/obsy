@@ -148,22 +148,27 @@ import ephem
 from datetime import datetime, timedelta
 
 class ScheduleRegenView(DetailView):
-    def __init__(self, start_date, days_to_schedule, observatory_id, telescope_id, imager_id):
+    def __init__(self, start_date, days_to_schedule, observatory_id):
         try:
             self.startDate = datetime.strptime(start_date, '%Y-%m-%d')
         except ValueError:
             logger.error("Invalid start_date")
+            return
+        
         self.daysToSchedule = days_to_schedule
         try:
             self.observatoryObj = observatory.objects.get(id=observatory_id)
         except observatory.DoesNotExist:
             logger.error("Invalid observatory_id")
+            return
+        
         # Load operations.currentConfig where observatory=observatory_id
         try:
             currentConfig = currentConfig.objects.get().filter(observatoryId=observatory_id)
         except currentConfig.DoesNotExist:
             logger.error("No currentConfig found")
             return
+            
         # Load the telescope and imager objects from the currentConfig
         self.telescopeList = []
         self.imagerList = []
