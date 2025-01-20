@@ -29,9 +29,9 @@ class Command(BaseCommand):
         cal_sequences = fitsSequence.objects.filter(fitsSequenceId__in=calSeqCreated).order_by('fitsSequenceDate')
         
         # Print a summary of all tasks performed
-        print('Files register: '+str(len(registered_files)))
-        print('Light_sequences'+str(len(light_sequences)))
-        print('Calibration sequences'+str(len(cal_sequences)))
+        print('Files registered: '+str(len(registered_files)))
+        print('Light sequences discovered: '+str(len(light_sequences)))
+        print('Calibration sequences discovered: '+str(len(cal_sequences)))
         #print('Files calibrated: '+str(len(calibrated_files)))
         
         self.stdout.write(self.style.SUCCESS('Successfully loaded new FITS files into the repo and saved database records'))

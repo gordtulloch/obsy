@@ -19,6 +19,7 @@ import os
 from math import cos,sin 
 from astropy.io import fits
 import shutil
+import pytz
 
 from obsy.config import Config
 
@@ -198,6 +199,7 @@ class PostProcess(object):
                 if (newFitsFileId := self.registerFitsImage(root,file)):
                     # Add the file to the list of registered files
                     registeredFiles.append(newFitsFileId)
+                    self.createThumbnail(newFitsFileId)
                 else:
                     logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
         return registeredFiles
@@ -222,6 +224,9 @@ class PostProcess(object):
         
         # Create a thumbnail image
         thumbnail_data = data[::10, ::10]
+
+        # Stretch the image to 0-100
+        thumbnail_data = (thumbnail_data - np.min(thumbnail_data)) / (np.max(thumbnail_data) - np.min(thumbnail_data)) * 100
         
         # Save the thumbnail image as a JPG file
         thumbnail_path = os.path.join(self.repoFolder+'Thumbnails/', f'thumbnail_{fits_file.fitsFileId}.jpg')
@@ -231,6 +236,8 @@ class PostProcess(object):
             logging.info(f"Thumbnail image saved to: {thumbnail_path}")
         except Exception as e:
             logging.info(f"Failed to save thumbnail image: {e}")
+        
+        return
 
     #################################################################################################################
     ## createLightSequences - this function creates sequences for all files not currently assigned to one          ##
@@ -246,27 +253,28 @@ class PostProcess(object):
 
         # Loop through each unassigned file and create a sequence each time the object changes
         currentObject= ""
-        currentSequenceId= uuid.uuid4()
-        
+      
         for currentFitsFile in unassigned_files:
             logging.info("Current Object is "+currentFitsFile.fitsFileObject)
             logging.info("Processing "+str(currentFitsFile.fitsFileName))
+
             # If the object name has changed, create a new sequence
             if str(currentFitsFile.fitsFileObject) != currentObject:
-                currentObject = str(currentFitsFile.fitsFileObject)
                 # Create a new fitsSequence record
+                currentSequenceId = uuid.uuid4()
                 try:
-                    newFitsSequence=fitsSequence(fitsMasterBias=None,fitsMasterDark=None,fitsMasterFlat=None)
+                    newFitsSequence=fitsSequence(fitsSequenceId=currentSequenceId,
+                                                 fitsSequenceObjectName=currentFitsFile.fitsFileObject,
+                                                 fitsSequenceDate=currentFitsFile.fitsFileDate.replace(tzinfo=pytz.UTC),
+                                                 fitsMasterBias=None,fitsMasterDark=None,fitsMasterFlat=None)
                     newFitsSequence.save()
-                    currentObject = currentFitsFile.fitsFileObject
-                    currentSequenceId = newFitsSequence.fitsSequenceId
                     sequencesCreated.append(currentSequenceId)
                     logging.info("New sequence created for "+str(newFitsSequence.fitsSequenceId))
                 except IntegrityError as e:
                     # Handle the integrity error
                     logging.error("IntegrityError: "+str(e))
                     continue     
-                
+                currentObject = str(currentFitsFile.fitsFileObject)
             # Assign the current sequence to the fits file
             currentFitsFile.fitsFileSequence=currentSequenceId
             currentFitsFile.save()
@@ -304,14 +312,20 @@ class PostProcess(object):
         # Bias calibration files
         currDate="0001-01-01"
         uuidStr=uuid.uuid4()
+                        
         for biasFitsFile in unassignedBiases:
             if not self.sameDay(biasFitsFile.fitsFileDate.strftime('%Y-%m-%d'),currDate):
                 currDate=biasFitsFile.fitsFileDate.strftime('%Y-%m-%d')
                 uuidStr=uuid.uuid4() # New sequence
+                newFitsSequence=fitsSequence(fitsSequenceId=uuidStr,
+                                             fitsSequenceDate=biasFitsFile.fitsFileDate.replace(tzinfo=pytz.UTC),
+                                             fitsSequenceObjectName='Flat',
+                                             fitsMasterBias=None,
+                                             fitsMasterDark=None,
+                                             fitsMasterFlat=None)
+                newFitsSequence.save()
                 logging.info("New date for bias "+currDate) 
             biasFitsFile.fitsFileSequence=uuidStr
-            biasFitsFile.fitsSequenceObjectName=biasFitsFile.fitsFileType
-            biasFitsFile.fitsSequenceDate=biasFitsFile.fitsFileDate
             biasFitsFile.save()   
             logging.info("Set sequence for bias "+biasFitsFile.fitsFileName+" to "+str(uuidStr))
             createdCalibrationSequences.append(uuidStr)
@@ -323,10 +337,15 @@ class PostProcess(object):
             if not self.sameDay(darkFitsFile.fitsFileDate.strftime('%Y-%m-%d'),currDate):
                 currDate=darkFitsFile.fitsFileDate.strftime('%Y-%m-%d')
                 uuidStr=uuid.uuid4() # New sequence
+                newFitsSequence=fitsSequence(fitsSequenceId=uuidStr,
+                                             fitsSequenceDate=darkFitsFile.fitsFileDate.replace(tzinfo=pytz.UTC),
+                                             fitsSequenceObjectName='Dark',
+                                             fitsMasterBias=None,
+                                             fitsMasterDark=None,
+                                             fitsMasterFlat=None)
+                newFitsSequence.save()
                 logging.info("New date "+currDate) 
             darkFitsFile.fitsFileSequence=uuidStr
-            darkFitsFile.fitsSequenceObjectName=darkFitsFile.fitsFileType
-            darkFitsFile.fitsSequenceDate=darkFitsFile.fitsFileDate
             darkFitsFile.save()   
             logging.info("Set sequence for dark "+darkFitsFile.fitsFileName+" to "+str(uuidStr))
             createdCalibrationSequences.append(uuidStr)
@@ -338,12 +357,17 @@ class PostProcess(object):
             if not self.sameDay(flatFitsFile.fitsFileDate.strftime('%Y-%m-%d'),currDate):
                 currDate=flatFitsFile.fitsFileDate.strftime('%Y-%m-%d')
                 uuidStr=uuid.uuid4() # New sequence
+                newFitsSequence=fitsSequence(fitsSequenceId=uuidStr,
+                                fitsSequenceDate=flatFitsFile.fitsFileDate.replace(tzinfo=pytz.UTC),
+                                fitsSequenceObjectName='Flat',
+                                fitsMasterBias=None,
+                                fitsMasterDark=None,
+                                fitsMasterFlat=None)
+                newFitsSequence.save()
                 logging.info("New date "+currDate) 
             flatFitsFile.fitsFileSequence=uuidStr
-            flatFitsFile.fitsSequenceObjectName=flatFitsFile.fitsFileObject
-            flatFitsFile.fitsSequenceDate=flatFitsFile.fitsFileDate
             flatFitsFile.save()   
-            logging.info("Set sequence for bias "+flatFitsFile.fitsFileName+" to "+str(uuidStr))
+            logging.info("Set sequence for flat "+flatFitsFile.fitsFileName+" to "+str(uuidStr))
             createdCalibrationSequences.append(uuidStr)
             
         return createdCalibrationSequences

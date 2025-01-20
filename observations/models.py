@@ -170,7 +170,7 @@ class fitsSequence(models.Model):
                                 default=uuid.uuid4,
                                 editable=False)
     fitsSequenceObjectName = models.CharField(max_length=255, null=True, blank=True)
-    fitsSequenceDate      = models.DateTimeField(default=datetime.now)
+    fitsSequenceDate      = models.DateTimeField(null=True, blank=True)
     fitsMasterBias       = models.CharField(max_length=255, null=True, blank=True)
     fitsMasterDark       = models.CharField(max_length=255, null=True, blank=True)
     fitsMasterFlat       = models.UUIDField(max_length=255, null=True, blank=True)
