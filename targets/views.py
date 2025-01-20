@@ -5,6 +5,8 @@ from django.conf import settings
 from .models import Target
 from .forms import TargetUpdateForm,UploadFileForm
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 import plotly.graph_objs as go
 import plotly.io as pio
@@ -19,6 +21,7 @@ from datetime import datetime, timedelta
 import ephem
 import math
 import pytz
+import xml.etree.ElementTree as ET
 
 # Get an instance of a logger
 logger = logging.getLogger('targets.views')
@@ -26,6 +29,7 @@ logger = logging.getLogger('targets.views')
 ##################################################################################################
 ## targetDetailView - List Target detail with DetailView template                               ## 
 ##################################################################################################
+@login_required
 def target_detail_view(request, pk):
     targetObj = get_object_or_404(Target, targetId=pk) 
     
@@ -124,6 +128,7 @@ from astropy.time import Time
 from astropy import units as u
 from astroplan import Observer, FixedTarget
 
+@login_required
 def target_all_list(request):
     targets = Target.objects.all()
     target_data = []
@@ -198,6 +203,7 @@ def target_all_list(request):
 ## assignTargetClass -  A helper function that looks up targetClass based on the label          ## 
 ##                      from SIMBAD                                                             ##
 ##################################################################################################
+@login_required
 def assignTargetClass(targetType):
     allwithTT=SimbadType.objects.filter(label=targetType)
     firstentry= SimbadType.objects.first()
@@ -210,6 +216,7 @@ def assignTargetClass(targetType):
 ##################################################################################################
 ## Target Query     -  Allow the user to search for objects using SimBad                        ##
 ##################################################################################################
+@login_required
 def target_query(request):
     error_message=""
     if request.method == 'POST':
@@ -262,7 +269,7 @@ def target_query(request):
 ##################################################################################################
 ## Target Update     -  Use the UpdateView class to edit Target records                         ##
 ##################################################################################################
-class target_update(UpdateView):
+class target_update(LoginRequiredMixin,UpdateView):
     model = Target
     form_class = TargetUpdateForm
     template_name = "targets/target_form.html"
@@ -271,7 +278,7 @@ class target_update(UpdateView):
 ##################################################################################################
 ## Target Delete     -  Use the DeleteView class to edit Target records                         ##
 ##################################################################################################    
-class target_delete(DeleteView):
+class target_delete(LoginRequiredMixin,DeleteView):
     model = Target
     template_name = "targets/target_confirm_delete.html"
     success_url = reverse_lazy('target_all_list')
@@ -300,7 +307,7 @@ def parse_xml(file):
 ##################################################################################################
 ## Upload Targets    -  Allow the user to upload a file with Target data from KStars            ##
 ##################################################################################################
-import xml.etree.ElementTree as ET
+@login_required
 def upload_targets_view(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)

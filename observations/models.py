@@ -5,6 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
+import pytz
 
 ##################################################################################################
 ## SequenceFile - a EKOS sequence file                                                          ##
@@ -135,7 +136,7 @@ class fitsFile(models.Model):
                                 default=uuid.uuid4,
                                 editable=False)
     fitsFileName        = models.CharField(max_length=255, default="None",null=True, blank=True) 
-    fitsFileDate        = models.DateTimeField(default=datetime.now)
+    fitsFileDate        = models.DateTimeField(default=datetime.now().replace(tzinfo=pytz.UTC))
     fitsFileCalibrated  = models.BooleanField(default=False)
     fitsFileType        = models.CharField(max_length=255, default="None",null=True, blank=True)
     fitsFileStacked     = models.BooleanField(default=False)
@@ -171,6 +172,8 @@ class fitsSequence(models.Model):
                                 editable=False)
     fitsSequenceObjectName = models.CharField(max_length=255, null=True, blank=True)
     fitsSequenceDate      = models.DateTimeField(null=True, blank=True)
+    fitsSequenceTelescope = models.CharField(max_length=255, null=True, blank=True)
+    fitsSequenceImager    = models.CharField(max_length=255, null=True, blank=True)
     fitsMasterBias       = models.CharField(max_length=255, null=True, blank=True)
     fitsMasterDark       = models.CharField(max_length=255, null=True, blank=True)
     fitsMasterFlat       = models.UUIDField(max_length=255, null=True, blank=True)

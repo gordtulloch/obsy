@@ -10,31 +10,34 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Delete all FitsFile records
+        logger.info('Deleting all existing FitsFile and FitsSequence records')
         fitsFile.objects.all().delete()
         fitsSequence.objects.all().delete()
 
         # Register all FITS files in the repo
-        postProcess=    PostProcess()
-        registered=     postProcess.registerFitsImages(moveFiles=False)
+        postProcess=PostProcess()
+        #logger.info('Registering all FITS files in the repo')
+        registered=postProcess.registerFitsImages(moveFiles=False)
+        logger.info('Creating light sequences')
+        # Remove existing sequence numbers from fitsFile records
+        #for fitsFileRecord in fitsFile.objects.all():
+        #    fitsFileRecord.fitsFileSequence = None
+        #    fitsFileRecord.save()
         lightSeqCreated=postProcess.createLightSequences()
+        logger.info('Creating calibration sequences')
         calSeqCreated=  postProcess.createCalibrationSequences()
         
-        logger.info(f"Registered files: {registered}")
-        logger.info(f"Light sequences created: {lightSeqCreated}")
-        logger.info(f"Calibration sequences created: {calSeqCreated}")
-        
-        # Query for fitsFile details
-        registered_files = fitsFile.objects.filter(fitsFileId__in=registered).order_by('fitsFileDate')
-        #calibrated_files = fitsFile.objects.filter(fitsFileId__in=calibrated)
+        # Fix the fitsObject field for all FitsFile records
+        logger.info('Fixing fitsObject field for all FitsFile records')
+        for sequence in fitsSequence.objects.all():
+            new_name = sequence.fitsSequenceObjectName.replace(' ', '').replace('_', '')
+            sequence.fitsSequenceObjectName = new_name
+            sequence.save()
+            logger.info(f'Updated fitsSequenceObjectName for sequence ID {sequence.fitsSequenceId} to {new_name}')
 
-        # Query for fitsSequence details
-        light_sequences = fitsSequence.objects.filter(fitsSequenceId__in=lightSeqCreated).order_by('fitsSequenceDate')
-        cal_sequences = fitsSequence.objects.filter(fitsSequenceId__in=calSeqCreated).order_by('fitsSequenceDate')
-        
         # Print a summary of all tasks performed
-        print('Files registered: '+str(len(registered_files)))
-        print('Light sequences discovered: '+str(len(light_sequences)))
-        print('Calibration sequences discovered: '+str(len(cal_sequences)))
-        #print('Files calibrated: '+str(len(calibrated_files)))
+        #logger.info('Files registered: '+str(len(registered)))
+        logger.info('Light sequences discovered: '+str(len(lightSeqCreated)))
+        logger.info('Calibration sequences discovered: '+str(len(calSeqCreated)))
         
-        self.stdout.write(self.style.SUCCESS('Successfully loaded new FITS files into the repo and saved database records'))
+        self.stdout.write(self.style.SUCCESS('Successfully synchronized FITS files in the repo and saved database records. See log for details.'))

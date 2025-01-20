@@ -142,6 +142,7 @@ class PostProcess(object):
             else:
                 logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
             hdul.close()
+            newPath=""
 
             # Create the folder structure (if needed)
             fitsDate=dateobj.strftime("%Y%m%d")
@@ -161,19 +162,22 @@ class PostProcess(object):
             elif hdr["FRAME"]=="Bias":
                 newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),fitsDate)
+            else:
+                logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
+                return None
 
             if not os.path.isdir(newPath) and moveFiles:
                 os.makedirs (newPath)
 
             # If we can add the file to the database move it to the repo
-            if self.moveFiles:
+            if moveFiles:
                 newFitsFileId=self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)
             else:
                 newFitsFileId=self.submitFileToDB(os.path.join(root, file),hdr)
 
             # Add the file to the list of registered files
             if (newFitsFileId != None):
-                if self.moveFiles:
+                if moveFiles:
                     moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
                     logging.info(moveInfo)
                     shutil.move(os.path.join(root, file),newPath+newName)
@@ -205,7 +209,7 @@ class PostProcess(object):
         for root, dirs, files in os.walk(os.path.abspath(workFolder)):
             for file in files:
                 logging.info("Processing file "+os.path.join(root, file))
-                if (newFitsFileId := self.registerFitsImage(root,file,self.moveFiles)) != None:
+                if (newFitsFileId := self.registerFitsImage(root,file,moveFiles)) != None:
                     # Add the file to the list of registered files
                     registeredFiles.append(newFitsFileId)
                     self.createThumbnail(newFitsFileId)
@@ -274,6 +278,8 @@ class PostProcess(object):
                 try:
                     newFitsSequence=fitsSequence(fitsSequenceId=currentSequenceId,
                                                  fitsSequenceObjectName=currentFitsFile.fitsFileObject,
+                                                 fitsSequenceTelescope=currentFitsFile.fitsFileTelescop,
+                                                 fitsSequenceImager=currentFitsFile.fitsFileInstrument,
                                                  fitsSequenceDate=currentFitsFile.fitsFileDate.replace(tzinfo=pytz.UTC),
                                                  fitsMasterBias=None,fitsMasterDark=None,fitsMasterFlat=None)
                     newFitsSequence.save()

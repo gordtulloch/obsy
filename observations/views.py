@@ -7,6 +7,8 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import ObservationDSForm, SequenceFileForm, ScheduleMasterForm
 from .models import Observation, scheduleMaster,fitsFile,scheduleDetail,sequenceFile,fitsSequence,ObservationDS, ObservationEX, ObservationVS
@@ -32,7 +34,7 @@ logger = logging.getLogger("observations.views")
 ##################################################################################################
 ## observationDetailView - List Observation detail with DetailView template                     ## 
 ##################################################################################################
-class observation_detail_view(DetailView):
+class observation_detail_view(LoginRequiredMixin,DetailView):
     model = Observation
     context_object_name = "Observation"
     template_name = "observations/observation_detail.html"
@@ -41,7 +43,7 @@ class observation_detail_view(DetailView):
 ##################################################################################################
 ## observationAllList - List all observations                                                   ## 
 ##################################################################################################
-class observation_all_list(ListView):
+class observation_all_list(LoginRequiredMixin,ListView):
     model=Observation
     context_object_name="observation_list"
     template_name="observations/observation_all_list.html"
@@ -53,6 +55,7 @@ def get_queryset(self):
 ##################################################################################################
 ## Observation Update     -  Use the UpdateView class to edit Observation records               ##
 ##################################################################################################
+@login_required
 def observation_update(request, pk):
     observationObj = get_object_or_404(Observation, pk=pk)
     # Get the target object
@@ -74,7 +77,7 @@ def observation_update(request, pk):
 ####################################################################################################
 ## Observation UpdateDS     -  Use the UpdateView class to edit Observation records for DSO class ##
 ####################################################################################################
-class observation_updateDS(UpdateView):
+class observation_updateDS(LoginRequiredMixin,UpdateView):
     model = Observation
     form_class = ObservationDSForm
     template_name = "observations/observation_form_ds.html"
@@ -83,7 +86,7 @@ class observation_updateDS(UpdateView):
 ##################################################################################################
 ## Observation Delete     -  Use the DeleteView class to edit Observation records               ##
 ##################################################################################################    
-class observation_delete(DeleteView):
+class observation_delete(LoginRequiredMixin,DeleteView):
     model = Observation
     template_name = "observations/observation_confirm_delete.html"
     success_url = reverse_lazy('observation_all_list')
@@ -91,6 +94,7 @@ class observation_delete(DeleteView):
 ##################################################################################################
 ## Observation create     -  Use the class to edit Observation records                          ##
 ################################################################################################## 
+@login_required
 def observation_create(request, target_uuid=None, target_name=None):
     if request.method == 'POST':
         form = ObservationDSForm(request.POST, target_uuid=target_uuid, target_name=target_name)
@@ -104,7 +108,7 @@ def observation_create(request, target_uuid=None, target_name=None):
 ##################################################################################################
 ## ScheduleCreateView -  Use the CreateView class to create a schedule of targets               ##
 ##################################################################################################
-class ScheduleCreateView(CreateView):
+class ScheduleCreateView(LoginRequiredMixin,CreateView):
     model = scheduleMaster
     form_class = ScheduleMasterForm
     template_name = 'observations/schedule_create.html'
@@ -113,7 +117,7 @@ class ScheduleCreateView(CreateView):
 ##################################################################################################
 ## Schedule -  this function will allow the user to create and edit a schedule of targets       ##
 ##################################################################################################
-class scheduleMasterList(ListView):
+class scheduleMasterList(LoginRequiredMixin,ListView):
     model=scheduleMaster
     context_object_name="scheduleMaster_list"
     template_name="observations/schedule_list.html"
@@ -122,7 +126,7 @@ class scheduleMasterList(ListView):
 ##################################################################################################
 ## Schedule Master Update -  this function allows the user to update a schedule                 ##
 ##################################################################################################
-class ScheduleUpdateView(UpdateView):
+class ScheduleUpdateView(LoginRequiredMixin,UpdateView):
     model = scheduleMaster
     form_class = ScheduleMasterForm
     template_name = 'observations/schedule_edit.html'
@@ -131,7 +135,7 @@ class ScheduleUpdateView(UpdateView):
 ##################################################################################################
 ## Schedule Delete -  this function allows the user to delete a schedule                        ##
 ##################################################################################################
-class ScheduleDeleteView(DeleteView):
+class ScheduleDeleteView(LoginRequiredMixin,DeleteView):
     model = scheduleMaster
     template_name = 'observations/schedule_confirm_delete.html'
     success_url = reverse_lazy('schedule_list')
@@ -212,6 +216,7 @@ class ScheduleRegenView(DetailView):
 ##################################################################################################
 # list_fits_files -  List all FITS files in the database                                        ##
 ##################################################################################################
+@login_required
 def list_fits_files(request):
     time_filter = request.GET.get('time_filter', 'all')
     now = timezone.now()
@@ -238,6 +243,7 @@ def list_fits_files(request):
 ##################################################################################################
 ## fitsfile_detail -  Display a detailed view of a FITS file                                    ##
 ##################################################################################################
+@login_required
 def fitsfile_detail(request, pk):
     fitsfile = get_object_or_404(fitsFile, pk=pk)
     
@@ -288,6 +294,7 @@ def fitsfile_detail(request, pk):
 ##################################################################################################
 ## Sequence File List -  List all sequence files                                                ##
 ##################################################################################################
+@login_required
 def sequence_file_list(request):
     sequences = sequenceFile.objects.all()
     return render(request, 'observations/sequence_file_list.html', {'sequences': sequences})
@@ -295,6 +302,7 @@ def sequence_file_list(request):
 ##################################################################################################
 ## Sequence File Create -  Create a new sequence file                                           ##
 ##################################################################################################
+@login_required
 def sequence_file_create(request):
     if request.method == 'POST':
         form = SequenceFileForm(request.POST, request.FILES)
@@ -317,6 +325,7 @@ def sequence_file_create(request):
 ##################################################################################################
 ## Sequence File Edit -  Edit an existing sequence file                                         ##
 ##################################################################################################
+@login_required
 def sequence_file_edit(request, pk):
     sequence_instance = get_object_or_404(sequenceFile, pk=pk)
     if request.method == 'POST':
@@ -337,9 +346,46 @@ def sequence_file_edit(request, pk):
 ##################################################################################################
 ## Sequence File Delete -  Delete an existing sequence file                                     ##
 ##################################################################################################
+@login_required
 def sequence_file_delete(request, pk):
     sequence_instance = get_object_or_404(sequenceFile, pk=pk)
     if request.method == 'POST':
         sequence_instance.delete()
         return redirect('observations/sequence_file_list')
     return render(request, 'observations/sequence_file_confirm_delete.html', {'sequence': sequence_instance})
+
+##################################################################################################
+## Sequence File Detail -  Display a detailed view of a sequence file                           ##
+##################################################################################################
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from .models import fitsSequence
+from collections import defaultdict
+
+class FitsFileSequenceListView(ListView):
+    model = fitsSequence
+    template_name = 'observations/fits_file_sequence_list.html'
+    context_object_name = 'fits_file_sequences'
+    paginate_by = 15
+
+    def get_queryset(self):
+        sequences = fitsSequence.objects.exclude(
+            fitsSequenceObjectName__in=['Dark', 'Flat', 'Bias']
+        ).order_by('fitsSequenceObjectName','fitsSequenceDate','fitsSequenceTelescope','fitsSequenceImager')
+        grouped_sequences = defaultdict(list)
+        for sequence in sequences:
+            grouped_sequences[sequence.fitsSequenceObjectName].append({
+                'date': sequence.fitsSequenceDate,
+                'telescope': sequence.fitsSequenceTelescope,
+                'imager': sequence.fitsSequenceImager,
+            })
+        return list(grouped_sequences.items())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = self.get_queryset()
+        paginator = Paginator(queryset, self.paginate_by)
+        page = self.request.GET.get('page')
+        fits_file_sequences = paginator.get_page(page)
+        context['fits_file_sequences'] = fits_file_sequences
+        return context
