@@ -24,7 +24,7 @@ import pytz
 from obsy.config import Config
 
 import logging
-logging=logging.getLogger('observations')
+logging=logging.getLogger(__name__)
 
 ################################################################################################################
 ## PostProcess - all the functions needed to import fits file data into the database while renaming files and ##
@@ -67,10 +67,9 @@ class PostProcess(object):
     ## registerFitsImage - this functioncalls a function to registers each fits files in the database              ##
     ## and also corrects any issues with the Fits header info (e.g. WCS)                                           ##
     #################################################################################################################
-    def registerFitsImage(self,root,file):
-        moveFiles=True
+    # Note: Movefiles means we are moving from a source folder to the repo, otherwise we are syncing the repo database
+    def registerFitsImage(self,root,file,moveFiles):
         newFitsFileId=None
-
         file_name, file_extension = os.path.splitext(os.path.join(root,file))
 
         # Ignore everything not a *fit* file
@@ -163,19 +162,24 @@ class PostProcess(object):
                 newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),fitsDate)
 
-            if not os.path.isdir(newPath):
+            if not os.path.isdir(newPath) and moveFiles:
                 os.makedirs (newPath)
 
             # If we can add the file to the database move it to the repo
-            newFitsFileId=self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)
+            if self.moveFiles:
+                newFitsFileId=self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)
+            else:
+                newFitsFileId=self.submitFileToDB(os.path.join(root, file),hdr)
 
             # Add the file to the list of registered files
             if (newFitsFileId != None):
-                if moveFiles:
+                if self.moveFiles:
                     moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
                     logging.info(moveInfo)
                     shutil.move(os.path.join(root, file),newPath+newName)
                     message = os.path.join(root, file)
+                else:
+                    logging.info("File not moved in repo is "+str(os.path.join(root, file)))
             else:
                 logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
         else:
@@ -186,17 +190,22 @@ class PostProcess(object):
     #################################################################################################################
     ## registerFitsImages - this function scans the images folder and registers all fits files in the database     ##
     #################################################################################################################
-    def registerFitsImages(self):
-        moveFiles=True
+    def registerFitsImages(self,moveFiles=True):
         registeredFiles=[]
         newFitsFileId=None
         
         # Scan the pictures folder
-        logging.info("Processing images in "+self.sourceFolder)
-        for root, dirs, files in os.walk(os.path.abspath(self.sourceFolder)):
+        if moveFiles:
+            logging.info("Processing images in "+self.sourceFolder)
+            workFolder=self.sourceFolder
+        else:
+            logging.info("Syncronizing images in "+os.path.abspath(self.repoFolder))
+            workFolder=self.repoFolder
+
+        for root, dirs, files in os.walk(os.path.abspath(workFolder)):
             for file in files:
                 logging.info("Processing file "+os.path.join(root, file))
-                if (newFitsFileId := self.registerFitsImage(root,file)):
+                if (newFitsFileId := self.registerFitsImage(root,file,self.moveFiles)) != None:
                     # Add the file to the list of registered files
                     registeredFiles.append(newFitsFileId)
                     self.createThumbnail(newFitsFileId)
@@ -373,22 +382,6 @@ class PostProcess(object):
         return createdCalibrationSequences
 
     #################################################################################################################
-    ## calibrateFitsFiles - this function calibrates all uncalibrated light frames                                 ##
-    #################################################################################################################
-    def calibrateAllFitsImages(self):
-        calibratedImages=[]
-        # Query for Light frames that are not calibrated
-        light_frames = fitsFile.objects.filter(fitsFileType="Light", fitsFileCalibrated=False)
-    
-        # How many light_frames are there?
-        logging.info("calibrateImages found "+str(len(light_frames))+" light frames to calibrate")
-
-        # Loop through each light frame and calibrate it
-        for light_frame in light_frames:
-            self.calibrateFitsImage(light_frame.fitsFileId)
-            calibratedImages.append(light_frame.fitsFileId)
-
-    #################################################################################################################
     ## calibrateFitsFile - this function calibrates a light frame using master bias, dark, and flat frames. If     ##
     ##                     the master frames do not exist, they are created for the sequence.                      ##
     #################################################################################################################
@@ -402,28 +395,27 @@ class PostProcess(object):
         # Check for a fitsSequence record for the light frame
         currFitsSequence = fitsSequence.objects.filter(fitsSequenceId=light_frame.fitsFileSequence).first()
         if not currFitsSequence:
-            logging.info(f"No fitsSequence record found for light frame: {light_frame.fitsFileId}")
-            # Create a new fitsSequence record
-            
-            currFitsSequence = fitsSequence(fitsObject=light_frame.fitsFileObject,fitsMasterBias="None", fitsMasterDark="None", fitsMasterFlat="None")
+            logging.info(f"No fitsSequence record found for light frame: {light_frame.fitsFileId}, run the sync_repo command")
+            return
 
         # If the master bias, dark, and flat frames do not exist, create them
         if not currFitsSequence.fitsMasterBias:
-            masterBiasId = self.createMasterBias(light_frame.fitsFileId)
+            currFitsSequence.fitsMasterBias = self.createMasterBias(light_frame.fitsFileId)
         if not currFitsSequence.fitsMasterDark:
-            masterDarkId = self.createMasterDark(light_frame.fitsFileId)
+            currFitsSequence.fitsMasterDark = self.createMasterDark(light_frame.fitsFileId)
         if not currFitsSequence.fitsMasterFlat:
-            masterFlatId = self.createMasterFlat(light_frame.fitsFileId)   
+            currFitsSequence.fitsMasterFlat = self.createMasterFlat(light_frame.fitsFileId)   
 
         # Save the fitsSequence record in the database
         try:
             currFitsSequence.save()
             logging.info(f"fitsSequence record saved: {currFitsSequence.fitsSequenceId}")
-        except IntegrityError as e:
-            return HttpResponse(f"IntegrityError: {e}")
+        except Exception as e:
+            logging.info(f"Failed to save fitsSequence record: {e}")
+            return
         
         # Load the master bias, dark, and flat frames
-        master_bias = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterBias).first()
+        master_bias = fitsFile.objects.filter(fitsFileName=currFitsSequence.fitsMasterBias).first()
         master_dark = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterDark).first()
         master_flat = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterFlat).first()
 

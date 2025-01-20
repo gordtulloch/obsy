@@ -174,7 +174,6 @@ class fitsSequence(models.Model):
     fitsMasterBias       = models.CharField(max_length=255, null=True, blank=True)
     fitsMasterDark       = models.CharField(max_length=255, null=True, blank=True)
     fitsMasterFlat       = models.UUIDField(max_length=255, null=True, blank=True)
-    fitsSequenceThumbnailPath = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.fitsSequenceId}"
