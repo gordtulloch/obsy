@@ -18,26 +18,8 @@ class Command(BaseCommand):
         postProcess=PostProcess()
         #logger.info('Registering all FITS files in the repo')
         registered=postProcess.registerFitsImages(moveFiles=False)
-        logger.info('Creating light sequences')
-        # Remove existing sequence numbers from fitsFile records
-        #for fitsFileRecord in fitsFile.objects.all():
-        #    fitsFileRecord.fitsFileSequence = None
-        #    fitsFileRecord.save()
-        lightSeqCreated=postProcess.createLightSequences()
-        logger.info('Creating calibration sequences')
-        calSeqCreated=  postProcess.createCalibrationSequences()
-        
-        # Fix the fitsObject field for all FitsFile records
-        logger.info('Fixing fitsObject field for all FitsFile records')
-        for sequence in fitsSequence.objects.all():
-            new_name = sequence.fitsSequenceObjectName.replace(' ', '').replace('_', '')
-            sequence.fitsSequenceObjectName = new_name
-            sequence.save()
-            logger.info(f'Updated fitsSequenceObjectName for sequence ID {sequence.fitsSequenceId} to {new_name}')
 
         # Print a summary of all tasks performed
-        #logger.info('Files registered: '+str(len(registered)))
-        logger.info('Light sequences discovered: '+str(len(lightSeqCreated)))
-        logger.info('Calibration sequences discovered: '+str(len(calSeqCreated)))
+        logger.info('Files registered: '+str(len(registered)))
         
         self.stdout.write(self.style.SUCCESS('Successfully synchronized FITS files in the repo and saved database records. See log for details.'))

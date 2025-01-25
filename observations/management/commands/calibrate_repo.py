@@ -16,12 +16,15 @@ class Command(BaseCommand):
         calibratedImages = []
 
         # Find all uncalibrated files
-        uncalibrated = fitsFile.objects.filter(fitsCalibrated=False)
+        uncalibrated = fitsFile.objects.filter(fitsFileCalibrated=False)
 
         # Loop through each light frame and calibrate it
         for light_frame in uncalibrated:
-            PostProcess.calibrateFitsImage(light_frame.fitsFileId)
-            calibratedImages.append(light_frame.fitsFileId)
+            result=postProcess.calibrateFitsImage(light_frame)
+            if not result:
+                logger.error('Failed to calibrate file: ' + str(light_frame.fitsFileId))
+            else:
+                calibratedImages.append(light_frame.fitsFileId)
 
         self.stdout.write(self.style.SUCCESS('Successfully calibrated' + str(len(calibratedImages)) + 'files out of ' + str(len(uncalibrated)) + 'files'))
         logger.info('Successfully calibrated' + str(len(calibratedImages)) + 'files out of ' + str(len(uncalibrated)) + 'files')

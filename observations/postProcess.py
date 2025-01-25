@@ -118,8 +118,13 @@ class PostProcess(object):
                     else:
                         logging.warning("No WCS information in header, file not updated is "+str(os.path.join(root, file)))
 
-                # Assign a new name
+                # Assign a new file name
                 if ("OBJECT" in hdr):
+                    # Standardize object name, remove spaces and underscores
+                    objectName=hdr["OBJECT"].replace(' ', '').replace('_', '')
+                    hdr.append(('OBJECT', objectName, 'Adjusted via MCP'), end=True)
+                    hdul.flush()  # changes are written back to original.fits
+                    
                     if ("FILTER" in hdr):
                         newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["OBJECT"].replace(" ", "_"),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
@@ -391,27 +396,31 @@ class PostProcess(object):
     ## calibrateFitsFile - this function calibrates a light frame using master bias, dark, and flat frames. If     ##
     ##                     the master frames do not exist, they are created for the sequence.                      ##
     #################################################################################################################
-    def calibrateFitsImage(self,fitsFileId):
-        # Load the light frame
-        light_frame = fitsFile.objects.filter(fitsFileId=fitsFileId).first()
-        if not light_frame:
-            logging.info(f"Failed to load light frame: {fitsFileId}")
-            return
-        
+    def calibrateFitsImage(self,targetFitsFile):
         # Check for a fitsSequence record for the light frame
-        currFitsSequence = fitsSequence.objects.filter(fitsSequenceId=light_frame.fitsFileSequence).first()
-        if not currFitsSequence:
-            logging.info(f"No fitsSequence record found for light frame: {light_frame.fitsFileId}, run the sync_repo command")
+        currFitsSequenceNo = targetFitsFile.fitsFileSequence
+
+        if not currFitsSequenceNo:
+            logging.info(f"No fitsSequence record found for light frame: {targetFitsFile.fitsFileId}, run the sync_repo command")
             return
+        else:
+            # Load the fitsSequence record corresponding to the light frame
+            currFitsSequence = fitsSequence.objects.filter(fitsSequenceId=currFitsSequenceNo).first()
 
         # If the master bias, dark, and flat frames do not exist, create them
         if not currFitsSequence.fitsMasterBias:
-            currFitsSequence.fitsMasterBias = self.createMasterBias(light_frame.fitsFileId)
-        if not currFitsSequence.fitsMasterDark:
-            currFitsSequence.fitsMasterDark = self.createMasterDark(light_frame.fitsFileId)
-        if not currFitsSequence.fitsMasterFlat:
-            currFitsSequence.fitsMasterFlat = self.createMasterFlat(light_frame.fitsFileId)   
-
+            currFitsSequence.fitsMasterBias = self.createMasterBias(targetFitsFile)
+            if not currFitsSequence.fitsMasterBias:
+                logging.info(f"Failed to create master bias frame for light frame: {targetFitsFile.fitsFileId}")
+                return None
+        #if not currFitsSequence.fitsMasterDark:
+        #    currFitsSequence.fitsMasterDark = self.createMasterDark(targetFitsFile)
+        #    if not currFitsSequence.fitsMasterDark:
+        #        logging.info(f"Failed to create master dark frame for light frame: {targetFitsFile.fitsFileId}")
+        #        return None            
+        #if not currFitsSequence.fitsMasterFlat:
+        #    currFitsSequence.fitsMasterFlat = self.createMasterFlat(targetFitsFile)   
+    
         # Save the fitsSequence record in the database
         try:
             currFitsSequence.save()
@@ -420,14 +429,15 @@ class PostProcess(object):
             logging.info(f"Failed to save fitsSequence record: {e}")
             return
         
+        return None
         # Load the master bias, dark, and flat frames
         master_bias = fitsFile.objects.filter(fitsFileName=currFitsSequence.fitsMasterBias).first()
-        master_dark = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterDark).first()
-        master_flat = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterFlat).first()
+        #master_dark = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterDark).first()
+        #master_flat = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterFlat).first()
 
         # Read the data from the light frame
         try:
-            with fits.open(light_frame.fitsFileName) as hdul:
+            with fits.open(targetFitsFile.fitsFileName) as hdul:
                 light_data = hdul[0].data
         except Exception as e:
             logging.info(f"Failed to read light frame: {e}")
@@ -437,7 +447,7 @@ class PostProcess(object):
         calibrated_data = (light_data - master_bias) / (master_flat - master_dark)
 
         # Save the calibrated light frame
-        calibrated_path = os.path.join(self.repoFolder, f'calibrated_{light_frame.fitsFileName}')
+        calibrated_path = os.path.join(self.repoFolder, f'calibrated_{targetFitsFile.fitsFileName}')
         try:
             hdu = fits.PrimaryHDU(calibrated_data)
             hdu.writeto(calibrated_path, overwrite=True)
@@ -447,63 +457,67 @@ class PostProcess(object):
 
         # Update the light frame record in the database
         newFitsFile=fitsFile(fitsFileName=calibrated_path,fitsFileCalibrated=True)
+
         # Copy the rest of the fields from the original light frame
-        newFitsFile.fitsFileDate=light_frame.fitsFileDate
+        newFitsFile.fitsFileDate=targetFitsFile.fitsFileDate
         newFitsFile.fitsFileType="CalibratedLight"
         newFitsFile.fitsFileStacked="False"
-        newFitsFile.fitsFileObject=light_frame.fitsFileObject
-        newFitsFile.fitsFileExpTime=light_frame.fitsFileExpTime
-        newFitsFile.fitsFileXBinning=light_frame.fitsFileXBinning
-        newFitsFile.fitsFileYBinning=light_frame.fitsFileYBinning
-        newFitsFile.fitsFileCCDTemp=light_frame.fitsFileCCDTemp
-        newFitsFile.fitsFileTelescop=light_frame.fitsFileTelescop
-        newFitsFile.fitsFileInstrument=light_frame.fitsFileInstrument
-        newFitsFile.fitsFileGain=light_frame.fitsFileGain
-        newFitsFile.fitsFileOffset=light_frame.fitsFileOffset
-        newFitsFile.fitsFileSequence=light_frame.fitsFileSequence
+        newFitsFile.fitsFileObject=targetFitsFile.fitsFileObject
+        newFitsFile.fitsFileExpTime=targetFitsFile.fitsFileExpTime
+        newFitsFile.fitsFileXBinning=targetFitsFile.fitsFileXBinning
+        newFitsFile.fitsFileYBinning=targetFitsFile.fitsFileYBinning
+        newFitsFile.fitsFileCCDTemp=targetFitsFile.fitsFileCCDTemp
+        newFitsFile.fitsFileTelescop=targetFitsFile.fitsFileTelescop
+        newFitsFile.fitsFileInstrument=targetFitsFile.fitsFileInstrument
+        newFitsFile.fitsFileSequence=targetFitsFile.fitsFileSequence
         newFitsFile.save()
         logging.info(f'Light frame calibrated: {calibrated_path}')
 
     #################################################################################################################
     ## CreateMasterBias - this function creates a master bias frame from a set of bias frames for a given sequence ##
     #################################################################################################################
-    def createMasterBias(self,targetFitsFileId):
-        # Load the fits file that we need the master bias for
-        light_frame = fitsFile.objects.filter(fitsFileType="Light", fitsFileId=targetFitsFileId)
-
+    def createMasterBias(self, targetFitsFile):
         # Query to get bias frames for the file - just need one to get the sequence number
-        bias_frame = fitsFile.objects.filter(fitsFileType="Bias", 
-                                             fitsFileInstrument=light_frame.fitsFileInstrument, 
-                                             fitsFileGain=light_frame.fitsFileGain,
-                                             fitsFileOffset=light_frame.fitsFileOffset,
-                                             fitsFileDate__lt=light_frame.fitsFileDate).order_by('fitsFileDate').first()
+        logging.info(f"Creating master bias frame for light frame: {targetFitsFile.fitsFileId}")
+
+        bias_frame = fitsFile.objects.filter(
+            fitsFileType="Bias", 
+            fitsFileTelescop=targetFitsFile.fitsFileTelescop,
+            fitsFileInstrument=targetFitsFile.fitsFileInstrument, 
+            fitsFileDate__lt=targetFitsFile.fitsFileDate
+        ).order_by('fitsFileDate').first()
 
         # If we have the sequence number, get all the bias frames
-        targetSequenceNo=bias_frame.fitsFileSequence
         if bias_frame:
-            bias_frames = fitsFile.objects.filter(fitsFileType="Bias",fitsFileSequence=bias_frame.fitsFileSequence).order_by('fitsFileDate')
+            logging.info(f"Found bias frames for target image")
+            bias_frames = fitsFile.objects.filter(fitsFileType="Bias", fitsFileSequence=bias_frame.fitsFileSequence).order_by('fitsFileDate')
         else:
-            logging.info('No bias frames found')
-        
+            logging.info('No bias frames found for target image, returning')
+            return None
+
         # Read all bias frames
         bias_data = []
+        
         for bias_frame in bias_frames:
             try:
-                with fits.open(bias_frame['fits']) as hdul:
-                    logging.info(f"Reading bias frame {bias_frame[2]}")
+                with fits.open(bias_frame.fitsFileName) as hdul:
+                    logging.debug(f"Reading bias frame {bias_frame.fitsFileId}")
                     bias_data.append(hdul[0].data)
             except Exception as e:
-                logging.info(f"Failed to read bias frame {bias_frame[2]}: {e}")
+                logging.info(f"Failed to read bias frame {bias_frame.fitsFileId}: {e}")
 
         if not bias_data:
             logging.info('No valid bias frames found')
-            return
+            return None
+        else:
+            logging.info(f"Found {len(bias_data)} bias frames")
         
         # Calculate the master bias frame (median of all bias frames)
         master_bias_data = np.median(bias_data, axis=0)
         
         # Save the master bias frame
-        master_bias_path = os.path.join(self.repoFolder, f'master_bias_{targetSequenceNo}.fits')
+        master_bias_path = os.path.join(self.repoFolder+"Masters/", f'master_bias_{bias_frame.fitsFileSequence}.fits')
+
         try:
             hdu = fits.PrimaryHDU(master_bias_data)
             hdu.writeto(master_bias_path, overwrite=True)
@@ -512,7 +526,7 @@ class PostProcess(object):
             logging.info(f"Failed to save master bias frame: {e}")
         
         # Save the master bias filename in the database
-        newfile=fitsFile(fitsFileName=master_bias_path,fitsFileType="MasterBias",fitsFileSequence=targetSequenceNo)
+        newfile=fitsFile(fitsFileName=master_bias_path,fitsFileType="MasterBias",fitsFileSequence=bias_frame.fitsFileSequence)
         newfile.save()
         logging.info(f'Master bias frame created: {master_bias_path}')
 
@@ -521,16 +535,8 @@ class PostProcess(object):
     #################################################################################################################
     ## CreateMasterDark - this function creates a master dark frame from a set of dark frames for a given sequence ##
     #################################################################################################################
-    def createMasterDark(self,targetFitsFileId):
-        # Load the fits file that we need the master dark for
-        light_frame = fitsFile.objects.filter(fitsFileType="Light", fitsFileId=targetFitsFileId)
-
-        # Query to get dark frames for the file - just need one to get the sequence number
-        dark_frame = fitsFile.objects.filter(fitsFileType="dark", 
-                                            fitsFileInstrument=light_frame.fitsFileInstrument, 
-                                            fitsFileGain=light_frame.fitsFileGain,
-                                            fitsFileOffset=light_frame.fitsFileOffset,
-                                            fitsFileDate__lt=light_frame.fitsFileDate).order_by('fitsFileDate').first()
+    def createMasterDark(self,targetFitsFile):
+        
 
         # If we have the sequence number, get all the dark frames
         targetSequenceNo=dark_frame.fitsFileSequence
@@ -557,7 +563,7 @@ class PostProcess(object):
         master_dark_data = np.median(dark_data, axis=0)
         
         # Save the master dark frame
-        master_dark_path = os.path.join(self.repoFolder, f'master_dark_{targetSequenceNo}.fits')
+        master_dark_path = os.path.join(self.repoFolder+"Masters/", f'master_dark_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_dark_data)
             hdu.writeto(master_dark_path, overwrite=True)
@@ -611,7 +617,7 @@ class PostProcess(object):
         master_flat_data = np.median(flat_data, axis=0)
         
         # Save the master flat frame
-        master_flat_path = os.path.join(self.repoFolder, f'master_flat_{targetSequenceNo}.fits')
+        master_flat_path = os.path.join(self.repoFolder+"Masters/", f'master_flat_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_flat_data)
             hdu.writeto(master_flat_path, overwrite=True)
