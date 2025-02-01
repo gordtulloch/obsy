@@ -1,0 +1,5 @@
+# Obsy related tasks. Runs scripts that set up the environment and executes a Django task
+# Change <user> to your username where obsy is installed
+#
+0 0 * * * /home/<user>/obsy.dev/bin/target_update.sh 
+0 0 * * * /home/<user>/obsy.dev/bin/load_repo.sh 
