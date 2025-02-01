@@ -16,7 +16,6 @@ class CommunicationsConfigForm(forms.ModelForm):
         model = CommunicationsConfig
         fields = '__all__'
         # hide the following fields
-        exclude = ['email_backend']
         labels = {
             'email_host': 'SMTP Server Host',
             'email_port': 'SMTP Server Port',

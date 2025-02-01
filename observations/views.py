@@ -389,3 +389,16 @@ class FitsFileSequenceListView(ListView):
         fits_file_sequences = paginator.get_page(page)
         context['fits_file_sequences'] = fits_file_sequences
         return context
+
+@login_required
+def fits_sequence_detail(request, pk):
+    sequence = get_object_or_404(fitsSequence, pk=pk)
+    light_frames = fitsFile.objects.filter(fitsFileSequence=sequence, fitsFileType="Light")
+    calibration_frames = fitsFile.objects.filter(fitsFileSequence=sequence).exclude(fitsFileType="Light")
+    
+    context = {
+        'sequence': sequence,
+        'light_frames': light_frames,
+        'calibration_frames': calibration_frames,
+    }
+    return render(request, 'observations/fits_sequence_detail.html', context)

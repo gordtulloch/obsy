@@ -9,35 +9,35 @@
     <H2>Targets List</H2>
     <button type="button" class="btn btn-primary" onclick="window.location.href='/targets/create/'">Add New Target</button>
     <table class="table table-dark">
-        {% for data in target_data %}
+        {% for Target in target_data %}
             {% if forloop.first %}
                 <tr><th>Thumbnail</th><th>Object</th><th>Details</th><th>Actions</th></tr>
                 {% endif %}    
-            <tr><td><img src="{{ data.Target.targetDefaultThumbnail.url }}" alt="Thumbnail for {{ data.Target.targetName }}" /></td>
-                <td><b>{{ data.Target.targetName }}</b></td>
+            <tr><td><img src="{{ Target.targetDefaultThumbnail.url }}" alt="Thumbnail for {{ Target.targetName }}" /></td>
+                <td><b>{{ Target.targetName }}</b></td>
                 <td><table class="table table-dark">
                     <tr>
                         <tr >
-                            <td width="33%">RA: {{ data.Target.targetRA2000 }}</td>
-                            <td width="33%">Dec: {{ data.Target.targetDec2000 }}</td>
-                            <td width="33%">Const: {{ data.Target.targetConst }}</td>
+                            <td width="33%">RA: {{ Target.targetRA2000 }}</td>
+                            <td width="33%">Dec: {{ Target.targetDec2000 }}</td>
+                            <td width="33%">Const: {{ Target.targetConst }}</td>
                         </tr>
                         <tr>
-                            <td>Mag: {{ data.Target.targetMag|floatformat:2 }}</td>
-                            <td>SIMBAD Type: {{ data.Target.targetType }}</td>
-                            <td>Class: {{ data.Target.targetClass }}</td>
+                            <td>Mag: {{ Target.targetMag|floatformat:2 }}</td>
+                            <td>SIMBAD Type: {{ Target.targetType }}</td>
+                            <td>Class: {{ Target.targetClass }}</td>
                         </tr>
                         <tr>
-                            <td>Rise: {{ data.rise_time }}</td>
-                            <td>Transit: {{ data.transit_time }}</td>
-                            <td>Set: {{ data.set_time }}</td>
+                            <td>Rise: {{ Target.targetRise }}</td>
+                            <td>Transit: {{ Target.targetTransit }}</td>
+                            <td>Set: {{ Target.targetSet }}</td>
                         </tr>
                         </table>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'target_update' data.Target.targetId %}'">Edit</button><br>
-                        <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'target_delete' data.Target.targetId %}'">Delete</button><br>
-                        <button type="button" class="btn btn-success" onclick="window.location.href='{% url 'observation_create' data.Target.targetId data.Target.targetName %}'">Observe</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'target_update' Target.targetId %}'">Edit</button><br>
+                        <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'target_delete' Target.targetId %}'">Delete</button><br>
+                        <button type="button" class="btn btn-success" onclick="window.location.href='{% url 'observation_create' Target.targetId Target.targetName %}'">Observe</button>
             {% empty %}
             <p><i>No results found.</i></p>
         {% endfor %}

@@ -1,0 +1,68 @@
+{% extends "_base.html" %}
+{% block title %}FITS Sequence Detail{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <br>
+    <h2>FITS Sequence Detail</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Sequence Details</h3>
+            <table class="table table-dark">
+                <tr><th>Object Name</th><td>{{ sequence.fitsSequenceObjectName }}</td></tr>
+                <tr><th>Date</th><td>{{ sequence.fitsSequenceDate }}</td></tr>
+                <tr><th>Telescope</th><td>{{ sequence.fitsSequenceTelescope }}</td></tr>
+                <tr><th>Imager</th><td>{{ sequence.fitsSequenceImager }}</td></tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h3>Thumbnail</h3>
+            {% if sequence.thumbnail %}
+                <img src="{{ sequence.thumbnail.url }}" alt="Thumbnail">
+            {% else %}
+                <p>No thumbnail available.</p>
+            {% endif %}
+        </div>
+    </div>
+    <h3>Light Frames</h3>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Date</th>
+                <th>Exposure</th>
+                <th>Filter</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for frame in light_frames %}
+            <tr>
+                <td>{{ frame.fitsFileName }}</td>
+                <td>{{ frame.fitsFileDate }}</td>
+                <td>{{ frame.fitsFileExpTime }}</td>
+                <td>{{ frame.fitsFileFilter }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Calibration Frames</h3>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Date</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for frame in calibration_frames %}
+            <tr>
+                <td>{{ frame.fitsFileName }}</td>
+                <td>{{ frame.fitsFileDate }}</td>
+                <td>{{ frame.fitsFileType }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

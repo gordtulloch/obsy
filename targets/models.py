@@ -13,6 +13,13 @@ from astropy.io import fits
 from PIL import Image
 import numpy as np
 
+from obsy.config import GeneralConfig
+from astropy.time import Time
+from astropy import units as u
+from astropy.coordinates import EarthLocation, SkyCoord
+from astroplan import Observer, FixedTarget
+import pytz
+
 logger = logging.getLogger(__name__)
 
 ##################################################################################################
@@ -31,6 +38,9 @@ class Target(models.Model):
     targetConst     = models.CharField(max_length=200)
     targetMag       = models.CharField(max_length=200)
     targetDefaultThumbnail = models.ImageField(upload_to='thumbnails/')
+    targetRise      = models.DateTimeField(null=True, blank=True)
+    targetTransit   = models.DateTimeField(null=True, blank=True)
+    targetSet       = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.targetName}"
@@ -123,3 +133,71 @@ class Target(models.Model):
                 logger.warning("Failed to remove thumbnail file "+jpg_filename)
         super().delete(*args, **kwargs)
         return 
+    
+    ##############################################################################################
+    # Set Rise / Transit / Set times for the Target                                             ##
+    ##############################################################################################
+    def set_rise_transit_set(self):
+         # Get General config
+        genSettings = GeneralConfig.objects.first()
+        
+        # Define the observer's location
+        location = EarthLocation(lat=float(genSettings.latitude) * u.deg, lon=float(genSettings.longitude) * u.deg, height=float(genSettings.elevation) * u.m)
+        observer = Observer(location=location, timezone=settings.TIME_ZONE, name="Observer")
+        
+        # Define the current time in UTC
+        utc_now = datetime.now(pytz.UTC)
+        time = Time(utc_now)
+
+        # Convert RA and Dec to decimal degrees
+        raList = self.targetRA2000.split(' ')
+        if len(raList) == 3:
+            ra_hrs, ra_min, ra_sec = raList
+        else:
+            ra_hrs, ra_min = raList
+            ra_sec = 0  
+        ra_decimal = (float(ra_hrs) + float(ra_min)/60 + float(ra_sec)/3600) * 15
+        
+        decList = self.targetDec2000.split(' ')
+        if len(decList) == 3:
+            dec_deg, dec_min, dec_sec = decList
+        else:
+            dec_deg, dec_min = decList
+            dec_sec = 0       
+        dec_decimal = float(dec_deg) + float(dec_min)/60 + float(dec_sec)/3600
+
+        # Create a SkyCoord object for the target
+        target_coord = SkyCoord(ra=ra_decimal * u.deg, dec=dec_decimal * u.deg, frame='icrs')
+        target_fixed = FixedTarget(coord=target_coord, name=self.targetName)
+
+        # Calculate rise, transit, and set times
+        local_tz = pytz.timezone(settings.TIME_ZONE)
+        rise_timeJD = observer.target_rise_time(time, target_fixed, which='next')
+        rise_timeUTC = rise_timeJD.to_datetime()
+        transit_timeJD = observer.target_meridian_transit_time(time, target_fixed, which='next')
+        transit_timeUTC = transit_timeJD.to_datetime()
+        set_timeJD = observer.target_set_time(time, target_fixed, which='next')
+        set_timeUTC = set_timeJD.to_datetime()
+        
+        logger.info("Object name: "+self.targetName)
+        logger.info("rise type"+str(type(rise_timeUTC)))
+        logger.info("transit type"+str(type(transit_timeUTC)))
+        logger.info("set type"+str(type(set_timeUTC))) 
+        
+        # Convert to local time and assign to object attributes
+        if type(rise_timeUTC) == datetime:
+            self.targetRise=rise_timeUTC.replace(tzinfo=pytz.UTC).astimezone(local_tz)
+        else:
+            self.targetRise=None
+        if type(transit_timeUTC) == datetime:
+            self.targetTransit=transit_timeUTC.replace(tzinfo=pytz.UTC).astimezone(local_tz)
+        else:
+            self.targetTransit=None
+        if type(set_timeUTC) == datetime:
+            self.targetSet=set_timeUTC.replace(tzinfo=pytz.UTC).astimezone(local_tz)
+        else:
+            self.targetSet=None
+
+        self.save()
+
+        return

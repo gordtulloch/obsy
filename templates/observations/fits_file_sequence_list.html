@@ -2,7 +2,6 @@
 {% block title %}All Sequences List{% endblock title %}
 {% block content %}
 
-
 <div class="container">
     <br>
     <h2>Fits File Sequences</h2>
@@ -10,9 +9,10 @@
         <thead>
             <tr>
                 <th>Object Name</th>
-                <th>Observed Dates (UT)</th>
+                <th>Observation Start (UT)</th>
                 <th>Telescope</th>
                 <th>Imager</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody>
@@ -21,7 +21,7 @@
                 <td>{{ object_name }}</td>
                 <td>
                   {% for sequence in sequences %}
-                    {{ sequence.date }}<br>
+                  <a href="{% url 'fits_sequence_detail' sequence.fitsSequenceId %}">{{ sequence.date }}</a><br>
                   {% endfor %}
                 </td>
                 <td>
@@ -34,36 +34,10 @@
                     {{ sequence.imager }}<br>
                   {% endfor %}
                 </td>
+                
               </tr>
             {% endfor %}
           </tbody>
     </table>
-    <div class="row justify-content-center"></div>
-    <div class="pagination">
-        <span class="step-links">
-            <table class="table table-dark table-responsive">
-                <tr>
-                    {% if fits_file_sequences.has_previous %}
-                    <td><a href="?page=1" style="color: white;">&laquo; first</a></td>
-                    <td><a href="?page={{ fits_file_sequences.previous_page_number }}"
-                            style="color: white;">previous</a></td>
-                    {% endif %}
-
-                    <span class="current">
-                        <td>Page {{ fits_file_sequences.number }} of {{ fits_file_sequences.paginator.num_pages }}
-                        </td>
-                    </span>
-
-                    {% if fits_file_sequences.has_next %}
-                    <td><a href="?page={{ fits_file_sequences.next_page_number }}" style="color: white;">next</a></td>
-                    <td><a href="?page={{ fits_file_sequences.paginator.num_pages }}" style="color: white;">last
-                            &raquo;</a></td>
-                    {% endif %}
-                </tr>
-            </table>
-
-        </span>
-    </div>
 </div>
-</div>
-{% endblock %}
+{% endblock content %}
