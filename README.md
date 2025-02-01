@@ -2,7 +2,7 @@
 ![](static/images/github-cover.png)
 OBSY is an Open Source observatory management system intended for amateur astronomers who want to automate data collection in their observatories. The system forms a meta layer over the KStars/EKOS imaging and telescope control system, feeding nightly schedules to the EKOS Scheduler and capturing the results. 
 
-NOTE THIS SOFTWARE IS IN ACTIVE DEVELOPMENT AND NO RELEASE CANDIDATE IS AVAILABLE YET. ESTIMATE FIRST RELEASE FEB 1 2025.
+NOTE THIS SOFTWARE IS IN ACTIVE DEVELOPMENT AND NO RELEASE CANDIDATE IS AVAILABLE YET. ESTIMATE FIRST RELEASE MAR 31 2025.
 
 Detailed documentation has been moved to the project Wiki.
 
