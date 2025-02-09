@@ -45,13 +45,13 @@ class PostProcess(object):
         if "DATE-OBS" in hdr:
             # Create new fitsFile record
             if "OBJECT" in hdr:
-                newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["FRAME"],
+                newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["IMAGETYP"],
                             fitsFileObject=hdr["OBJECT"],fitsFileExpTime=hdr["EXPTIME"],fitsFileXBinning=hdr["XBINNING"],
                             fitsFileYBinning=hdr["YBINNING"],fitsFileCCDTemp=hdr["CCD-TEMP"],fitsFileTelescop=hdr["TELESCOP"],
                             fitsFileInstrument=hdr["INSTRUME"],
                             fitsFileSequence=None)
             else:
-                newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["FRAME"],
+                newfile=fitsFile(fitsFileName=fileName,fitsFileDate=hdr["DATE-OBS"],fitsFileType=hdr["IMAGETYP"],
                             fitsFileExpTime=hdr["EXPTIME"],fitsFileXBinning=hdr["XBINNING"],
                             fitsFileYBinning=hdr["YBINNING"],fitsFileCCDTemp=hdr["CCD-TEMP"],fitsFileTelescop=hdr["TELESCOP"],
                             fitsFileInstrument=hdr["INSTRUME"],
@@ -84,7 +84,7 @@ class PostProcess(object):
             return False
 
         hdr = hdul[0].header
-        if "FRAME" in hdr:
+        if "IMAGETYP" in hdr:
             # Create an os-friendly date
             try:
                 if "DATE-OBS" not in hdr:
@@ -99,7 +99,7 @@ class PostProcess(object):
                 return False
 
             # Create a new standard name for the file based on what it is
-            if (hdr["FRAME"]=="Light"):
+            if (hdr["IMAGETYP"]=="Light"):
                 # Adjust the WCS for the image
                 if "CD1_1" not in hdr:
                     if "CDELT1" in hdr:
@@ -110,10 +110,10 @@ class PostProcess(object):
                         fitsCD1_2 = -fitsCDELT2 * sin(fitsCROTA2)
                         fitsCD2_1 =  fitsCDELT1 * sin (fitsCROTA2)
                         fitsCD2_2 = fitsCDELT2 * cos(fitsCROTA2)
-                        hdr.append(('CD1_1', str(fitsCD1_1), 'Adjusted via MCP'), end=True)
-                        hdr.append(('CD1_2', str(fitsCD1_2), 'Adjusted via MCP'), end=True)
-                        hdr.append(('CD2_1', str(fitsCD2_1), 'Adjusted via MCP'), end=True)
-                        hdr.append(('CD2_2', str(fitsCD2_2), 'Adjusted via MCP'), end=True)
+                        hdr.append(('CD1_1', str(fitsCD1_1), 'Adjusted via Obsy'), end=True)
+                        hdr.append(('CD1_2', str(fitsCD1_2), 'Adjusted via Obsy'), end=True)
+                        hdr.append(('CD2_1', str(fitsCD2_1), 'Adjusted via Obsy'), end=True)
+                        hdr.append(('CD2_2', str(fitsCD2_2), 'Adjusted via Obsy'), end=True)
                         hdul.flush()  # changes are written back to original.fits
                     else:
                         logging.warning("No WCS information in header, file not updated is "+str(os.path.join(root, file)))
@@ -134,41 +134,41 @@ class PostProcess(object):
                 else:
                     logging.warning("Invalid object name in header. File not processed is "+str(os.path.join(root, file)))
                     return False
-            elif hdr["FRAME"]=="Flat":
+            elif hdr["IMAGETYP"]=="Flat":
                 if ("FILTER" in hdr):
-                    newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                    newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
                 else:
-                    newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                    newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
-            elif hdr["FRAME"]=="Dark" or hdr["FRAME"]=="Bias":
-                newName="{0}-{1}-{1}-{2}-{3}s-{4}x{5}-t{6}.fits".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+            elif hdr["IMAGETYP"]=="Dark" or hdr["IMAGETYP"]=="Bias":
+                newName="{0}-{1}-{1}-{2}-{3}s-{4}x{5}-t{6}.fits".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
             else:
-                logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
+                logging.warning("File not processed as IMAGETYP -"+hdr["IMAGETYP"]+"- not recognized: "+str(os.path.join(root, file)))
             hdul.close()
             newPath=""
 
             # Create the folder structure (if needed)
             fitsDate=dateobj.strftime("%Y%m%d")
-            if (hdr["FRAME"]=="Light"):
+            if (hdr["IMAGETYP"]=="Light"):
                 newPath=self.repoFolder+"Light/{0}/{1}/{2}/{3}/".format(hdr["OBJECT"].replace(" ", ""),hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),fitsDate)
-            elif hdr["FRAME"]=="Dark":
-                newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+            elif hdr["IMAGETYP"]=="Dark ":
+                newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),hdr["EXPTIME"],fitsDate)
-            elif hdr["FRAME"]=="Flat":
+            elif hdr["IMAGETYP"]=="Flat":
                 if ("FILTER" in hdr):
-                    newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                    newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),hdr["FILTER"],fitsDate)
                 else:
-                    newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+                    newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/{4}/".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate)
-            elif hdr["FRAME"]=="Bias":
-                newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["FRAME"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
+            elif hdr["IMAGETYP"]=="Bias":
+                newPath=self.repoFolder+"Calibrate/{0}/{1}/{2}/{3}/".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),fitsDate)
             else:
-                logging.warning("File not processed as FRAME not recognized: "+str(os.path.join(root, file)))
+                logging.warning("File not processed as IMAGETYP not recognized: "+str(os.path.join(root, file)))
                 return None
 
             if not os.path.isdir(newPath) and moveFiles:
@@ -192,7 +192,7 @@ class PostProcess(object):
             else:
                 logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
         else:
-            logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
+            logging.warning("File not added to repo - no IMAGETYP card - "+str(os.path.join(root, file)))
 
         return newFitsFileId
 
@@ -219,7 +219,7 @@ class PostProcess(object):
                     registeredFiles.append(newFitsFileId)
                     self.createThumbnail(newFitsFileId)
                 else:
-                    logging.warning("File not added to repo - no FRAME card - "+str(os.path.join(root, file)))
+                    logging.warning("File not added to repo - no IMAGETYP card - "+str(os.path.join(root, file)))
         return registeredFiles
 
     #################################################################################################################
@@ -393,30 +393,30 @@ class PostProcess(object):
         return createdCalibrationSequences
 
     #################################################################################################################
-    ## calibrateFitsFile - this function calibrates a light frame using master bias, dark, and flat frames. If     ##
-    ##                     the master frames do not exist, they are created for the sequence.                      ##
+    ## calibrateFitsFile - this function calibrates a light IMAGETYP using master bias, dark, and flat IMAGETYPs. If     ##
+    ##                     the master IMAGETYPs do not exist, they are created for the sequence.                      ##
     #################################################################################################################
     def calibrateFitsImage(self,targetFitsFile):
-        # Check for a fitsSequence record for the light frame
+        # Check for a fitsSequence record for the light IMAGETYP
         currFitsSequenceNo = targetFitsFile.fitsFileSequence
 
         if not currFitsSequenceNo:
-            logging.info(f"No fitsSequence record found for light frame: {targetFitsFile.fitsFileId}, run the sync_repo command")
+            logging.info(f"No fitsSequence record found for light IMAGETYP: {targetFitsFile.fitsFileId}, run the sync_repo command")
             return
         else:
-            # Load the fitsSequence record corresponding to the light frame
+            # Load the fitsSequence record corresponding to the light IMAGETYP
             currFitsSequence = fitsSequence.objects.filter(fitsSequenceId=currFitsSequenceNo).first()
 
-        # If the master bias, dark, and flat frames do not exist, create them
+        # If the master bias, dark, and flat IMAGETYPs do not exist, create them
         if not currFitsSequence.fitsMasterBias:
             currFitsSequence.fitsMasterBias = self.createMasterBias(targetFitsFile)
             if not currFitsSequence.fitsMasterBias:
-                logging.info(f"Failed to create master bias frame for light frame: {targetFitsFile.fitsFileId}")
+                logging.info(f"Failed to create master bias IMAGETYP for light IMAGETYP: {targetFitsFile.fitsFileId}")
                 return None
         #if not currFitsSequence.fitsMasterDark:
         #    currFitsSequence.fitsMasterDark = self.createMasterDark(targetFitsFile)
         #    if not currFitsSequence.fitsMasterDark:
-        #        logging.info(f"Failed to create master dark frame for light frame: {targetFitsFile.fitsFileId}")
+        #        logging.info(f"Failed to create master dark IMAGETYP for light IMAGETYP: {targetFitsFile.fitsFileId}")
         #        return None            
         #if not currFitsSequence.fitsMasterFlat:
         #    currFitsSequence.fitsMasterFlat = self.createMasterFlat(targetFitsFile)   
@@ -430,35 +430,35 @@ class PostProcess(object):
             return
         
         return None
-        # Load the master bias, dark, and flat frames
+        # Load the master bias, dark, and flat IMAGETYPs
         master_bias = fitsFile.objects.filter(fitsFileName=currFitsSequence.fitsMasterBias).first()
         #master_dark = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterDark).first()
         #master_flat = fitsFile.objects.filter(fitsFileName=fitsSequence.fitsMasterFlat).first()
 
-        # Read the data from the light frame
+        # Read the data from the light IMAGETYP
         try:
             with fits.open(targetFitsFile.fitsFileName) as hdul:
                 light_data = hdul[0].data
         except Exception as e:
-            logging.info(f"Failed to read light frame: {e}")
+            logging.info(f"Failed to read light IMAGETYP: {e}")
             return
         
-        # Calibrate the light frame
+        # Calibrate the light IMAGETYP
         calibrated_data = (light_data - master_bias) / (master_flat - master_dark)
 
-        # Save the calibrated light frame
+        # Save the calibrated light IMAGETYP
         calibrated_path = os.path.join(self.repoFolder, f'calibrated_{targetFitsFile.fitsFileName}')
         try:
             hdu = fits.PrimaryHDU(calibrated_data)
             hdu.writeto(calibrated_path, overwrite=True)
-            logging.info(f"Calibrated light frame saved to: {calibrated_path}")
+            logging.info(f"Calibrated light IMAGETYP saved to: {calibrated_path}")
         except Exception as e:
-            logging.info(f"Failed to save calibrated light frame: {e}")
+            logging.info(f"Failed to save calibrated light IMAGETYP: {e}")
 
-        # Update the light frame record in the database
+        # Update the light IMAGETYP record in the database
         newFitsFile=fitsFile(fitsFileName=calibrated_path,fitsFileCalibrated=True)
 
-        # Copy the rest of the fields from the original light frame
+        # Copy the rest of the fields from the original light IMAGETYP
         newFitsFile.fitsFileDate=targetFitsFile.fitsFileDate
         newFitsFile.fitsFileType="CalibratedLight"
         newFitsFile.fitsFileStacked="False"
@@ -471,163 +471,163 @@ class PostProcess(object):
         newFitsFile.fitsFileInstrument=targetFitsFile.fitsFileInstrument
         newFitsFile.fitsFileSequence=targetFitsFile.fitsFileSequence
         newFitsFile.save()
-        logging.info(f'Light frame calibrated: {calibrated_path}')
+        logging.info(f'Light IMAGETYP calibrated: {calibrated_path}')
 
     #################################################################################################################
-    ## CreateMasterBias - this function creates a master bias frame from a set of bias frames for a given sequence ##
+    ## CreateMasterBias - this function creates a master bias IMAGETYP from a set of bias IMAGETYPs for a given sequence ##
     #################################################################################################################
     def createMasterBias(self, targetFitsFile):
-        # Query to get bias frames for the file - just need one to get the sequence number
-        logging.info(f"Creating master bias frame for light frame: {targetFitsFile.fitsFileId}")
+        # Query to get bias IMAGETYPs for the file - just need one to get the sequence number
+        logging.info(f"Creating master bias IMAGETYP for light IMAGETYP: {targetFitsFile.fitsFileId}")
 
-        bias_frame = fitsFile.objects.filter(
+        bias_IMAGETYP = fitsFile.objects.filter(
             fitsFileType="Bias", 
             fitsFileTelescop=targetFitsFile.fitsFileTelescop,
             fitsFileInstrument=targetFitsFile.fitsFileInstrument, 
             fitsFileDate__lt=targetFitsFile.fitsFileDate
         ).order_by('fitsFileDate').first()
 
-        # If we have the sequence number, get all the bias frames
-        if bias_frame:
-            logging.info(f"Found bias frames for target image")
-            bias_frames = fitsFile.objects.filter(fitsFileType="Bias", fitsFileSequence=bias_frame.fitsFileSequence).order_by('fitsFileDate')
+        # If we have the sequence number, get all the bias IMAGETYPs
+        if bias_IMAGETYP:
+            logging.info(f"Found bias IMAGETYPs for target image")
+            bias_IMAGETYPs = fitsFile.objects.filter(fitsFileType="Bias", fitsFileSequence=bias_IMAGETYP.fitsFileSequence).order_by('fitsFileDate')
         else:
-            logging.info('No bias frames found for target image, returning')
+            logging.info('No bias IMAGETYPs found for target image, returning')
             return None
 
-        # Read all bias frames
+        # Read all bias IMAGETYPs
         bias_data = []
         
-        for bias_frame in bias_frames:
+        for bias_IMAGETYP in bias_IMAGETYPs:
             try:
-                with fits.open(bias_frame.fitsFileName) as hdul:
-                    logging.debug(f"Reading bias frame {bias_frame.fitsFileId}")
+                with fits.open(bias_IMAGETYP.fitsFileName) as hdul:
+                    logging.debug(f"Reading bias IMAGETYP {bias_IMAGETYP.fitsFileId}")
                     bias_data.append(hdul[0].data)
             except Exception as e:
-                logging.info(f"Failed to read bias frame {bias_frame.fitsFileId}: {e}")
+                logging.info(f"Failed to read bias IMAGETYP {bias_IMAGETYP.fitsFileId}: {e}")
 
         if not bias_data:
-            logging.info('No valid bias frames found')
+            logging.info('No valid bias IMAGETYPs found')
             return None
         else:
-            logging.info(f"Found {len(bias_data)} bias frames")
+            logging.info(f"Found {len(bias_data)} bias IMAGETYPs")
         
-        # Calculate the master bias frame (median of all bias frames)
+        # Calculate the master bias IMAGETYP (median of all bias IMAGETYPs)
         master_bias_data = np.median(bias_data, axis=0)
         
-        # Save the master bias frame
-        master_bias_path = os.path.join(self.repoFolder+"Masters/", f'master_bias_{bias_frame.fitsFileSequence}.fits')
+        # Save the master bias IMAGETYP
+        master_bias_path = os.path.join(self.repoFolder+"Masters/", f'master_bias_{bias_IMAGETYP.fitsFileSequence}.fits')
 
         try:
             hdu = fits.PrimaryHDU(master_bias_data)
             hdu.writeto(master_bias_path, overwrite=True)
-            logging.info(f"Master bias frame saved to: {master_bias_path}")
+            logging.info(f"Master bias IMAGETYP saved to: {master_bias_path}")
         except Exception as e:
-            logging.info(f"Failed to save master bias frame: {e}")
+            logging.info(f"Failed to save master bias IMAGETYP: {e}")
         
         # Save the master bias filename in the database
-        newfile=fitsFile(fitsFileName=master_bias_path,fitsFileType="MasterBias",fitsFileSequence=bias_frame.fitsFileSequence)
+        newfile=fitsFile(fitsFileName=master_bias_path,fitsFileType="MasterBias",fitsFileSequence=bias_IMAGETYP.fitsFileSequence)
         newfile.save()
-        logging.info(f'Master bias frame created: {master_bias_path}')
+        logging.info(f'Master bias IMAGETYP created: {master_bias_path}')
 
         return newfile.fitsFileId
 
     #################################################################################################################
-    ## CreateMasterDark - this function creates a master dark frame from a set of dark frames for a given sequence ##
+    ## CreateMasterDark - this function creates a master dark IMAGETYP from a set of dark IMAGETYPs for a given sequence ##
     #################################################################################################################
     def createMasterDark(self,targetFitsFile):
         
 
-        # If we have the sequence number, get all the dark frames
-        targetSequenceNo=dark_frame.fitsFileSequence
-        if dark_frame:
-            dark_frames = fitsFile.objects.filter(fitsFileType="Dark",fitsFileSequence=dark_frame.fitsFileSequence).order_by('fitsFileDate')
+        # If we have the sequence number, get all the dark IMAGETYPs
+        targetSequenceNo=dark_IMAGETYP.fitsFileSequence
+        if dark_IMAGETYP:
+            dark_IMAGETYPs = fitsFile.objects.filter(fitsFileType="Dark",fitsFileSequence=dark_IMAGETYP.fitsFileSequence).order_by('fitsFileDate')
         else:
-            logging.info('No dark frames found')
+            logging.info('No dark IMAGETYPs found')
         
-        # Read all dark frames
+        # Read all dark IMAGETYPs
         dark_data = []
-        for dark_frame in dark_frames:
+        for dark_IMAGETYP in dark_IMAGETYPs:
             try:
-                with fits.open(dark_frame['fits']) as hdul:
-                    logging.info(f"Reading dark frame {dark_frame[2]}")
+                with fits.open(dark_IMAGETYP['fits']) as hdul:
+                    logging.info(f"Reading dark IMAGETYP {dark_IMAGETYP[2]}")
                     dark_data.append(hdul[0].data)
             except Exception as e:
-                logging.info(f"Failed to read dark frame {dark_frame[2]}: {e}")
+                logging.info(f"Failed to read dark IMAGETYP {dark_IMAGETYP[2]}: {e}")
 
         if not dark_data:
-            logging.info('No valid dark frames found')
+            logging.info('No valid dark IMAGETYPs found')
             return
         
-        # Calculate the master dark frame (median of all dark frames)
+        # Calculate the master dark IMAGETYP (median of all dark IMAGETYPs)
         master_dark_data = np.median(dark_data, axis=0)
         
-        # Save the master dark frame
+        # Save the master dark IMAGETYP
         master_dark_path = os.path.join(self.repoFolder+"Masters/", f'master_dark_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_dark_data)
             hdu.writeto(master_dark_path, overwrite=True)
-            logging.info(f"Master dark frame saved to: {master_dark_path}")
+            logging.info(f"Master dark IMAGETYP saved to: {master_dark_path}")
         except Exception as e:
-            logging.info(f"Failed to save master dark frame: {e}")
+            logging.info(f"Failed to save master dark IMAGETYP: {e}")
         
         # Save the master dark filename in the database
         newfile=fitsFile(fitsFileName=master_dark_path,fitsFileType="Masterdark",fitsFileSequence=targetSequenceNo)
         newfile.save()
-        logging.info(f'Master dark frame created: {master_dark_path}')
+        logging.info(f'Master dark IMAGETYP created: {master_dark_path}')
 
         return newfile.fitsFileId
 
     #################################################################################################################
-    ## CreateMasterFlat - this function creates a master flat frame from a set of flat frames for a given sequence ##
+    ## CreateMasterFlat - this function creates a master flat IMAGETYP from a set of flat IMAGETYPs for a given sequence ##
     #################################################################################################################
     def createMasterFlat(self,targetFitsFileId):
         # Load the fits file that we need the master flat for
-        light_frame = fitsFile.objects.filter(fitsFileType="Light", fitsFileId=targetFitsFileId)
+        light_IMAGETYP = fitsFile.objects.filter(fitsFileType="Light", fitsFileId=targetFitsFileId)
 
-        # Query to get flat frames for the file - just need one to get the sequence number
-        flat_frame = fitsFile.objects.filter(fitsFileType="flat", 
-                                             fitsFileInstrument=light_frame.fitsFileInstrument, 
-                                             fitsFileGain=light_frame.fitsFileGain,
-                                             fitsFileOffset=light_frame.fitsFileOffset,
-                                             fitsFileDate__lt=light_frame.fitsFileDate).order_by('fitsFileDate').first()
+        # Query to get flat IMAGETYPs for the file - just need one to get the sequence number
+        flat_IMAGETYP = fitsFile.objects.filter(fitsFileType="flat", 
+                                             fitsFileInstrument=light_IMAGETYP.fitsFileInstrument, 
+                                             fitsFileGain=light_IMAGETYP.fitsFileGain,
+                                             fitsFileOffset=light_IMAGETYP.fitsFileOffset,
+                                             fitsFileDate__lt=light_IMAGETYP.fitsFileDate).order_by('fitsFileDate').first()
 
-        # If we have the sequence number, get all the flat frames
-        targetSequenceNo=flat_frame.fitsFileSequence
-        if flat_frame:
-            flat_frames = fitsFile.objects.filter(fitsFileType="Flat",fitsFileSequence=flat_frame.fitsFileSequence).order_by('fitsFileDate')
+        # If we have the sequence number, get all the flat IMAGETYPs
+        targetSequenceNo=flat_IMAGETYP.fitsFileSequence
+        if flat_IMAGETYP:
+            flat_IMAGETYPs = fitsFile.objects.filter(fitsFileType="Flat",fitsFileSequence=flat_IMAGETYP.fitsFileSequence).order_by('fitsFileDate')
         else:
-            logging.info('No flat frames found')
+            logging.info('No flat IMAGETYPs found')
         
-        # Read all flat frames
+        # Read all flat IMAGETYPs
         flat_data = []
-        for flat_frame in flat_frames:
+        for flat_IMAGETYP in flat_IMAGETYPs:
             try:
-                with fits.open(flat_frame['fits']) as hdul:
-                    logging.info(f"Reading flat frame {flat_frame[2]}")
+                with fits.open(flat_IMAGETYP['fits']) as hdul:
+                    logging.info(f"Reading flat IMAGETYP {flat_IMAGETYP[2]}")
                     flat_data.append(hdul[0].data)
             except Exception as e:
-                logging.info(f"Failed to read flat frame {flat_frame[2]}: {e}")
+                logging.info(f"Failed to read flat IMAGETYP {flat_IMAGETYP[2]}: {e}")
 
         if not flat_data:
-            logging.info('No valid flat frames found')
+            logging.info('No valid flat IMAGETYPs found')
             return
         
-        # Calculate the master flat frame (median of all flat frames)
+        # Calculate the master flat IMAGETYP (median of all flat IMAGETYPs)
         master_flat_data = np.median(flat_data, axis=0)
         
-        # Save the master flat frame
+        # Save the master flat IMAGETYP
         master_flat_path = os.path.join(self.repoFolder+"Masters/", f'master_flat_{targetSequenceNo}.fits')
         try:
             hdu = fits.PrimaryHDU(master_flat_data)
             hdu.writeto(master_flat_path, overwrite=True)
-            logging.info(f"Master flat frame saved to: {master_flat_path}")
+            logging.info(f"Master flat IMAGETYP saved to: {master_flat_path}")
         except Exception as e:
-            logging.info(f"Failed to save master flat frame: {e}")
+            logging.info(f"Failed to save master flat IMAGETYP: {e}")
         
         # Save the master flat filename in the database
         newfile=fitsFile(fitsFileName=master_flat_path,fitsFileType="Masterflat",fitsFileSequence=targetSequenceNo)
         newfile.save()
-        logging.info(f'Master flat frame created: {master_flat_path}')
+        logging.info(f'Master flat IMAGETYP created: {master_flat_path}')
 
         return newfile.fitsFileId

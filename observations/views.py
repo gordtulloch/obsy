@@ -231,9 +231,11 @@ def list_fits_files(request):
         time_threshold = None
 
     if time_threshold:
-        fits_files = fitsFile.objects.filter(fitsFileDate__gte=time_threshold)
+        fits_files = fitsFile.objects.filter(fitsFileDate__gte=time_threshold).filter(fitsFileType='Light').order_by('-fitsFileObject')
     else:
-        fits_files = fitsFile.objects.all()
+        # Get all Light files 
+        fits_files = fitsFile.objects.all().filter(fitsFileType='Light').order_by('-fitsFileObject')
+
     # Parse the filename to exclude the path
     for fits_file in fits_files:
         fits_file.fitsFileName = fits_file.fitsFileName.split('/')[-1]
