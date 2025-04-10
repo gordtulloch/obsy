@@ -132,9 +132,26 @@ from obsy.settings import TIME_ZONE
 
 @login_required
 def target_all_list(request):
-    target_data = Target.objects.all()
+    # Get all targets
+    target_data = Target.objects.all().order_by('targetName')
 
-    return render(request, 'targets/target_all_list.html', {'target_data': target_data})
+    # Get search and filter parameters from the request
+    search_query = request.GET.get('search', '').strip()
+    target_class_filter = request.GET.get('targetClass', '').strip()
+
+    # Apply search filter if provided
+    if search_query:
+        target_data = target_data.filter(targetName__icontains=search_query)
+
+    # Apply targetClass filter if provided
+    if target_class_filter:  
+        target_data = target_data.filter(targetClass__iexact=target_class_filter)
+
+    return render(request, 'targets/target_all_list.html', {
+        'target_data': target_data,
+        'search_query': search_query,
+        'target_class_filter': target_class_filter
+    })
 
 ##################################################################################################
 ## assignTargetClass -  A helper function that looks up targetClass based on the label          ## 
@@ -290,7 +307,7 @@ def upload_targets_view(request):
                                             targetId = uuid.uuid4(),     
                                             targetName = row["MAIN_ID"].replace(' ',''),
                                             targetType  =row["OTYPE_main"],
-                                            targetClass=assignTargetClass(row["OTYPE_main"]),
+                                            #targetClass=assignTargetClass(row["OTYPE_main"]),
                                             targetRA2000 = row["RA"],
                                             targetDec2000 = row["DEC"],
                                             targetConst = get_constellation(c),

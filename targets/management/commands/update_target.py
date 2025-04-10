@@ -8,7 +8,7 @@ class Command(BaseCommand):
         # Load all target records
         targets = Target.objects.all()
         for target in targets:
-            target.set_rise_transit_set()
-            target.save()
+            if (target.set_rise_transit_set()):
+                target.save()
 
-        self.stdout.write(self.style.SUCCESS('Successfully reset all config records'))
+        self.stdout.write(self.style.SUCCESS('Successfully updated all target records'))

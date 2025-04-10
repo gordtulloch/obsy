@@ -140,6 +140,9 @@ class Target(models.Model):
     def set_rise_transit_set(self):
          # Get General config
         genSettings = GeneralConfig.objects.first()
+        if genSettings == None:
+            logger.info("[*]  Unable to load settings, aborting")
+            return False
         
         # Define the observer's location
         location = EarthLocation(lat=float(genSettings.latitude) * u.deg, lon=float(genSettings.longitude) * u.deg, height=float(genSettings.elevation) * u.m)
@@ -179,10 +182,7 @@ class Target(models.Model):
         set_timeJD = observer.target_set_time(time, target_fixed, which='next')
         set_timeUTC = set_timeJD.to_datetime()
         
-        logger.info("Object name: "+self.targetName)
-        logger.info("rise type"+str(type(rise_timeUTC)))
-        logger.info("transit type"+str(type(transit_timeUTC)))
-        logger.info("set type"+str(type(set_timeUTC))) 
+        logger.info("Processing object name: "+self.targetName)
         
         # Convert to local time and assign to object attributes
         if type(rise_timeUTC) == datetime:

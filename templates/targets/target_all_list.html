@@ -7,7 +7,32 @@
 <div class="container">
     <br><br>
     <H2>Targets List</H2>
-    <button type="button" class="btn btn-primary" onclick="window.location.href='/targets/create/'">Add New Target</button>
+  
+    <form method="get" action="{% url 'target_all_list' %}" class="d-flex justify-content-between align-items-center mb-3">
+        <button type="button" class="btn btn-primary" onclick="window.location.href='/targets/create/'">Add New Target</button>
+        <!-- Centered Search Field -->
+        <div class="form-group mx-auto">
+            <input 
+                type="text" 
+                name="search" 
+                class="form-control" 
+                placeholder="Search by name" 
+                value="{{ search_query }}">
+        </div>
+    
+        <!-- Right-Aligned Filter and Button -->
+        <div class="d-flex align-items-center">
+            <div class="form-group mr-2">
+                <select name="targetClass" class="form-control">
+                    <option value="">All Classes</option>
+                    <option value="DS" {% if target_class_filter == "DS" %}selected{% endif %}>Deep Sky</option>
+                    <option value="VS" {% if target_class_filter == "VS" %}selected{% endif %}>Variable Star</option>
+                    <!-- Add more classes as needed -->
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
     <table class="table table-dark">
         {% for Target in target_data %}
             {% if forloop.first %}
