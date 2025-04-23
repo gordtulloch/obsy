@@ -14,7 +14,7 @@ urlpatterns = [
     path("<uuid:pk>/",                      observation_detail_view.as_view(), name="observation_detail" ),
     path("all_list/",                       observation_all_list.as_view(), name="observation_all_list"),
     path("<uuid:pk>/edit/",                 observation_update, name="observation_update"),
-    path("<uuid:pk>/delete/",               observation_delete.as_view(), name="observation_delete"),
+    path("<uuid:pk>/delete/",               observation_delete, name="observation_delete"),
     path('create/',                         observation_create, name='observation_create'),
     path('create/<uuid:target_uuid>/<str:target_name>/',      observation_create, name='observation_create'),
     # Schedules

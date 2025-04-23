@@ -19,9 +19,17 @@
                 <td>{{ Observation.imagerId }}</td>
                 <td>{{ Observation.sequenceFileId.sequenceFileName }}</td>
                 <td>{{ Observation.sequenceFileId.sequenceDuration }}</td>
-                <td><button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{% url 'observation_update' Observation.observationId %}'">Edit</button>
+                <!-- <td>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href='{% url 'observation_update' Observation.observationId %}'">Edit</button>
                     <button type="button" class="btn btn-danger btn-sm" onclick="window.location.href='{% url 'observation_delete' Observation.observationId %}">Delete</button>
-                </td>
+                </td> -->
+                <td>
+                    <a href="{% url 'observation_update' Observation.observationId %}"><button type="button" class="btn btn-primary btn-sm" >Edit</button></a>
+                    <form action="{% url 'observation_delete' Observation.observationId %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm"onclick="return confirm('Are you sure you want to delete this observation?');">Delete</button>
+                </form>
+            </td>
             </tr>
         {% empty %}
             <p><i>No results found.</i></p>

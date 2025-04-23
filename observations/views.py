@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from .forms import ObservationDSForm, SequenceFileForm, ScheduleMasterForm
 from .models import Observation, scheduleMaster,fitsFile,scheduleDetail,sequenceFile,fitsSequence,ObservationDS, ObservationEX, ObservationVS
@@ -16,6 +17,7 @@ from targets.models import Target
 from setup.models import observatory,telescope,imager
 from observations.models import Observation
 from observations.postProcess import PostProcess
+
 
 import base64
 import io
@@ -86,10 +88,13 @@ class observation_updateDS(LoginRequiredMixin,UpdateView):
 ##################################################################################################
 ## Observation Delete     -  Use the DeleteView class to edit Observation records               ##
 ##################################################################################################    
-class observation_delete(LoginRequiredMixin,DeleteView):
-    model = Observation
-    template_name = "observations/observation_confirm_delete.html"
-    success_url = reverse_lazy('observation_all_list')
+@login_required
+def observation_delete(request, pk):
+    logger.info(f"Deleting observation with pk: {pk}")
+    observation = get_object_or_404(Observation, pk=pk)
+    observation.delete()
+    messages.success(request, "Observation deleted successfully.")
+    return redirect('observation_all_list')
 
 ##################################################################################################
 ## Observation create     -  Use the class to edit Observation records                          ##
