@@ -3,8 +3,8 @@ from django.conf import settings
 from django.urls import path,include
 from . import views
 from .views import observation_detail_view, observation_all_list
-from .views import observation_create,observation_update,observation_delete,ScheduleUpdateView,ScheduleDeleteView, ScheduleRegenView,\
-    scheduleMasterList,ScheduleCreateView, list_fits_files, fitsfile_detail, sequence_file_list, \
+from .views import observation_create,observation_update,observation_delete,ScheduleUpdateView,ScheduleDeleteView, \
+    scheduleMasterList,ScheduleCreateView, ScheduleDownload, list_fits_files, fitsfile_detail, sequence_file_list, \
     sequence_file_create, sequence_file_edit, sequence_file_delete,observation_updateDS, FitsFileSequenceListView, fits_sequence_detail
 from targets.models import Target
 
@@ -22,7 +22,7 @@ urlpatterns = [
     path('schedule/create/',                ScheduleCreateView.as_view(), name='schedule_create'),
     path('schedule/edit/<uuid:pk>/',        ScheduleUpdateView.as_view(), name='schedule_edit'),
     path('schedule/delete/<uuid:pk>/',      ScheduleDeleteView.as_view(), name='schedule_delete'),
-    path('schedule/regen/<uuid:pk>/',       ScheduleRegenView.as_view(), name='schedule_regen'),
+    path('schedule/download/<uuid:pk>/',    ScheduleDownload,             name='schedule_download'),
     # Fits Files
     path('list_fits_files/',                list_fits_files, name='list_fits_files'),
     path('fitsfile/<uuid:pk>/',             fitsfile_detail, name='fits_file_detail'),

@@ -98,7 +98,7 @@ class PostProcess(object):
                 logging.warning("Invalid date format in header. File not processed is "+str(os.path.join(root, file)))
                 return False
 
-            # Create a new standard name for the file based on what it is
+            ############## L I G H T S ################################################################
             if (hdr["IMAGETYP"]=="Light"):
                 # Adjust the WCS for the image
                 if "CD1_1" not in hdr:
@@ -118,7 +118,7 @@ class PostProcess(object):
                     else:
                         logging.warning("No WCS information in header, file not updated is "+str(os.path.join(root, file)))
 
-                # Assign a new file name
+                # Standardize the object name and create a new file name
                 if ("OBJECT" in hdr):
                     # Standardize object name, remove spaces and underscores
                     objectName=hdr["OBJECT"].replace(' ', '').replace('_', '')
@@ -134,6 +134,7 @@ class PostProcess(object):
                 else:
                     logging.warning("Invalid object name in header. File not processed is "+str(os.path.join(root, file)))
                     return False
+            ############## F L A T S #############################################################################            
             elif hdr["IMAGETYP"]=="Flat":
                 if ("FILTER" in hdr):
                     newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
@@ -141,6 +142,8 @@ class PostProcess(object):
                 else:
                     newName=newName="{0}-{1}-{2}-{3}-{4}-{5}s-{6}x{7}-t{8}.fits".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),"OSC",fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
+            
+            ############## D A R K S / B I A S E S ################################################################   
             elif hdr["IMAGETYP"]=="Dark" or hdr["IMAGETYP"]=="Bias":
                 newName="{0}-{1}-{1}-{2}-{3}s-{4}x{5}-t{6}.fits".format(hdr["IMAGETYP"],hdr["TELESCOP"].replace(" ", "_").replace("\\", "_"),
                                     hdr["INSTRUME"].replace(" ", "_"),fitsDate,hdr["EXPTIME"],hdr["XBINNING"],hdr["YBINNING"],hdr["CCD-TEMP"])
@@ -149,6 +152,7 @@ class PostProcess(object):
             hdul.close()
             newPath=""
 
+            ######################################################################################################
             # Create the folder structure (if needed)
             fitsDate=dateobj.strftime("%Y%m%d")
             if (hdr["IMAGETYP"]=="Light"):
@@ -175,22 +179,16 @@ class PostProcess(object):
                 os.makedirs (newPath)
 
             # If we can add the file to the database move it to the repo
-            if moveFiles:
-                newFitsFileId=self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)
-            else:
-                newFitsFileId=self.submitFileToDB(os.path.join(root, file),hdr)
-
-            # Add the file to the list of registered files
-            if (newFitsFileId != None):
-                if moveFiles:
-                    moveInfo="Moving {0} to {1}\n".format(os.path.join(root, file),newPath+newName)
-                    logging.info(moveInfo)
-                    shutil.move(os.path.join(root, file),newPath+newName)
-                    message = os.path.join(root, file)
+            newFitsFileId=self.submitFileToDB(newPath+newName.replace(" ", "_"),hdr)
+            if (newFitsFileId != None) and moveFiles:
+                if not os.path.exists(newPath+newName):
+                    logging.info("Moving file "+os.path.join(root, file)+" to "+newPath+newName)
                 else:
-                    logging.info("File not moved in repo is "+str(os.path.join(root, file)))
+                    logging.warning("File already exists in repo - "+newPath+newName)
+                    newName=newName.replace(".fits","_dup.fits")
+                    logging.info("Renaming file to "+newName)              
             else:
-                logging.warning("Warning: File not added to repo is "+str(os.path.join(root, file)))
+                logging.warning("Warning: File not moved to repo is "+str(os.path.join(root, file)))
         else:
             logging.warning("File not added to repo - no IMAGETYP card - "+str(os.path.join(root, file)))
 

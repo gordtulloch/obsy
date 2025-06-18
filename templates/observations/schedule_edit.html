@@ -8,14 +8,18 @@
         {% csrf_token %}
         {{ form|crispy }}
         <div class="d-flex">
-            <button type="submit" class="btn btn-primary mr-2">Save</button>
+            <button type="submit" class="btn btn-primary mr-2">Save</button>&nbsp;
             <form method="post" action="{% url 'schedule_delete' object.pk %}" class="mr-2">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="submit" class="btn btn-danger">Delete</button>&nbsp;
             </form>
             <form method="post" action="{% url 'schedule_regen' object.pk %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-warning">(Re)Generate</button>
+                <button type="submit" class="btn btn-warning">(Re)Generate</button>&nbsp;
+            </form>
+            <form method="post" action="{% url 'schedule_download' object.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Download</button>
             </form>
         </div>
     </form>

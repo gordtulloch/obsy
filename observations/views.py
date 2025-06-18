@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from .forms import ObservationDSForm, SequenceFileForm, ScheduleMasterForm
-from .models import Observation, scheduleMaster,fitsFile,scheduleDetail,sequenceFile,fitsSequence,ObservationDS, ObservationEX, ObservationVS
+from .models import Observation, scheduleMaster,fitsFile,scheduleDetail,sequenceFile,fitsSequence
 from targets.models import Target
 from setup.models import observatory,telescope,imager
 from observations.models import Observation
@@ -146,7 +146,27 @@ class ScheduleDeleteView(LoginRequiredMixin,DeleteView):
     success_url = reverse_lazy('schedule_list')
 
 ##################################################################################################
-## buildSchedule function -  this function accepts parameters from the user and loads the       ##
+## Schedule Download -  Produce a file on disk and send to user                                 ##
+##################################################################################################
+import csv
+def ScheduleDownload(request, pk):
+    scheduleMasterObj = get_object_or_404(scheduleMaster, pk=pk)
+    scheduleDetailObj = scheduleDetail.objects.filter(scheduleMasterId=scheduleMasterObj)
+    
+    # For now Create a CSV file
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="ekos_schedule_{scheduleMasterObj.scheduleDate.strftime('%Y-%m-%d')}.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Target Name', 'Start Time', 'End Time', 'Telescope', 'Imager'])
+    
+    for detail in scheduleDetailObj:
+        writer.writerow([detail.targetName, detail.startTime, detail.endTime, detail.telescopeId, detail.imagerId])
+    
+    return response
+
+##################################################################################################
+## buildSchedule functions -  this function accepts parameters from the user and loads the      ##
 ##                           scheduleMaster and scheduleDetail tables with details from the     ##
 ##                           targets file if active=True. Then, based on the sequence provided  ##
 ##                           the code does a second pass through the schedule, adjusting start  ##
@@ -157,66 +177,19 @@ class ScheduleDeleteView(LoginRequiredMixin,DeleteView):
 import ephem
 from datetime import datetime, timedelta
 
-class ScheduleRegenView(DetailView):
-    def __init__(self, start_date, days_to_schedule, observatory_id):
-        try:
-            self.startDate = datetime.strptime(start_date, '%Y-%m-%d')
-        except ValueError:
-            logger.error("Invalid start_date")
-            return
-        
-        self.daysToSchedule = days_to_schedule
-        try:
-            self.observatoryObj = observatory.objects.get(id=observatory_id)
-        except observatory.DoesNotExist:
-            logger.error("Invalid observatory_id")
-            return
-        
-        # Load operations.currentConfig where observatory=observatory_id
-        try:
-            currentConfig = currentConfig.objects.get().filter(observatoryId=observatory_id)
-        except currentConfig.DoesNotExist:
-            logger.error("No currentConfig found")
-            return
-            
-        # Load the telescope and imager objects from the currentConfig
-        self.telescopeList = []
-        self.imagerList = []
-        for thisConfig in currentConfig:
-            self.telescopeList.append(thisConfig.telescopeId)
-            self.imagerList.append(thisConfig.imagerId)
- 
-    def regenSchedule(self):
-        # Calculate astronomical twilight and dawn using ephem
-        location = ephem.Observer()
-        location.lat = str(self.observatoryObj.latitude)
-        location.lon = str(self.observatoryObj.longitude)
-        times = []
-        
-        for day in range(self.daysToSchedule):
-            date = self.startDate + timedelta(days=day)
-            location.date = date
-            twilight_evening = location.next_setting(ephem.Sun(), use_center=True)
-            twilight_morning = location.next_rising(ephem.Sun(), use_center=True)
-            times.append((twilight_evening.datetime(), twilight_morning.datetime()))
-
-        # Query the database and add observations to scheduleDetail records
-        for twilight_evening, twilight_morning in times:
-            observations = Observation.objects.filter(
-                observatory=self.observatoryId,
-                telescope=telescope_id,
-                imager=imager_id,
-                observation_date__range=(twilight_evening, twilight_morning)
-            )
-            for obs in observations:
-                obs_time = Time(obs.observation_date)
-                obs_altaz = AltAz(obstime=obs_time, location=EarthLocation(lat=observatory_obj.latitude, lon=observatory_obj.longitude))
-                obs_altitude = obs.Target.transform_to(obs_altaz).alt
-
-                if obs_altitude > 15 * u.deg:
-                    schedule_master.observations.add(obs)
-
-        return
+def ScheduleRegen(request, pk):
+    scheduleMasterObj = get_object_or_404(scheduleMaster, pk=pk)
+    
+    # Delete existing scheduleDetail records
+    scheduleDetailObj = scheduleDetail.objects.filter(scheduleMasterId=scheduleMasterObj)
+    scheduleDetailObj.delete()
+    
+    # Regenerate the schedule
+    scheduleMasterObj.regenSchedule()
+    
+    # Return to the schedule detail page
+    messages.success(request, "Schedule regenerated successfully.")
+    return redirect('schedule_list')
 
 ##################################################################################################
 # list_fits_files -  List all FITS files in the database                                        ##

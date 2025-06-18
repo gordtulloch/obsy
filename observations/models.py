@@ -6,6 +6,15 @@ from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
 import pytz
+import ephem
+from astropy.time import Time
+from astropy.coordinates import AltAz, EarthLocation
+from datetime import timedelta
+from django.db.models import Q
+from django.utils import timezone
+
+import logging
+logger = logging.getLogger(__name__)
 
 ##################################################################################################
 ## SequenceFile - a EKOS sequence file                                                          ##
@@ -80,6 +89,7 @@ class scheduleDetail(models.Model):
                                 primary_key=True,
                                 default=uuid.uuid4,
                                 editable=False)
+    scheduleMasterId        = models.ForeignKey('scheduleMaster', on_delete=models.CASCADE)
     targetId                = models.ForeignKey(Target, on_delete=models.CASCADE)  
     scheduledDateTime       = models.DateTimeField()
     targetPriority          = models.IntegerField(default=1,validators=[MaxValueValidator(100),MinValueValidator(1)])
@@ -112,13 +122,65 @@ class scheduleMaster(models.Model):
     scheduleDate       = models.DateField(default=datetime.now, blank=True)
     scheduleDays       = models.IntegerField(default=1,validators=[MaxValueValidator(365),MinValueValidator(1)])
     observatoryId       = models.ForeignKey(observatory, on_delete=models.CASCADE)
-    telescopeId         = models.ForeignKey(telescope, on_delete=models.CASCADE,null=True, blank=True)
     imagerId            = models.ForeignKey(imager, on_delete=models.CASCADE,null=True, blank=True)
     sequenceFileId      = models.ForeignKey(sequenceFile, on_delete=models.CASCADE,null=True, blank=True)
     observations        = models.ManyToManyField(scheduleDetail)
 
     def get_absolute_url(self):
         return reverse("scheduleMasterList", args=[str(self.scheduleMasterId)])
+
+    def regenSchedule(self):          
+        self.daysToSchedule = self.scheduleDays 
+        try:
+            observatoryObj = observatory.objects.get(id=self.observatoryId)
+        except observatory.DoesNotExist:
+            logger.error("Invalid observatory_id")
+            return
+        
+        # Load operations.currentConfig where observatory=observatory_id
+        try:
+            currentConfig = currentConfig.objects.get().filter(observatoryId=self.observatoryId)
+        except currentConfig.DoesNotExist:
+            logger.error("No currentConfig found")
+            return
+            
+        # Load the telescope and imager objects from the currentConfig
+        telescopeList = []
+        imagerList = []
+        for thisConfig in currentConfig:
+            self.telescopeList.append(thisConfig.telescopeId)
+            self.imagerList.append(thisConfig.imagerId)
+
+        # Calculate astronomical twilight and dawn using ephem
+        location = ephem.Observer()
+        location.lat = str(observatoryObj.latitude)
+        location.lon = str(observatoryObj.longitude)
+        times = []
+        
+        for day in range(self.daysToSchedule):
+            date = self.scheduleDate + timedelta(days=self.scheduleDays)
+            location.date = date
+            twilight_evening = location.next_setting(ephem.Sun(), use_center=True)
+            twilight_morning = location.next_rising(ephem.Sun(), use_center=True)
+            times.append((twilight_evening.datetime(), twilight_morning.datetime()))
+
+        # Query the database and add observations to scheduleDetail records
+        for twilight_evening, twilight_morning in times:
+            observations = Observation.objects.filter(
+                observatory=self.observatoryId,
+                telescope=self.telescope_id,
+                imager=imager_id,
+                observation_date__range=(twilight_evening, twilight_morning)
+            )
+            for obs in observations:
+                obs_time = Time(obs.observation_date)
+                obs_altaz = AltAz(obstime=obs_time, location=EarthLocation(lat=observatory_obj.latitude, lon=observatory_obj.longitude))
+                obs_altitude = obs.Target.transform_to(obs_altaz).alt
+
+                if obs_altitude > 15 * u.deg:
+                    schedule_master.observations.add(obs)
+
+        return
 
 ##################################################################################################
 ## ScheduleManager - this manager class is used to delete all scheduleMaster records            ##
